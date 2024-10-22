@@ -6,7 +6,7 @@ export default function Users() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get("http://swiftlead-backend-production.up.railway.app/api/users")
+        axios.get("https://swiftlead-backend-production.up.railway.app/api/users")
             .then((res) => {
                 setUsers(res.data);
                 setLoading(false);
