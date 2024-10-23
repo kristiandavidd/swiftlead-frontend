@@ -40,7 +40,7 @@ export default function Login() {
         }
 
         try {
-            const res = await axios.post('https://swiftlead-backend-production.up.railway.app/api/auth/login', { email, password });
+            const res = await axios.post('https://swiftlead-backend-production-9ac7.up.railway.app/api/auth/login', { email, password });
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('email', email);
             router.push('/dashboard');
