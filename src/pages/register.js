@@ -25,7 +25,7 @@ export default function Register() {
 
     const onSubmit = async (data) => {
         try {
-            const res = await axios.post('https://swiftlead-backend-production-9ac7.up.railway.app/api/auth/register', data);
+            const res = await axios.post('https://swiftlead-backend-production-9ac7.up.railway.app/auth/register', data);
             localStorage.setItem('token', res.data.token);
             setMessage(res.data.message);
             router.push('/dashboard');
