@@ -29,6 +29,8 @@ export default function Register() {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
+                    'Origin': 'https://swiftlead-frontend.vercel.app',
+                    'Referer': 'https://swiftlead-frontend.vercel.app/'
                 },
             });
             localStorage.setItem('token', res.data.token);
