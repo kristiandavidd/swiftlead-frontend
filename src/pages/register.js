@@ -25,11 +25,17 @@ export default function Register() {
 
     const onSubmit = async (data) => {
         try {
-            const res = await axios.post('https://swiftlead-backend-production-9ac7.up.railway.app/auth/register', data);
+            const res = await axios.post('https://swiftlead-backend-production-9ac7.up.railway.app/auth/register', data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+            });
             localStorage.setItem('token', res.data.token);
             setMessage(res.data.message);
             router.push('/dashboard');
         } catch (error) {
+            console.error('Error:', error.response || error.message);
             setMessage('Registration failed');
         }
     };
