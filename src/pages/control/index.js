@@ -25,14 +25,14 @@ export default function Control() {
         }
 
         const fetchDailyData = async () => {
-            const res = await axios.get('https://swiftlead-backend-production-9ac7.up.railway.app/control/daily');
+            const res = await axios.get('http://swiftlead-backend-production-9ac7.up.railway.app/control/daily');
             const suhu = res.data.map((d) => d.avgSuhu);
             const kelembapan = res.data.map((d) => d.avgKelembapan);
             setDailyData({ suhu, kelembapan });
         };
 
         const fetchMonthlyData = async () => {
-            const res = await axios.get('https://swiftlead-backend-production-9ac7.up.railway.app/control/monthly');
+            const res = await axios.get('http://swiftlead-backend-production-9ac7.up.railway.app/control/monthly');
             const suhu = res.data.map((d) => d.avgSuhu);
             const kelembapan = res.data.map((d) => d.avgKelembapan);
             setMonthlyData({ suhu, kelembapan });
