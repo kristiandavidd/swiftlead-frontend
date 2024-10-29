@@ -40,14 +40,14 @@ export default function Login() {
         }
 
         try {
-            const res = await axios.post('https://swiftlead-backend-production-9ac7.up.railway.app/auth/login', { email, password });
+            const apiUrl = process.env.NODE_ENV === 'production'
+                ? process.env.NEXT_PUBLIC_API_PROD_URL
+                : process.env.NEXT_PUBLIC_API_URL;
+
+            const res = await axios.post(`${apiUrl}/auth/login`, { email, password });
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('email', email);
             router.push('/dashboard');
-            // const res = await axios.post('http://localhost:5000/auth/login', { email, password });
-            // localStorage.setItem('token', res.data.token);
-            // localStorage.setItem('email', email);
-            // router.push('/dashboard');
         } catch (error) {
             setError('Invalid credentials');
         }

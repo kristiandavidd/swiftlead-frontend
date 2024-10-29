@@ -26,19 +26,15 @@ export default function Register() {
     const onSubmit = async (data) => {
         console.log(data);
         try {
-            const res = await axios.post('https://swiftlead-backend-production-9ac7.up.railway.app/auth/register', data, {
+            const apiUrl = process.env.NODE_ENV === 'production'
+                ? process.env.NEXT_PUBLIC_API_PROD_URL
+                : process.env.NEXT_PUBLIC_API_URL;
+            const res = await axios.post(`${apiUrl}/auth/register`, data, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
                 },
             });
-            // const res = await axios.post('http://localhost:5000/auth/register', data, {
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //         'Accept': 'application/json',
-            //     },
-            // });
-            console.log(res.status);
             if (res.status == 200 || res.status == 201) {
                 localStorage.setItem('token', res.data.token);
                 setMessage(res.data.message);
