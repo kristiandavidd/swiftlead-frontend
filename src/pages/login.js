@@ -44,6 +44,10 @@ export default function Login() {
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('email', email);
             router.push('/dashboard');
+            // const res = await axios.post('http://localhost:5000/auth/login', { email, password });
+            // localStorage.setItem('token', res.data.token);
+            // localStorage.setItem('email', email);
+            // router.push('/dashboard');
         } catch (error) {
             setError('Invalid credentials');
         }

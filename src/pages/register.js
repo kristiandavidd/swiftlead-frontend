@@ -24,26 +24,38 @@ export default function Register() {
     const password = watch('password');
 
     const onSubmit = async (data) => {
+        console.log(data);
         try {
             const res = await axios.post('https://swiftlead-backend-production-9ac7.up.railway.app/auth/register', data, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
                 },
-            })
-                .then(response => {
-                    console.log('Success:', response.data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            localStorage.setItem('token', res.data.token);
-            setMessage(res.data.message);
-            router.push('/dashboard');
+            });
+            // const res = await axios.post('http://localhost:5000/auth/register', data, {
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'Accept': 'application/json',
+            //     },
+            // });
+            console.log(res.status);
+            if (res.status == 200 || res.status == 201) {
+                localStorage.setItem('token', res.data.token);
+                setMessage(res.data.message);
+                router.push('/dashboard');
+            } else {
+                setMessage('Registration failed: ' + res.data.message);
+            }
         } catch (error) {
-            console.error('Error:', error.response || error.message);
-            setMessage('Registration failed');
+            if (error.response) {
+                console.error('Error response:', error.response.data);
+                setMessage('Registration failed: ' + error.response.data.message || 'An error occurred');
+            } else {
+                console.error('Error:', error.message);
+                setMessage('Registration failed: ' + error.message);
+            }
         }
+
     };
 
     return (
