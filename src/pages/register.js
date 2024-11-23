@@ -9,35 +9,46 @@ import {
     CardFooter,
     CardHeader,
     CardDescription,
-    CardTitle,
 } from '@/components/ui/card';
 import { Label } from '@radix-ui/react-label';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 import Head from 'next/head';
+import Cookies from 'js-cookie';
+import { useUser } from '@/context/userContext'; 
 
 export default function Register() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const [message, setMessage] = useState('');
     const router = useRouter();
+    const { setUser } = useUser(); 
     const password = watch('password');
 
     const onSubmit = async (data) => {
-        console.log(data);
+        setMessage('');
         try {
             const apiUrl = process.env.NODE_ENV === 'production'
                 ? process.env.NEXT_PUBLIC_API_PROD_URL
                 : process.env.NEXT_PUBLIC_API_URL;
+
             const res = await axios.post(`${apiUrl}/auth/register`, data, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
                 },
             });
-            if (res.status == 200 || res.status == 201) {
-                localStorage.setItem('token', res.data.token);
-                setMessage(res.data.message);
+
+            if (res.status === 201 || res.status === 200) {
+                const { token, user } = res.data;
+
+                Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' });
+
+                setUser({
+                    email: user.email,
+                    role: user.role,
+                });
+
                 router.push('/dashboard');
             } else {
                 setMessage('Registration failed: ' + res.data.message);
@@ -45,13 +56,12 @@ export default function Register() {
         } catch (error) {
             if (error.response) {
                 console.error('Error response:', error.response.data);
-                setMessage('Registration failed: ' + error.response.data.message || 'An error occurred');
+                setMessage(error.response.data.message || 'An error occurred');
             } else {
                 console.error('Error:', error.message);
-                setMessage('Registration failed: ' + error.message);
+                setMessage(error.message);
             }
         }
-
     };
 
     return (

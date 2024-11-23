@@ -5,7 +5,6 @@ import {
     CardDescription,
     CardFooter,
     CardHeader,
-    CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@radix-ui/react-label';
@@ -13,29 +12,42 @@ import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import { useUser } from '@/context/userContext';
+import { jwtDecode } from 'jwt-decode';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
+    const { user, setUser } = useUser();
     const router = useRouter();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                const { role } = decoded;
+
+                if (role === 1) {
+                    router.push('/admin');
+                } else if (role === 0) {
+                    router.push('/dashboard');
+                }
+            } catch (error) {
+                console.error('Invalid token:', error);
+            }
+        }
+    }, [router]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setEmailError('');
-        setPasswordError('');
         setError('');
 
-        if (!email) {
-            setEmailError('Email is required');
-            return;
-        }
-        if (!password) {
-            setPasswordError('Password is required');
+        if (!email || !password) {
+            setError('Email and password are required');
             return;
         }
 
@@ -45,9 +57,20 @@ export default function Login() {
                 : process.env.NEXT_PUBLIC_API_URL;
 
             const res = await axios.post(`${apiUrl}/auth/login`, { email, password });
-            localStorage.setItem('token', res.data.token);
-            localStorage.setItem('email', email);
-            router.push('/dashboard');
+
+            const { token, user: { name, role } } = res.data;
+
+            localStorage.setItem('token', token);
+
+            setUser({ email, name, role });
+
+            if (role === 1) {
+                router.push('/admin');
+            } else if (role === 0) {
+                router.push('/dashboard');
+            } else {
+                setError('Unknown user role');
+            }
         } catch (error) {
             setError('Invalid credentials');
         }
@@ -67,12 +90,10 @@ export default function Login() {
                     <div className='flex flex-col gap-2'>
                         <Label htmlFor='email'>Email</Label>
                         <Input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-                        {emailError && <p className='text-sm text-red-500'>{emailError}</p>}
                     </div>
                     <div className='flex flex-col gap-2'>
                         <Label htmlFor='password'>Password</Label>
                         <Input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-                        {passwordError && <p className='text-sm text-red-500'>{passwordError}</p>}
                     </div>
                     <div className='flex flex-col gap-2'>
                         {error && <p className='text-sm text-red-500'>{error}</p>}

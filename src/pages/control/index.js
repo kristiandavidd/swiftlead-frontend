@@ -10,48 +10,69 @@ import axios from 'axios';
 
 export default function Control() {
     const [sensorData, setSensorData] = useState({ suhu: 0, kelembapan: 0 });
-    const [dailyData, setDailyData] = useState({ suhu: [], kelembapan: [] });
-    const [monthlyData, setMonthlyData] = useState({ suhu: [], kelembapan: [] });
+    const [dailyData, setDailyData] = useState({ suhu: [], kelembapan: [], labels: [] });
+    const [monthlyData, setMonthlyData] = useState({ suhu: [], kelembapan: [], labels: [] });
     const [timeRange, setTimeRange] = useState('daily');
     const router = useRouter();
 
     const statusSuhu = sensorData.suhu > 29 ? 'Too warm' : sensorData.suhu < 27 ? 'Too cold' : 'Good';
     const statusKelembapan = sensorData.kelembapan > 70 ? 'Too humid' : sensorData.kelembapan < 65 ? 'Too dry' : 'Good';
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            router.push('/login');
-        }
-
-        const apiUrl = process.env.NODE_ENV === 'production'
-            ? process.env.NEXT_PUBLIC_API_PROD_URL
-            : process.env.NEXT_PUBLIC_API_URL;
-
-        const fetchDailyData = async () => {
+    const fetchDailyData = async () => {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        try {
             const res = await axios.get(`${apiUrl}/control/daily`);
-            const suhu = res.data.map((d) => d.avgSuhu);
-            const kelembapan = res.data.map((d) => d.avgKelembapan);
-            setDailyData({ suhu, kelembapan });
-        };
+            const labels = res.data.map((d) => `${String(d.hour).padStart(2, '0')}:00`);
+            const suhu = res.data.map((d) => Number(d.avgSuhu));
+            const kelembapan = res.data.map((d) => Number(d.avgKelembapan));
+            setDailyData({ suhu, kelembapan, labels });
+        } catch (error) {
+            console.error('Error fetching daily data:', error);
+        }
+    };
 
-        const fetchMonthlyData = async () => {
-
+    const fetchMonthlyData = async () => {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        try {
             const res = await axios.get(`${apiUrl}/control/monthly`);
-            const suhu = res.data.map((d) => d.avgSuhu);
-            const kelembapan = res.data.map((d) => d.avgKelembapan);
-            setMonthlyData({ suhu, kelembapan });
-        };
+            const labels = res.data.map((d) => {
+                const date = new Date(d.date);
+                return date.toLocaleDateString('id-ID', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                });
+            });
+            const suhu = res.data.map((d) => Number(d.avgSuhu));
+            const kelembapan = res.data.map((d) => Number(d.avgKelembapan));
+            setMonthlyData({ suhu, kelembapan, labels });
+        } catch (error) {
+            console.error('Error fetching monthly data:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchDailyData();
         fetchMonthlyData();
+
+        const intervalId = setInterval(() => {
+            fetchDailyData();
+            fetchMonthlyData();
+        }, 15 * 60 * 1000);
+        console.log("update data")
+
+        return () => clearInterval(intervalId);
     }, [router]);
+
+    const chartData = timeRange === 'daily' ? dailyData : monthlyData;
 
     useEffect(() => {
         const socket = initSocket();
 
         socket.on('sensorData', (data) => {
-            setSensorData(data);
+            if (data && data.suhu !== 0 && data.kelembapan !== 0) {
+                setSensorData(data);
+            }
         });
 
         return () => {
@@ -59,12 +80,8 @@ export default function Control() {
         };
     }, []);
 
-    const chartData = timeRange === 'daily' ? dailyData : monthlyData;
-
     const suhuData = {
-        labels: timeRange === 'daily'
-            ? chartData.suhu.map((_, index) => `${index}:00`)
-            : chartData.suhu.map((d) => d.date),
+        labels: chartData.labels,
         datasets: [
             {
                 label: 'Suhu (°C)',
@@ -76,9 +93,7 @@ export default function Control() {
     };
 
     const kelembapanData = {
-        labels: timeRange === 'daily'
-            ? chartData.kelembapan.map((_, index) => `${index}:00`)
-            : chartData.kelembapan.map((d) => d.date),
+        labels: chartData.labels,
         datasets: [
             {
                 label: 'Kelembapan (%)',
@@ -90,72 +105,59 @@ export default function Control() {
     };
 
     return (
-        <UserLayout head={"Control"} key={router.pathname}>
-            <div className='mb-6'>
-                <div className='flex items-center justify-between'>
+        <UserLayout head="Control">
+            <div className="mb-6">
+                <div className="flex items-center justify-between">
                     <div>
-                        <p className='text-lg font-semibold'>Control Dashboard</p>
-                        <p className='text-sm'>Manage and monitor real-time sensor data.</p>
+                        <p className="text-lg font-semibold">Control Dashboard</p>
+                        <p className="text-sm">Manage and monitor real-time sensor data.</p>
                     </div>
                 </div>
 
-                <div className='flex flex-col gap-2 my-4 md:flex-row'>
+                <div className="flex flex-col gap-2 my-4 md:flex-row">
                     <Card className="md:w-1/2">
                         <CardHeader>
-                            <CardDescription>
-                                Real-Time Temperature
-                            </CardDescription>
-                            <CardTitle>
-                                {sensorData.suhu}°C
-                                {console.log(sensorData.suhu)}
-                            </CardTitle>
+                            <CardDescription>Real-Time Temperature</CardDescription>
+                            <CardTitle>{sensorData.suhu.toFixed(2)}°C</CardTitle>
                         </CardHeader>
                         <CardFooter className="flex justify-between">
-                            <span className='text-sm text-muted-foreground'>
-                                Status: {statusSuhu}
-                            </span>
+                            <span className="text-sm text-muted-foreground">Status: {statusSuhu}</span>
                             <Button>See Details</Button>
                         </CardFooter>
                     </Card>
 
                     <Card className="md:w-1/2">
                         <CardHeader>
-                            <CardDescription>
-                                Real-Time Humidity
-                            </CardDescription>
-                            <CardTitle>
-                                {sensorData.kelembapan}%
-                            </CardTitle>
+                            <CardDescription>Real-Time Humidity</CardDescription>
+                            <CardTitle>{sensorData.kelembapan.toFixed(2)}%</CardTitle>
                         </CardHeader>
                         <CardFooter className="flex justify-between">
-                            <span className='text-sm text-muted-foreground'>
-                                Status: {statusKelembapan}
-                            </span>
+                            <span className="text-sm text-muted-foreground">Status: {statusKelembapan}</span>
                             <Button>See Details</Button>
                         </CardFooter>
                     </Card>
                 </div>
             </div>
 
-            <div className='mb-6'>
-                <div className='flex flex-col items-center justify-between gap-4 md:flex-row'>
+            <div className="mb-6">
+                <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
                     <div>
-                        <p className='text-lg font-semibold'>Temperature & Humidity Trends</p>
-                        <p className='text-sm'>View historical sensor data trends per day and month.</p>
+                        <p className="text-lg font-semibold">Temperature & Humidity Trends</p>
+                        <p className="text-sm">View historical sensor data trends per day and month.</p>
                     </div>
                     <Button onClick={() => setTimeRange(timeRange === 'daily' ? 'monthly' : 'daily')}>
                         Switch to {timeRange === 'daily' ? 'Monthly' : 'Daily'} View
                     </Button>
                 </div>
 
-                <div className='my-4'>
+                <div className="my-4">
                     <Card className="w-full mb-4">
                         <CardHeader>
                             <CardTitle>Temperature Trends ({timeRange === 'daily' ? 'Daily' : 'Monthly'})</CardTitle>
                         </CardHeader>
                         <Line data={suhuData} />
                         <CardFooter>
-                            <span className='text-sm text-muted-foreground'>Historical temperature data</span>
+                            <span className="text-sm text-muted-foreground">Historical temperature data</span>
                         </CardFooter>
                     </Card>
 
@@ -165,7 +167,7 @@ export default function Control() {
                         </CardHeader>
                         <Line data={kelembapanData} />
                         <CardFooter>
-                            <span className='text-sm text-muted-foreground'>Historical humidity data</span>
+                            <span className="text-sm text-muted-foreground">Historical humidity data</span>
                         </CardFooter>
                     </Card>
                 </div>

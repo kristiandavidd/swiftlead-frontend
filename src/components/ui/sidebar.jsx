@@ -50,8 +50,7 @@ const SidebarProvider = React.forwardRef((
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
 
-  // This is the internal state of the sidebar.
-  // We use openProp and setOpenProp for control from outside the component.
+  
   const [_open, _setOpen] = React.useState(defaultOpen)
   const open = openProp ?? _open
   const setOpen = React.useCallback((value) => {
@@ -88,8 +87,6 @@ const SidebarProvider = React.forwardRef((
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [toggleSidebar])
 
-  // We add a state so that we can do data-state="expanded" or "collapsed".
-  // This makes it easier to style the sidebar with Tailwind classes.
   const state = open ? "expanded" : "collapsed"
 
   const contextValue = React.useMemo(() => ({
@@ -167,7 +164,7 @@ const Sidebar = React.forwardRef((
             }
           }
           side={side}>
-          <div className="flex h-full w-full flex-col">{children}</div>
+          <div className="flex flex-col w-full h-full">{children}</div>
         </SheetContent>
       </Sheet>)
     );
@@ -176,7 +173,7 @@ const Sidebar = React.forwardRef((
   return (
     (<div
       ref={ref}
-      className="group peer hidden md:block"
+      className="hidden group peer md:block"
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
@@ -535,7 +532,7 @@ const SidebarMenuSkeleton = React.forwardRef(({ className, showIcon = false, ...
       className={cn("rounded-md h-8 flex gap-2 px-2 items-center", className)}
       {...props}>
       {showIcon && (
-        <Skeleton className="size-4 rounded-md" data-sidebar="menu-skeleton-icon" />
+        <Skeleton className="rounded-md size-4" data-sidebar="menu-skeleton-icon" />
       )}
       <Skeleton
         className="h-4 flex-1 max-w-[--skeleton-width]"

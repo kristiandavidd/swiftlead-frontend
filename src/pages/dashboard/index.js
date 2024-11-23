@@ -19,9 +19,12 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from '@/components/ui/separator';
+import { useUser } from '@/context/userContext';
 
 export default function Home() {
   const router = useRouter();
+  const { user } = useUser();
+  console.log(user);
 
   const truncateText = (text, maxLength) => {
     if (text.length > maxLength) {
@@ -29,13 +32,6 @@ export default function Home() {
     }
     return text;
   };
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      router.push('/login');
-    }
-  }, [router]);
 
   return (
     <UserLayout head={"Dashboard"}>

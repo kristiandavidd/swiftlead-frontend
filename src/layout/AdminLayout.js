@@ -1,32 +1,27 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Sidebar from '@/components/ui/sidebarAlt';
+import SidebarAdmin from '@/components/ui/sidebarAdmin';
 import Head from 'next/head';
-import { useUser } from '@/context/userContext';
-import { jwtDecode } from 'jwt-decode';
 
-export default function UserLayout({ children, head, className = '' }) {
-
+export default function AdminLayout({ children, head, className = '' }) {
     const router = useRouter();
     const [isAuthorized, setIsAuthorized] = useState(false); 
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        
         if (!token) {
-            router.push('/login');
-            console.log('Token not found');
+            router.push('/login'); 
             return;
         }
 
         try {
             const { role } = jwtDecode(token); 
-            if (role !== 0) {
-                router.push('/admin');
+            if (role !== 1) {
+                router.push('/dashboard'); 
+                return;
             }
-            setIsAuthorized(true);
+            setIsAuthorized(true); 
         } catch (error) {
-            console.log('Invalid token', error);
             router.push('/login'); 
         }
     }, [router]);
@@ -41,7 +36,7 @@ export default function UserLayout({ children, head, className = '' }) {
                 <title>{head}</title>
             </Head>
 
-            <Sidebar />
+            <SidebarAdmin />
 
             <div className='w-full min-h-screen p-8 bg-gray-100 md:p-12 lg:w-4/5'>
                 {children}
