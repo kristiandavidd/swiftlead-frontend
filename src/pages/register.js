@@ -16,13 +16,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Head from 'next/head';
 import Cookies from 'js-cookie';
-import { useUser } from '@/context/userContext'; 
+import { useUser } from '@/context/userContext';
 
 export default function Register() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const [message, setMessage] = useState('');
     const router = useRouter();
-    const { setUser } = useUser(); 
+    const { setUser } = useUser();
     const password = watch('password');
 
     const onSubmit = async (data) => {
@@ -42,13 +42,21 @@ export default function Register() {
             if (res.status === 201 || res.status === 200) {
                 const { token, user } = res.data;
 
-                Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' });
+                // Menyimpan token di localStorage
+                localStorage.setItem('token', token);
 
-                setUser({
+                // Menyimpan user di context dan localStorage
+                const userData = {
                     email: user.email,
+                    name: user.name,
                     role: user.role,
-                });
+                    location: user.location,
+                    no_telp: user.no_telp,
+                    img_profile: user.img_profile,
+                };
+                setUser(userData);
 
+                // Redirect ke dashboard
                 router.push('/dashboard');
             } else {
                 setMessage('Registration failed: ' + res.data.message);
@@ -79,6 +87,11 @@ export default function Register() {
                         <Label htmlFor='email'>Email</Label>
                         <Input {...register('email', { required: true })} type="email" id="email" placeholder="Email" />
                         {errors.email && <p className='text-sm text-red-500'>Email is required</p>}
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        <Label htmlFor='name'>Name</Label>
+                        <Input {...register('name', { required: true })} type="text" id="name" placeholder="Name" />
+                        {errors.name && <p className='text-sm text-red-500'>Name is required</p>}
                     </div>
                     <div className='flex flex-col gap-2'>
                         <Label htmlFor='password'>Password</Label>

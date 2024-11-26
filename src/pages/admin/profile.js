@@ -19,7 +19,6 @@ import { useUser } from '@/context/userContext';
 export default function Profile() {
     const router = useRouter();
     const { user, setUser } = useUser();
-    console.log(user);
 
     const handleLogout = async () => {
         setUser(null); 

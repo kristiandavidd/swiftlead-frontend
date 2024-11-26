@@ -24,7 +24,6 @@ import { useUser } from '@/context/userContext';
 export default function Home() {
   const router = useRouter();
   const { user } = useUser();
-  console.log(user);
 
   const truncateText = (text, maxLength) => {
     if (text.length > maxLength) {

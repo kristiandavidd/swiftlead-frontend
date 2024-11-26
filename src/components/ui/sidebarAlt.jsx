@@ -8,7 +8,7 @@ export default function Sidebar() {
 
     return (
         <>
-            <div className="hidden text-white md:flex-col md:bg-white md:h-screen md:flex">
+            <div className="hidden w-1/5 text-white md:flex-col md:bg-white md:h-screen md:flex">
                 <div className="flex items-center justify-center p-6 pt-12">
                     <Image src="/images/logo.png" alt="Logo" width={120} height={120} />
                 </div>

@@ -58,11 +58,11 @@ export default function Login() {
 
             const res = await axios.post(`${apiUrl}/auth/login`, { email, password });
 
-            const { token, user: { name, role } } = res.data;
+            const { token, user: { name, role, location, no_telp, img_profile } } = res.data;
 
             localStorage.setItem('token', token);
 
-            setUser({ email, name, role });
+            setUser({ email, name, role, location, no_telp, img_profile });
 
             if (role === 1) {
                 router.push('/admin');
