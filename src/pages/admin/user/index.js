@@ -1,61 +1,39 @@
-import AdminLayout from "@/layout/AdminLayout"
-import axios from "axios"
-import { useEffect, useState } from "react"
+"use client";
+
+import AdminLayout from "@/layout/AdminLayout";
+
+
 import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@/components/ui/tabs"
+import UserTable from "./UserTable";
 
 export default function User() {
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const apiUrl = process.env.NODE_ENV === 'production'
-            ? process.env.NEXT_PUBLIC_API_PROD_URL
-            : process.env.NEXT_PUBLIC_API_URL;
-
-        axios.get(`${apiUrl}/user`)
-            .then((res) => {
-                setUsers(res.data);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error("there was an arror", err);
-            });
-    }, []);
+    
 
     return (
         <AdminLayout>
-            <div className="flex flex-col w-full">
-                <p className="text-lg font-semibold">Admin Dashboard</p>
-                <p className="hidden text-sm md:block">Bagian User</p>
+            <div className="flex justify-between mb-4">
+                <h1 className="text-2xl font-bold">User Management</h1>
             </div>
-            <Table>
-                <TableCaption>A list of active users.</TableCaption>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className="w-[100px]">Invoice</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Method</TableHead>
-                        <TableHead className="text-right">Amount</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {users.map((user) => (
-                        <TableRow key={user.user}>
-                            <TableCell className="font-medium">{user.email}</TableCell>
-                            <TableCell>{user.created_at}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+
+            <div className="p-4 overflow-x-auto bg-white rounded-lg">
+                <Tabs defaultValue="user" className="">
+                    <TabsList className="grid w-1/2 grid-cols-2 p-0 px-2 pt-2 bg-white">
+                        <TabsTrigger className="py-2" value="user">User</TabsTrigger>
+                        <TabsTrigger className="py-2" value="membership">Membership</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="user">
+                        <UserTable></UserTable>
+                    </TabsContent>
+                    <TabsContent value="membership">
+
+                    </TabsContent>
+                </Tabs>
+            </div>
         </AdminLayout>
-    )
+    );
 }

@@ -16,8 +16,11 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useUser } from '@/context/userContext';
 import { jwtDecode } from 'jwt-decode';
+import { useToast } from '@/hooks/use-toast';
+import { Toaster } from '@/components/ui/toaster';
 
 export default function Login() {
+    const { toast } = useToast();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -72,8 +75,14 @@ export default function Login() {
             } else {
                 setError('Unknown user role');
             }
-        } catch (error) {
-            setError('Invalid credentials');
+        } catch (err) {
+            let errorMessage = "Login failed. Please try again.";
+
+            if (err.response && err.response.data.message) {
+                errorMessage = err.response.data.message;
+            }
+
+            setError(errorMessage)
         }
     };
 
@@ -105,6 +114,7 @@ export default function Login() {
             <CardFooter className="flex justify-center">
                 <p className='text-sm text-muted-foreground'>Don&apos;t have an account? <Link href="/register" className="text-primary">Register</Link></p>
             </CardFooter>
+            <Toaster />
         </Card>
     );
 }

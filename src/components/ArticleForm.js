@@ -4,7 +4,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
 import Image from 'next/image';
-import { Input } from '@/components/ui/Input';
+import { Input } from '@/components/ui/input';
 import { Badge } from './ui/badge';
 
 const ArticleForm = () => {
