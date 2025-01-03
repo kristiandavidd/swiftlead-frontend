@@ -30,7 +30,7 @@ export default function UserLayout({ children, head, className = '' }) {
             router.push('/login');
         }
 
-        if (!token || isTokenExpired(token)) {
+        if (!token) {
             router.push('/login');
             console.log('Token not found');
             return;

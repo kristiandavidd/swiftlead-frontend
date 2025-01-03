@@ -2,6 +2,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import SidebarAdmin from '@/components/ui/sidebarAdmin';
 import Head from 'next/head';
+import { Toaster } from '@/components/ui/toaster';
+import { jwtDecode } from 'jwt-decode';
 
 export default function AdminLayout({ children, head, className = '' }) {
     const router = useRouter();
@@ -11,6 +13,7 @@ export default function AdminLayout({ children, head, className = '' }) {
         try {
             const decoded = jwtDecode(token);
             const currentTime = Date.now() / 1000; // Convert to seconds
+            console.log(currentTime);
             return decoded.exp < currentTime; // True if token is expired
         } catch (error) {
             return true; // Treat invalid token as expired
@@ -19,12 +22,13 @@ export default function AdminLayout({ children, head, className = '' }) {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+
         if (isTokenExpired(token)) {
             localStorage.removeItem('token');
             router.push('/login');
         }
+
         if (!token) {
-            console.log("token", token)
             router.push('/login');
             return;
         }
@@ -56,6 +60,7 @@ export default function AdminLayout({ children, head, className = '' }) {
             <div className='w-full min-h-screen p-8 bg-gray-100 md:p-12 lg:w-4/5'>
                 {children}
             </div>
+            <Toaster />
         </div>
     );
 }

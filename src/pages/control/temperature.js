@@ -131,9 +131,7 @@ export default function Temperature() {
     // Download PDF
     const downloadPDF = () => {
         const printWindow = window.open('', '_blank', 'width=800,height=600');
-
         const noPrintElements = document.querySelectorAll('.no-print');
-
         noPrintElements.forEach((el) => {
             el.style.visibility = 'hidden';
         });
@@ -149,15 +147,13 @@ export default function Temperature() {
             const imgHeight = (canvas.height * 190) / canvas.width;
 
             doc.addImage(imgData, 'PNG', 10, 10, 190, imgHeight);
-
             const table = pdfRef.current.querySelector('table');
             doc.autoTable({
                 html: table,
                 startY: imgHeight + 15,
             });
-
+            
             doc.save(timeRange === 'daily' ? 'Daily Temperature.pdf' : 'Monthly Temperature.pdf');
-
             printWindow.close();
         });
     };

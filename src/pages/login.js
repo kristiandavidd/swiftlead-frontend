@@ -59,6 +59,7 @@ export default function Login() {
             const res = await axios.post(`${apiUrl}/auth/login`, { email, password });
 
             const { token, user: { name, role, location, no_telp, img_profile } } = res.data;
+            console.log("token login", token);
 
             localStorage.setItem('token', token);
 
