@@ -17,7 +17,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { IconExternalLink, IconPencil, IconSearch, IconTrash } from "@tabler/icons-react";
+import { IconPlus, IconPencil, IconSearch, IconTrash } from "@tabler/icons-react";
 import {
     Select,
     SelectContent,
@@ -146,21 +146,26 @@ export default function ArticleTable() {
 
     return (
         <AdminLayout className="mx-auto" head={"Article Page"}>
-            <div className="items-center justify-between mb-4 flexflex-col">
+            <div className="flex flex-col justify-between mb-4">
                 <h1 className="text-2xl font-bold">Manage Articles</h1>
                 <p className="text-sm">Manage Article page</p>
             </div>
             <div className="flex justify-between mb-4">
-                <div className="flex gap-4">
+                <div className="flex items-center gap-4">
                     <input
                         type="text"
+                        size="sm"
                         placeholder="Search article"
                         className="px-4 py-2 border border-gray-300 rounded-md"
                         onChange={handleSearch}
                     />
-                    <Button><IconSearch className="w-8 h-8 " strokeWidth={2.4} /></Button>
+                    <Button size="sm"><IconSearch className="w-8 h-8 " strokeWidth={2.4} /></Button>
                 </div>
-                <Link className="px-6 py-2 font-medium text-white rounded-md bg-primary hover:bg-primary/90" href={"/admin/article/create"}>Create</Link>
+                <Link className="" href={"/admin/article/create"}>
+                    <Button size="sm">
+                        <IconPlus className="mr-2" />Create
+                    </Button>
+                </Link>
             </div>
             <div className="grid grid-cols-3 gap-4">
                 {filteredArticles.map((article) => (

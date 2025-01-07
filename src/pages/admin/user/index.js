@@ -10,14 +10,16 @@ import {
     TabsTrigger,
 } from "@/components/ui/tabs"
 import UserTable from "./UserTable";
+import MembershipTable from "./MembershipTable";
 
 export default function User() {
-    
+
 
     return (
         <AdminLayout>
-            <div className="flex justify-between mb-4">
-                <h1 className="text-2xl font-bold">User Management</h1>
+            <div className="flex flex-col justify-between mb-4">
+                <h1 className="text-2xl font-bold">Manage Users</h1>
+                <p className="text-sm">Manage User page</p>
             </div>
 
             <div className="p-4 overflow-x-auto bg-white rounded-lg">
@@ -30,7 +32,7 @@ export default function User() {
                         <UserTable></UserTable>
                     </TabsContent>
                     <TabsContent value="membership">
-
+                        <MembershipTable></MembershipTable>
                     </TabsContent>
                 </Tabs>
             </div>

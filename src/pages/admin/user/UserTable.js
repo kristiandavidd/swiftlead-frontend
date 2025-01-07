@@ -49,7 +49,7 @@ export default function UserTable() {
 
     useEffect(() => {
         handleSearch(); // Memperbarui data pencarian setiap kali query berubah
-    },);
+    }, );
 
 
     const fetchUsers = async () => {
@@ -90,14 +90,14 @@ export default function UserTable() {
 
         try {
             await axios.put(`${apiUrl}/user/${id}/membership`, { status: newStatus });
-            toast({ title: "Success", description: "Membership updated successfully", variant: "success" });
+            toast({ title: "Success", description: "User status updated successfully", variant: "success" });
             fetchUsers();
         } catch (err) {
             console.error("Error updating membership:", err);
             if (err.response.status === 400) {
                 toast({ title: "Error", description: "Cannot change user status. User password is not set.", variant: "destructive" });
             } else {
-                toast({ title: "Error", description: "Failed to update membership", variant: "destructive" });
+                toast({ title: "Error", description: "Failed to update user status", variant: "destructive" });
             }
         }
     };
@@ -143,7 +143,7 @@ export default function UserTable() {
     return (
         <div>
             <div className="flex justify-between px-2 py-4">
-                <div className="flex gap-4">
+                <div className="flex items-center gap-4">
                     <input
                         type="text"
                         size="sm"
@@ -155,7 +155,7 @@ export default function UserTable() {
 
                         }}
                     />
-                    <Button><IconSearch className="w-8 h-8 " strokeWidth={2.4} /></Button>
+                    <Button size="sm"><IconSearch className="w-8 h-8 " strokeWidth={2.4} /></Button>
                 </div>
                 <Link href="/admin/user/create">
                     <Button size="sm" >
@@ -221,13 +221,13 @@ export default function UserTable() {
                                 <TableCell>
                                     <div className="flex gap-2">
                                         <Link href={`/admin/user/edit/${user.id}`}>
-                                            <Button variant="outline">
+                                            <Button size="sm" className="bg-tersier-foreground/60 hover:bg-tersier-foreground/80">
                                                 <IconPencil />
                                             </Button>
                                         </Link>
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
-                                                <Button variant="destructive" onClick={() => setSelectedUserId(user.id)}>
+                                                <Button size="sm" variant="destructive" onClick={() => setSelectedUserId(user.id)}>
                                                     <IconTrash />
                                                 </Button>
                                             </AlertDialogTrigger>

@@ -20,6 +20,7 @@ import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import Link from 'next/link';
 
 export default function Profile() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -136,8 +137,8 @@ export default function Profile() {
                                     </div>
                                 </div>
                                 <div className="flex justify-center gap-4">
-                                    <Button size="xsm" className="text-sm bg-white border border-primary text-primary hover:bg-muted">Change Photo</Button>
-                                    <Button size="xsm" className="text-sm bg-white border border-primary text-primary hover:bg-muted">Remove Photo</Button>
+                                    <Button size="sm" className="text-sm bg-white border border-primary text-primary hover:bg-muted">Change Photo</Button>
+                                    <Button size="sm" className="text-sm bg-white border border-primary text-primary hover:bg-muted">Remove Photo</Button>
                                 </div>
                             </div>
                             <div className="flex flex-col justify-between w-1/2 gap-4">
@@ -189,9 +190,11 @@ export default function Profile() {
                         <CardTitle className='text-lg font-bold'>Join & Unlock Exclusive Perks!</CardTitle>
                         <CardDescription>Sign up now for premium access and more!</CardDescription>
                     </div>
-                    <Button className="px-8 py-2 w-fit">
-                        Join Now!
-                    </Button>
+                    <Link href="/membership/register">
+                        <Button className="px-8 py-2 w-fit">
+                            Join Now!
+                        </Button>
+                    </Link>
                 </CardHeader>
                 <CardContent className="w-1/2 p-0 px-6">
                     <Card className="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 background-animate">

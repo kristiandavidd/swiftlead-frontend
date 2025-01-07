@@ -54,49 +54,68 @@ export default function CreateUser() {
 
     return (
         <AdminLayout>
-            <h1 className="mb-4 text-2xl font-bold">Create User</h1>
-            <div className="space-y-4">
-                <Input
-                    placeholder="Name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                />
-                <Input
-                    placeholder="Email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                />
-                <Input
-                    placeholder="Phone"
-                    name="no_telp"
-                    value={formData.no_telp}
-                    onChange={handleChange}
-                />
-                <Input
-                    placeholder="Location"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                />
-                <Select
-                    value={formData.role.toString()}
-                    onValueChange={(value) => setFormData({ ...formData, role: parseInt(value) })}
-                >
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select Role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectItem value="0">User</SelectItem>
-                            <SelectItem value="1">Admin</SelectItem>
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-                <Button onClick={handleSubmit} disabled={loading}>
-                    {loading ? 'Creating...' : 'Create User'}
-                </Button>
+            <div className="container w-2/3 p-4 mx-auto bg-white rounded shadow">
+
+                <h1 className="mb-4 text-2xl font-bold">Create User</h1>
+                <div className="space-y-4">
+
+                    <div>
+                        <label htmlFor="name">Name</label>
+                        <Input
+                            placeholder="Name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="email">Email</label>
+                        <Input
+                            placeholder="Email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="no_telp">Phone Number</label>
+                        <Input
+                            placeholder="Phone"
+                            name="no_telp"
+                            value={formData.no_telp}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="location">Location</label>
+                        <Input
+                            placeholder="Location"
+                            name="location"
+                            value={formData.location}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="role">Role</label>
+                        <Select
+                            value={formData.role.toString()}
+                            onValueChange={(value) => setFormData({ ...formData, role: parseInt(value) })}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select Role" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem value="0">User</SelectItem>
+                                    <SelectItem value="1">Admin</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <Button onClick={handleSubmit} disabled={loading}>
+                        {loading ? 'Creating...' : 'Create User'}
+                    </Button>
+                </div>
             </div>
         </AdminLayout>
     );
