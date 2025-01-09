@@ -110,7 +110,9 @@ export default function Home() {
           </CardHeader>
           <CardFooter className="flex justify-between">
             <span className='text-sm text-muted-foreground'>Same as last month.</span>
-            <Button>See Details</Button>
+            <Link href={"/sales"}>
+              <Button>See Details</Button>
+            </Link>
           </CardFooter>
         </Card>
         <Card className="md:w-1/2">
@@ -120,7 +122,9 @@ export default function Home() {
           </CardHeader>
           <CardFooter className="flex justify-between">
             <span className='text-sm text-muted-foreground'>Same as last month.</span>
-            <Button>See Details</Button>
+            <Link href={"/harvest"}>
+              <Button>See Details</Button>
+            </Link>
           </CardFooter>
         </Card>
       </div>
