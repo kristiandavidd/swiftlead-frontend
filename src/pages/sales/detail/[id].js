@@ -59,8 +59,8 @@ export default function SaleDetailsPage({ sale }) {
 
     return (
         <UserLayout>
-            <div className="p-4">
-                <h1 className="mb-4 text-2xl font-bold">Detail Penjualan</h1>
+            <h1 className="mb-4 text-2xl font-bold">Detail Penjualan</h1>
+            <div className="p-4 bg-white rounded-lg ">
                 <div className="space-y-4">
                     <div>
                         <strong>Province:</strong> {sale.province}

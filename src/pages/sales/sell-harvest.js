@@ -99,68 +99,70 @@ export default function AddSalePage() {
     return (
         <UserLayout>
             <h1 className="mb-4 text-2xl font-bold">Sell your Birdnest</h1>
-            <div className="space-y-4">
-                <Select onValueChange={setProvince}>
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select Province" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {provinces.map((prov) => (
-                            <SelectItem key={prov} value={prov}>
-                                {prov}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-                <Input
-                    type="text"
-                    value={`Rp ${price ? formatCurrency(price).replace('Rp', '').trim() : ''} / Kg`}
-                    readOnly
-                    disabled
-                />
-                <Input
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    placeholder="Bowl Weight (kg)"
-                    value={bowlWeight}
-                    onChange={(e) => setBowlWeight(e.target.value)}
-                />
-                <Input
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    placeholder="Oval Weight (kg)"
-                    value={ovalWeight}
-                    onChange={(e) => setOvalWeight(e.target.value)}
-                />
-                <Input
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    placeholder="Corner Weight (kg)"
-                    value={cornerWeight}
-                    onChange={(e) => setCornerWeight(e.target.value)}
-                />
-                <Input
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    placeholder="Broken Weight (kg)"
-                    value={brokenWeight}
-                    onChange={(e) => setBrokenWeight(e.target.value)}
-                />
-                <Input
-                    type="date"
-                    placeholder="Appointment Date"
-                    value={appointmentDate}
-                    onChange={(e) => setAppointmentDate(e.target.value)}
-                />
-                <Input
-                    type="file"
-                    onChange={handleFileChange}
-                />
-                <Button onClick={handleSubmit}>Submit</Button>
+            <div className="p-4 bg-white rounded-lg ">
+                <div className="space-y-4">
+                    <Select onValueChange={setProvince}>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select Province" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {provinces.map((prov) => (
+                                <SelectItem key={prov} value={prov}>
+                                    {prov}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <Input
+                        type="text"
+                        value={`Rp ${price ? formatCurrency(price).replace('Rp', '').trim() : ''} / Kg`}
+                        readOnly
+                        disabled
+                    />
+                    <Input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        placeholder="Bowl Weight (kg)"
+                        value={bowlWeight}
+                        onChange={(e) => setBowlWeight(e.target.value)}
+                    />
+                    <Input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        placeholder="Oval Weight (kg)"
+                        value={ovalWeight}
+                        onChange={(e) => setOvalWeight(e.target.value)}
+                    />
+                    <Input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        placeholder="Corner Weight (kg)"
+                        value={cornerWeight}
+                        onChange={(e) => setCornerWeight(e.target.value)}
+                    />
+                    <Input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        placeholder="Broken Weight (kg)"
+                        value={brokenWeight}
+                        onChange={(e) => setBrokenWeight(e.target.value)}
+                    />
+                    <Input
+                        type="date"
+                        placeholder="Appointment Date"
+                        value={appointmentDate}
+                        onChange={(e) => setAppointmentDate(e.target.value)}
+                    />
+                    <Input
+                        type="file"
+                        onChange={handleFileChange}
+                    />
+                    <Button onClick={handleSubmit}>Submit</Button>
+                </div>
             </div>
         </UserLayout>
     );
