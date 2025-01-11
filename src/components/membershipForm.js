@@ -16,9 +16,12 @@ export default function MembershipForm() {
         }
 
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+            const apiUrl = process.env.NODE_ENV === "production"
+                ? process.env.NEXT_PUBLIC_API_PROD_URL
+                : process.env.NEXT_PUBLIC_API_URL;
+
             const response = await axios.post(`${apiUrl}/payment/create`, {
-                user_id: 1, 
+                user_id: 1,
                 email: "user@example.com",
                 name: "John Doe",
             });

@@ -13,6 +13,10 @@ const ArticlePreview = () => {
     console.log('accessed article preview');
 
     useEffect(() => {
+        const apiUrl = process.env.NODE_ENV === "production"
+            ? process.env.NEXT_PUBLIC_API_PROD_URL
+            : process.env.NEXT_PUBLIC_API_URL;
+
         if (id) {
             axios.get(`http://localhost:5000/articles/${id}`)
                 .then(response => {

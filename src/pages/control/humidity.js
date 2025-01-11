@@ -22,7 +22,9 @@ export default function HumidityDetail() {
 
     // Fetch daily data
     const fetchDailyData = async () => {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl = process.env.NODE_ENV === "production"
+            ? process.env.NEXT_PUBLIC_API_PROD_URL
+            : process.env.NEXT_PUBLIC_API_URL;
         try {
             const res = await axios.get(`${apiUrl}/control/daily`);
 
@@ -42,7 +44,9 @@ export default function HumidityDetail() {
 
     // Fetch monthly data
     const fetchMonthlyData = async () => {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl = process.env.NODE_ENV === "production"
+            ? process.env.NEXT_PUBLIC_API_PROD_URL
+            : process.env.NEXT_PUBLIC_API_URL;
         try {
             const res = await axios.get(`${apiUrl}/control/monthly`);
 

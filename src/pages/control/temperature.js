@@ -22,7 +22,9 @@ export default function Temperature() {
 
     // Fetch daily data
     const fetchDailyData = async () => {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl = process.env.NODE_ENV === "production"
+            ? process.env.NEXT_PUBLIC_API_PROD_URL
+            : process.env.NEXT_PUBLIC_API_URL;
         try {
             const res = await axios.get(`${apiUrl}/control/daily`);
 
@@ -42,7 +44,9 @@ export default function Temperature() {
 
     // Fetch monthly data
     const fetchMonthlyData = async () => {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl = process.env.NODE_ENV === "production"
+            ? process.env.NEXT_PUBLIC_API_PROD_URL
+            : process.env.NEXT_PUBLIC_API_URL;
         try {
             const res = await axios.get(`${apiUrl}/control/monthly`);
 
@@ -152,7 +156,7 @@ export default function Temperature() {
                 html: table,
                 startY: imgHeight + 15,
             });
-            
+
             doc.save(timeRange === 'daily' ? 'Daily Temperature.pdf' : 'Monthly Temperature.pdf');
             printWindow.close();
         });

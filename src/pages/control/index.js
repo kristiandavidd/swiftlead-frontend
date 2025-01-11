@@ -26,7 +26,9 @@ export default function Control() {
     const statusKelembapan = sensorData.kelembapan > 70 ? 'Too humid' : sensorData.kelembapan < 65 ? 'Too dry' : 'Good';
 
     const fetchDailyData = async () => {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl = process.env.NODE_ENV === "production"
+            ? process.env.NEXT_PUBLIC_API_PROD_URL
+            : process.env.NEXT_PUBLIC_API_URL;
         try {
             const res = await axios.get(`${apiUrl}/control/daily`);
             const labels = res.data.map((d) => `${String(d.hour).padStart(2, '0')}:00`);
@@ -39,7 +41,9 @@ export default function Control() {
     };
 
     const fetchMonthlyData = async () => {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl = process.env.NODE_ENV === "production"
+            ? process.env.NEXT_PUBLIC_API_PROD_URL
+            : process.env.NEXT_PUBLIC_API_URL;
         try {
             const res = await axios.get(`${apiUrl}/control/monthly`);
             const labels = res.data.map((d) => {
