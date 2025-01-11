@@ -18,7 +18,11 @@ const ArticlePreview = () => {
             : process.env.NEXT_PUBLIC_API_URL;
 
         if (id) {
-            axios.get(`http://localhost:5000/articles/${id}`)
+            const apiUrl = process.env.NODE_ENV === "production"
+                ? process.env.NEXT_PUBLIC_API_PROD_URL
+                : process.env.NEXT_PUBLIC_API_URL;
+
+            axios.get(`${apiUrl}/articles/${id}`)
                 .then(response => {
                     if (Array.isArray(response.data) && response.data.length > 0) {
                         setArticle(response.data[0]);

@@ -48,7 +48,11 @@ export default function Home() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/articles/published'); // Ganti URL API sesuai kebutuhan
+        const apiUrl = process.env.NODE_ENV === "production"
+          ? process.env.NEXT_PUBLIC_API_PROD_URL
+          : process.env.NEXT_PUBLIC_API_URL;
+
+        const response = await axios.get(`${apiUrl}/articles/published`); // Ganti URL API sesuai kebutuhan
         console.log(response.data);
 
         // Ambil array pertama dari response.data
