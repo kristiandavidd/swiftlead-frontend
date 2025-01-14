@@ -56,6 +56,9 @@ export default function SaleDetailsPage({ sale }) {
             </UserLayout>
         );
     }
+    const apiUrl = process.env.NODE_ENV === "production"
+        ? process.env.NEXT_PUBLIC_API_PROD_URL
+        : process.env.NEXT_PUBLIC_API_URL;
 
     return (
         <UserLayout>
@@ -114,7 +117,7 @@ export default function SaleDetailsPage({ sale }) {
                         <br />
                         {sale.proof_photo ? (
                             <Image
-                                src={`http://localhost:5000${sale.proof_photo}`}
+                                src={`${apiUrl}${sale.proof_photo}`}
                                 alt="Proof"
                                 width={200}
                                 height={200}

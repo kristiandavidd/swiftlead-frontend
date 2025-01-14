@@ -9,6 +9,9 @@ import Image from "next/image";
 export default function SaleDetailsModal({ isOpen, onClose, saleId }) {
     const [sale, setSale] = useState(null);
     const [loading, setLoading] = useState(true);
+    const apiUrl = process.env.NODE_ENV === "production"
+        ? process.env.NEXT_PUBLIC_API_PROD_URL
+        : process.env.NEXT_PUBLIC_API_URL;
 
     const statusMapping = {
         0: 'Submission',
@@ -28,9 +31,7 @@ export default function SaleDetailsModal({ isOpen, onClose, saleId }) {
     }, [isOpen, saleId]);
 
     const fetchSaleDetails = async () => {
-        const apiUrl = process.env.NODE_ENV === "production"
-            ? process.env.NEXT_PUBLIC_API_PROD_URL
-            : process.env.NEXT_PUBLIC_API_URL;
+
 
         try {
             const res = await axios.get(`${apiUrl}/sales/${saleId}`);
@@ -89,7 +90,7 @@ export default function SaleDetailsModal({ isOpen, onClose, saleId }) {
                             <strong>Proof Photo:</strong>
                             {sale.proof_photo ? (
                                 <Image
-                                    src={`http://localhost:5000${sale.proof_photo}`}
+                                    src={`${apiUrl}${sale.proof_photo}`}
                                     alt="Proof"
                                     width={200}
                                     height={200}

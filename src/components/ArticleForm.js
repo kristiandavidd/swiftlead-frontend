@@ -14,10 +14,17 @@ const ArticleForm = () => {
     const [cover, setCover] = useState(null); // Cover state yang baru
     const router = useRouter();
     const { id } = router.query; // ID artikel untuk edit
+    const apiUrl = process.env.NODE_ENV === "production"
+        ? process.env.NEXT_PUBLIC_API_PROD_URL
+        : process.env.NEXT_PUBLIC_API_URL;
 
     useEffect(() => {
+        const apiUrl = process.env.NODE_ENV === "production"
+            ? process.env.NEXT_PUBLIC_API_PROD_URL
+            : process.env.NEXT_PUBLIC_API_URL;
+
         if (id) {
-            axios.get(`http://localhost:5000/articles/${id}`)
+            axios.get(`${apiUrl}/articles/${id}`)
                 .then(response => {
                     console.log('API Response:', response.data);
                     if (Array.isArray(response.data) && response.data.length > 0) {
@@ -48,12 +55,15 @@ const ArticleForm = () => {
         }
 
         try {
+            const apiUrl = process.env.NODE_ENV === "production"
+                ? process.env.NEXT_PUBLIC_API_PROD_URL
+                : process.env.NEXT_PUBLIC_API_URL;
             if (id) {
                 // Update artikel jika id ada
-                await axios.put(`http://localhost:5000/articles/${id}`, formData);
+                await axios.put(`${apiUrl}/articles/${id}`, formData);
             } else {
                 // Tambah artikel jika id tidak ada
-                await axios.post('http://localhost:5000/articles', formData);
+                await axios.post(`${apiUrl}/articles`, formData);
             }
             router.push('/admin/article');
         } catch (error) {
@@ -63,6 +73,8 @@ const ArticleForm = () => {
 
     const handleSaveDraft = async () => {
         try {
+
+
             const formData = new FormData();
             formData.append('title', title);
             formData.append('content', content);
@@ -74,7 +86,7 @@ const ArticleForm = () => {
                 formData.append('cover_image', cover);
             }
 
-            await axios.post('http://localhost:5000/articles', formData);
+            await axios.post(`${apiUrl}/articles`, formData);
             router.push('/admin/article');
         } catch (error) {
             console.error('Error saving draft:', error);
@@ -88,7 +100,7 @@ const ArticleForm = () => {
                 <div className="flex flex-col items-center gap-2 mb-4">
                     {/* Menampilkan gambar cover sebelumnya jika tidak ada gambar yang dipilih */}
                     {cover && typeof cover === 'string' ? (
-                        <Image src={`http://localhost:5000${cover}`} alt="Cover" className="w-1/2 m-auto mt-4 rounded-lg" width={80} height={80} />
+                        <Image src={`${apiUrl}${cover}`} alt="Cover" className="w-1/2 m-auto mt-4 rounded-lg" width={80} height={80} />
                     ) : cover && cover instanceof File ? (
                         <Image src={URL.createObjectURL(cover)} alt="Cover Preview" className="w-1/2 m-auto mt-4 rounded-lg" width={80} height={80} />
                     ) : null}

@@ -47,6 +47,9 @@ export default function Article() {
     const [searchQuery, setSearchQuery] = useState(""); // State untuk input pencarian
     const [selectedArticleId, setSelectedArticleId] = useState(null); // Untuk ID artikel yang akan dihapus
     const { toast } = useToast();
+    const apiUrl = process.env.NODE_ENV === "production"
+        ? process.env.NEXT_PUBLIC_API_PROD_URL
+        : process.env.NEXT_PUBLIC_API_URL;
 
     useEffect(() => {
         fetchArticles();
@@ -118,7 +121,7 @@ export default function Article() {
                             <Link href={`/article/${article.id}`} target="_blank" className="flex flex-col gap-2">
                                 {article.cover_image && (
                                     <Image
-                                        src={`http://localhost:5000${article.cover_image}`}
+                                        src={`${apiUrl}${article.cover_image}`}
                                         alt="Cover"
                                         className="w-full h-[200px] rounded-lg object-cover"
                                         width={80}

@@ -30,6 +30,9 @@ export default function Home() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const apiUrl = process.env.NODE_ENV === "production"
+    ? process.env.NEXT_PUBLIC_API_PROD_URL
+    : process.env.NEXT_PUBLIC_API_URL;
 
   // Function to truncate text if it exceeds maxLength
   const truncateText = (text, maxLength) => {
@@ -153,7 +156,7 @@ export default function Home() {
                 <div className='flex flex-col items-center gap-4 md:flex-row'>
                   <div className='w-1/6 h-full'>
                     <Image
-                      src={`http://localhost:5000${article.cover_image}`}
+                      src={`${apiUrl}${article.cover_image}`}
                       alt={article.title}
                       width={80}
                       height={80}

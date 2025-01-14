@@ -9,13 +9,14 @@ const ArticlePreview = () => {
     const router = useRouter();
     const { id } = router.query;
     const [article, setArticle] = useState(null);
+    const apiUrl = process.env.NODE_ENV === "production"
+        ? process.env.NEXT_PUBLIC_API_PROD_URL
+        : process.env.NEXT_PUBLIC_API_URL;
 
     console.log('accessed article preview');
 
     useEffect(() => {
-        const apiUrl = process.env.NODE_ENV === "production"
-            ? process.env.NEXT_PUBLIC_API_PROD_URL
-            : process.env.NEXT_PUBLIC_API_URL;
+
 
         if (id) {
             const apiUrl = process.env.NODE_ENV === "production"
@@ -49,7 +50,7 @@ const ArticlePreview = () => {
             <h1 className="mb-4 text-3xl font-bold text-center">{article.title}</h1>
             {article.cover_image && (
                 <Image
-                    src={`http://localhost:5000${article.cover_image}`}
+                    src={`${apiUrl}${article.cover_image}`}
                     alt="Cover"
                     className="object-cover mx-auto mt-6 mb-6 rounded-md max-h-96"
                     width={800}
