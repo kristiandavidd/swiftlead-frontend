@@ -1,7 +1,7 @@
 const statusLabels = {
-    0: 'Submission',
+    0: 'Pending',
     1: 'Checking',
-    2: 'Admin Approval',
+    2: 'Approved',
     3: 'Completed',
     4: 'Cancelled',
     5: 'Rejected',

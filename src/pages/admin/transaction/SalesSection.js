@@ -20,7 +20,7 @@ const statusOptions = [
     { value: 0, label: "Submission" },
     { value: 1, label: "Checking" },
     { value: 2, label: "Approved" },
-    { value: 3, label: "Cmpleted" },
+    { value: 3, label: "Completed" },
     { value: 4, label: "Cancelled" },
     { value: 5, label: "Rejected" },
     { value: 6, label: "Rescheduled" },
@@ -119,7 +119,7 @@ export default function AdminSalesPage() {
                                 <TableCell>
                                     {new Date(sale.appointment_date).toLocaleDateString("id-ID", {
                                         day: "2-digit",
-                                        month: "long",
+                                        month: "short",
                                         year: "numeric",
                                     })}
                                 </TableCell>

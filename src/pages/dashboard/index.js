@@ -79,10 +79,6 @@ export default function Home() {
     return
   }
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
     <UserLayout head={"Dashboard"}>
       <div className='flex items-center'>

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { IconHome, IconCurrencyDollar, IconUser, IconFile } from '@tabler/icons-react';
+import { IconHome, IconCurrencyDollar, IconUser, IconFile, IconAlarmSmoke } from '@tabler/icons-react';
 
 export default function SidebarAdmin() {
     const router = useRouter();
@@ -32,6 +32,16 @@ export default function SidebarAdmin() {
                                         }`}
                                 >
                                     <IconUser size={20} stroke={1.5} /> User
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/installation">
+                                <div
+                                    className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/admin/installation' ? 'bg-tersier text-primary' : 'text-primary'
+                                        }`}
+                                >
+                                    <IconAlarmSmoke size={20} stroke={1.5} /> Installation
                                 </div>
                             </a>
                         </li>
@@ -89,6 +99,16 @@ export default function SidebarAdmin() {
                                             }`}
                                     >
                                         <IconUser size={20} stroke={1.5} /> User
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admin/installation">
+                                    <div
+                                        className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/admin/installation' ? 'bg-tersier text-primary' : 'text-primary'
+                                            }`}
+                                    >
+                                        <IconAlarmSmoke size={20} stroke={1.5} /> Installation
                                     </div>
                                 </a>
                             </li>
