@@ -130,7 +130,7 @@ const ArticlePreview = () => {
                 {/* Recommendations */}
                 <div className="mt-10">
                     <h2 className="mb-4 text-2xl font-bold">Recommended Articles</h2>
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                         {recommendations.map((rec) => (
                             <Link key={rec.id} href={`/article/${rec.id}`} className="p-4 border rounded-md hover:shadow-md">
                                 {rec.cover_image && (
@@ -144,7 +144,7 @@ const ArticlePreview = () => {
                                 )}
                                 <h3 className="text-lg font-semibold">{rec.title}</h3>
                                 <p className="text-sm text-gray-500">
-                                    {truncateText(stripHtmlTags(rec.content), 80)}...
+                                    {truncateText(stripHtmlTags(rec.content), 40)}...
                                 </p>
                             </Link>
                         ))}
