@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Head from 'next/head';
 import { useUser } from '@/context/userContext';
+import { Toaster } from '@/components/ui/toaster';
 
 export default function GuestLayout({ children, head, className = '' }) {
     const { user } = useUser();
@@ -31,6 +32,7 @@ export default function GuestLayout({ children, head, className = '' }) {
                     {children}
                 </div>
             </div>
+            <Toaster />
         </div>
     )
 }

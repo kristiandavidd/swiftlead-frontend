@@ -52,8 +52,8 @@ export default function ArticleTable() {
 
     useEffect(() => {
         fetchArticles();
-        
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const stripHtmlTags = (html) => {
@@ -145,6 +145,8 @@ export default function ArticleTable() {
         }
     };
 
+    console.log(articles)
+
     return (
         <AdminLayout className="mx-auto" head={"Article Page"}>
             <div className="flex flex-col justify-between mb-4">
@@ -182,6 +184,11 @@ export default function ArticleTable() {
                                         height={80}
                                     />
                                 )}
+                                {article.tag_name && (
+                                    <div className="mt-2 text-sm text-gray-500">
+                                        <span className="px-3 py-1 text-blue-700 bg-blue-100 rounded-md">{article.tag_name}</span>
+                                    </div>
+                                )}
                                 <CardTitle className="duration-300 ease-in-out text-md hover:text-muted-foreground">{article.title}</CardTitle>
                                 <CardDescription>{truncateText(stripHtmlTags(article.content), 50)}</CardDescription>
                             </Link>
@@ -204,6 +211,7 @@ export default function ArticleTable() {
                                     </SelectContent>
                                 </Select>
                                 <Link href={`/admin/article/edit/${article.id}`} className="inline-flex items-center justify-center w-1/5 gap-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
+                                    {console.log("article id: ", article.id)}
                                     <IconPencil />
                                 </Link>
                                 <AlertDialog>
