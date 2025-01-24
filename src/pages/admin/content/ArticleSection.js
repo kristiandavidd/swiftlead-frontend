@@ -148,11 +148,7 @@ export default function ArticleTable() {
     console.log(articles)
 
     return (
-        <AdminLayout className="mx-auto" head={"Article Page"}>
-            <div className="flex flex-col justify-between mb-4">
-                <h1 className="text-2xl font-bold">Manage Articles</h1>
-                <p className="text-sm">Manage Article page</p>
-            </div>
+        <div className="mx-auto">
             <div className="flex justify-between mb-4">
                 <div className="flex items-center gap-4">
                     <input
@@ -164,7 +160,7 @@ export default function ArticleTable() {
                     />
                     <Button size="sm"><IconSearch className="w-8 h-8 " strokeWidth={2.4} /></Button>
                 </div>
-                <Link className="" href={"/admin/article/create"}>
+                <Link className="" href={"/admin/content/create"}>
                     <Button size="sm">
                         <IconPlus className="mr-2" />Create
                     </Button>
@@ -196,8 +192,8 @@ export default function ArticleTable() {
                         <CardFooter className="flex flex-col">
                             <div className="flex justify-between w-full gap-2">
                                 <Select
-                                    value={article.status === 1 ? "published" : "draft"}
-                                    onValueChange={(value) => handleStatusChange(article.id, value === "published" ? 1 : 0)}
+                                    value={article.status === 1 ? "published" : article.status === 2 ? "membership" : "draft"}
+                                    onValueChange={(value) => handleStatusChange(article.id, value === "published" ? 1 : value === "membership" ? 2 : 0)}
                                 >
                                     <SelectTrigger className="w-3/5">
                                         <SelectValue placeholder="Pilih status" />
@@ -206,11 +202,12 @@ export default function ArticleTable() {
                                         <SelectGroup>
                                             <SelectLabel>Status</SelectLabel>
                                             <SelectItem value="published">Published</SelectItem>
+                                            <SelectItem value="membership">Membership</SelectItem>
                                             <SelectItem value="draft">Draft</SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
-                                <Link href={`/admin/article/edit/${article.id}`} className="inline-flex items-center justify-center w-1/5 gap-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
+                                <Link href={`/admin/content/edit/${article.id}`} className="inline-flex items-center justify-center w-1/5 gap-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
                                     {console.log("article id: ", article.id)}
                                     <IconPencil />
                                 </Link>
@@ -236,6 +233,6 @@ export default function ArticleTable() {
                     </Card>
                 ))}
             </div>
-        </AdminLayout>
+        </div>
     );
 }

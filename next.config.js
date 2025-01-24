@@ -8,6 +8,6 @@ const withPWA = require('next-pwa')({
 module.exports = withPWA({
     reactStrictMode: true,
     images: {
-        domains: ['localhost'], // Tambahkan domain backend Anda
+        domains: ['localhost', 'img.youtube.com'], // Tambahkan domain backend Anda
     },
 });

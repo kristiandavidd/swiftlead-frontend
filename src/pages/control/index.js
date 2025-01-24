@@ -7,9 +7,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ControlSection from "./ControlSection";
 import ManagementSection from "./ManagementSection";
 import TrackingSection from "./TrackingSection";
+import { useUser } from "@/context/userContext";
 
 export default function Control() {
     const [activeTab, setActiveTab] = useState("monitoring");
+    const { user } = useUser();
+
+    console.log("user from control", user)
 
     return (
         <UserLayout className="mx-auto" head={"Article Page"}>

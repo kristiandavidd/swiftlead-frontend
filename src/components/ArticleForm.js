@@ -5,6 +5,15 @@ import axios from "axios";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Badge } from "./ui/badge";
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectGroup,
+    SelectLabel,
+    SelectItem,
+} from "@/components/ui/select";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 
@@ -14,6 +23,7 @@ const ArticleForm = () => {
     const [cover, setCover] = useState(null);
     const [tags, setTags] = useState([]); // List of tags
     const [selectedTag, setSelectedTag] = useState(""); // Selected tag ID
+    const [status, setStatus] = useState("0"); // Default status as draft
     const [loading, setLoading] = useState(false); // Loading state
     const router = useRouter();
     const { id } = router.query;
@@ -45,11 +55,12 @@ const ArticleForm = () => {
         try {
             const res = await axios.get(`${apiUrl}/articles/${id}`);
             if (res.data.length > 0) {
-                const { title, content, cover_image, tags_id } = res.data[0];
+                const { title, content, cover_image, tags_id, status } = res.data[0];
                 setTitle(title || ""); // Set title
                 setContent(content || ""); // Set content
                 setCover(cover_image || null); // Set cover image
                 setSelectedTag(tags_id || ""); // Set selected tag ID
+                setStatus(status !== undefined ? status.toString() : "0"); // Set status as default
             }
         } catch (error) {
             console.error("Error fetching article:", error);
@@ -58,15 +69,15 @@ const ArticleForm = () => {
         }
     };
 
-    console.log("selectedtag", selectedTag)
-
-    const handleSubmit = async (e, status = 1) => {
+    const handleSubmit = async (e,) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append("title", title);
         formData.append("content", content);
         formData.append("tags_id", selectedTag); // Add tag ID
         formData.append("status", status);
+
+        console.log("data:", title, selectedTag, status, cover);
 
         if (cover instanceof File) {
             formData.append("cover", cover);
@@ -80,7 +91,7 @@ const ArticleForm = () => {
             } else {
                 await axios.post(`${apiUrl}/articles`, formData);
             }
-            router.push("/admin/article");
+            router.push("/admin/content");
         } catch (error) {
             console.error("Error submitting article:", error);
         }
@@ -128,21 +139,45 @@ const ArticleForm = () => {
                         <ReactQuill value={content} onChange={setContent} theme="snow" />
                     </div>
 
-                    {/* Tags */}
-                    <div className="mb-4">
-                        <label className="block mb-2 font-medium text-gray-700">Tag</label>
-                        <select
-                            value={selectedTag}
-                            onChange={(e) => setSelectedTag(e.target.value)}
-                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option value="">Select Tag</option>
-                            {tags.map((tag) => (
-                                <option key={tag.id} value={tag.id}>
-                                    {tag.name}
-                                </option>
-                            ))}
-                        </select>
+                    {/* Tags and Status */}
+                    <div className="flex justify-between gap-4 mb-4">
+                        {/* Status */}
+                        <div className="w-1/2">
+                            <label className="block mb-2 font-medium text-gray-700">Status</label>
+                            <Select
+                                value={status}
+                                onValueChange={(value) => setStatus(value)}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select Status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Status</SelectLabel>
+                                        <SelectItem value="1">Published</SelectItem>
+                                        <SelectItem value="2">Membership</SelectItem>
+                                        <SelectItem value="0">Draft</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* Tags */}
+                        <div className="w-1/2">
+                            <label className="block mb-2 font-medium text-gray-700">Tag</label>
+                            <select
+                                value={selectedTag}
+                                onChange={(e) => setSelectedTag(e.target.value)}
+                                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <option value="">Select Tag</option>
+                                {tags.map((tag) => (
+                                    <option key={tag.id} value={tag.id}>
+                                        {tag.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
 
                     {/* Buttons */}

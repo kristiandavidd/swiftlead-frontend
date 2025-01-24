@@ -47,6 +47,7 @@ export default function Register() {
 
                 // Menyimpan user di context dan localStorage
                 const userData = {
+                    id: user.id,
                     email: user.email,
                     name: user.name,
                     role: user.role,

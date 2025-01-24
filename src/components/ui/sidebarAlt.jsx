@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { IconHome, IconChartDots3, IconUser, IconAffiliate } from '@tabler/icons-react';
+import { IconHome, IconChartDots3, IconUser, IconFeather } from '@tabler/icons-react';
 
 export default function Sidebar() {
     const router = useRouter();
@@ -36,12 +36,12 @@ export default function Sidebar() {
                             </a>
                         </li>
                         <li>
-                            <a href="/community">
+                            <a href="/harvest">
                                 <div
-                                    className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/community' ? 'bg-tersier text-primary' : 'text-primary'
+                                    className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/harvest' ? 'bg-tersier text-primary' : 'text-primary'
                                         }`}
                                 >
-                                    <IconAffiliate size={20} stroke={1.5} /> Community
+                                    <IconFeather size={20} stroke={1.5} /> Harvest
                                 </div>
                             </a>
                         </li>

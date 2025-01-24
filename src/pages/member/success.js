@@ -12,7 +12,7 @@ export default function SuccessPage() {
 
         // Redirect ke /membership setelah 3 detik
         const timeout = setTimeout(() => {
-            router.push('/membership');
+            router.push('/member');
         }, 3000);
 
         // Membersihkan timeout ketika komponen di-unmount
@@ -24,7 +24,7 @@ export default function SuccessPage() {
             <h1 className="mb-4 text-3xl font-bold">🎉 Payment Successful!</h1>
             <p>Thank you for subscribing to our membership.</p>
             <p className="mt-2 text-sm text-gray-500">Redirecting to your dashboard in 3 seconds...</p>
-            <Button className="mt-4" onClick={() => router.push('/membership')}>
+            <Button className="mt-4" onClick={() => router.push('/member')}>
                 Go to Dashboard Now
             </Button>
         </div>

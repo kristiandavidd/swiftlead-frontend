@@ -4,11 +4,11 @@ import Sidebar from '@/components/ui/sidebarAlt';
 import Head from 'next/head';
 import { useUser } from '@/context/userContext';
 import { jwtDecode } from 'jwt-decode';
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 
 export default function UserLayout({ children, head, className = '' }) {
-
     const router = useRouter();
+    const { user } = useUser();
     const [isAuthorized, setIsAuthorized] = useState(false);
 
     const isTokenExpired = (token) => {
@@ -24,29 +24,33 @@ export default function UserLayout({ children, head, className = '' }) {
     useEffect(() => {
         const token = localStorage.getItem('token');
 
-        console.log("token", token)
-        if (isTokenExpired(token)) {
+        if (!token || isTokenExpired(token)) {
+            console.log(!token);
+            console.log('Token from UserLayout:', token);
+            console.log('User from UserLayout:', user);
             localStorage.removeItem('token');
+            localStorage.removeItem('user');
             router.push('/login');
+            return;
         }
 
-        if (!token) {
-            router.push('/login');
-            console.log('Token not found');
-            return;
+        if (!user) {
+            console.log('User is not loaded yet');
+            return; // Wait until `user` is ready
         }
 
         try {
             const { role } = jwtDecode(token);
             if (role !== 0) {
                 router.push('/admin');
+            } else {
+                setIsAuthorized(true);
             }
-            setIsAuthorized(true);
         } catch (error) {
             console.log('Invalid token', error);
             router.push('/login');
         }
-    }, [router]);
+    }, [router, user]); // Add `user` to dependency array
 
     if (!isAuthorized) {
         return null;

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { IconHome, IconCurrencyDollar, IconUser, IconFile, IconAlarmSmoke } from '@tabler/icons-react';
+import { IconHome, IconCurrencyDollar, IconUser, IconLayout2, IconAlarmSmoke } from '@tabler/icons-react';
 
 export default function SidebarAdmin() {
     const router = useRouter();
@@ -56,12 +56,12 @@ export default function SidebarAdmin() {
                             </a>
                         </li>
                         <li>
-                            <a href="/admin/article">
+                            <a href="/admin/content">
                                 <div
-                                    className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/admin/article' ? 'bg-tersier text-primary' : 'text-primary'
+                                    className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/admin/content' ? 'bg-tersier text-primary' : 'text-primary'
                                         }`}
                                 >
-                                    <IconFile size={20} stroke={1.5} /> Article
+                                    <IconLayout2 size={20} stroke={1.5} /> Content
                                 </div>
                             </a>
                         </li>
@@ -123,12 +123,12 @@ export default function SidebarAdmin() {
                                 </a>
                             </li>
                             <li>
-                                <a href="/admin/article">
+                                <a href="/admin/content">
                                     <div
-                                        className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/control' ? 'bg-tersier text-primary' : 'text-primary'
+                                        className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/content' ? 'bg-tersier text-primary' : 'text-primary'
                                             }`}
                                     >
-                                        <IconFile size={20} stroke={1.5} /> Article
+                                        <IconLayout2 size={20} stroke={1.5} /> Content
                                     </div>
                                 </a>
                             </li>

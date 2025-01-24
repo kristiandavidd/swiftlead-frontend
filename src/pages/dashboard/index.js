@@ -30,6 +30,8 @@ export default function Home() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+
   const apiUrl = process.env.NODE_ENV === "production"
     ? process.env.NEXT_PUBLIC_API_PROD_URL
     : process.env.NEXT_PUBLIC_API_URL;

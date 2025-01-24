@@ -17,7 +17,7 @@ import { IconPencil, IconUserCircle } from '@tabler/icons-react';
 import axios from 'axios';
 import { useUser } from '@/context/userContext';
 import Image from 'next/image';
-import { useForm } from 'react-hook-form';
+import { get, useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
@@ -25,9 +25,10 @@ import Link from 'next/link';
 export default function Profile() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const { toast } = useToast()
+    const [isActive, setIsActive] = useState(null);
     const router = useRouter();
     const { user, setUser } = useUser();
-    console.log(user);
+    console.log("user", user);
 
     // State untuk form
     const [formData, setFormData] = useState({
@@ -36,15 +37,6 @@ export default function Profile() {
         location: user?.location || ''
     });
 
-    useEffect(() => {
-        if (user) {
-            setFormData({
-                name: user.name || '',
-                no_telp: user.no_telp || '',
-                location: user.location || '',
-            });
-        }
-    }, [user]);
 
     // Fungsi untuk menangani perubahan input
     const handleInputChange = (e) => {
@@ -109,6 +101,36 @@ export default function Profile() {
             });
         }
     };
+
+
+
+    const getStatusMember = async () => {
+        const apiUrl = process.env.NODE_ENV === 'production'
+            ? process.env.NEXT_PUBLIC_API_PROD_URL
+            : process.env.NEXT_PUBLIC_API_URL;
+        try {
+            const userId = user.id;
+            console.log(userId);
+            const { data } = await axios.get(`${apiUrl}/membership/user/${userId}`);
+            setIsActive(data.isActive);
+            console.log(data);
+        } catch (error) {
+            console.error('Error fetching membership status:', error);
+            setIsActive(false); // Jika terjadi error, anggap user tidak aktif
+        }
+    };
+
+    useEffect(() => {
+        if (user) {
+            setFormData({
+                name: user.name || '',
+                no_telp: user.no_telp || '',
+                location: user.location || '',
+            });
+        }
+        getStatusMember();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user]);
 
     return (
         <UserLayout head={"Profile"}>
@@ -190,11 +212,21 @@ export default function Profile() {
                         <CardTitle className='text-lg font-bold'>Join & Unlock Exclusive Perks!</CardTitle>
                         <CardDescription>Sign up now for premium access and more!</CardDescription>
                     </div>
-                    <Link href="/membership/register">
-                        <Button className="px-8 py-2 w-fit">
-                            Join Now!
-                        </Button>
-                    </Link>
+                    {isActive === null ? (
+                        <p>Loading...</p>
+                    ) : isActive ? (
+                        <Link href="/member">
+                            <Button className="px-8 py-2 w-fit">
+                                Membership Dashboard
+                            </Button>
+                        </Link>
+                    ) : (
+                        <Link href="/member/register">
+                            <Button className="px-8 py-2 w-fit">
+                                Join Now!
+                            </Button>
+                        </Link>
+                    )}
                 </CardHeader>
                 <CardContent className="w-1/2 p-0 px-6">
                     <Card className="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 background-animate">
