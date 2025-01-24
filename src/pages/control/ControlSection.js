@@ -209,7 +209,6 @@ export default function ControlSection({ setActiveTab }) {
 
         if (newHouseAdded) {
             fetchHouses(); // Fetch data kandang terbaru setelah modal ditutup
-            setActiveTab("management");
         }
     };
 

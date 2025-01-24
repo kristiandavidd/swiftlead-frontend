@@ -3,11 +3,13 @@ import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
-const AddEditArticleModal = ({ onClose, onRefresh, article }) => {
+export default function AddEditArticleModal({ onClose, onRefresh, article }) {
     const [title, setTitle] = useState(article?.title || "");
     const [content, setContent] = useState(article?.content || "");
     const [cover, setCover] = useState(null);
+    const { toast } = useToast();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,9 +30,15 @@ const AddEditArticleModal = ({ onClose, onRefresh, article }) => {
                 await axios.post(`${apiUrl}/articles`, formData);
             }
             onRefresh();
+            toast({ title: "Sukses!", description: "Artikel berhasil disimpan.", variant: "success" });
             onClose();
         } catch (error) {
             console.error("Error saving article:", error);
+            toast({
+                title: "Galat!",
+                description: "Gagal menyimpan artikel.",
+                variant: "error",
+            });
         }
     };
 
@@ -38,14 +46,14 @@ const AddEditArticleModal = ({ onClose, onRefresh, article }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
             <Input
                 label="Title"
-                placeholder="Article Title"
+                placeholder="Judul artikel.."
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
             />
             <Textarea
-                label="Content"
-                placeholder="Write article content here..."
+                label="Konten"
+                placeholder="Tulis konten artikel disini.."
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 rows={6}
@@ -53,19 +61,19 @@ const AddEditArticleModal = ({ onClose, onRefresh, article }) => {
             />
             <Input
                 type="file"
-                label="Cover Image"
+                label="Gambar pratinjau.."
                 onChange={(e) => setCover(e.target.files[0])}
             />
             <div className="flex justify-end gap-2">
                 <Button variant="secondary" onClick={onClose}>
-                    Cancel
+                    Batal
                 </Button>
                 <Button type="submit" variant="primary">
-                    Save
+                    Simpan
                 </Button>
             </div>
         </form>
     );
 };
 
-export default AddEditArticleModal;
+

@@ -21,7 +21,7 @@ export default function Sidebar() {
                                     className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/dashboard' ? 'bg-tersier text-primary' : 'text-primary'
                                         }`}
                                 >
-                                    <IconHome size={20} stroke={1.5} /> Dashboard
+                                    <IconHome size={20} stroke={1.5} /> Beranda
                                 </div>
                             </a>
                         </li>
@@ -31,7 +31,7 @@ export default function Sidebar() {
                                     className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/control' ? 'bg-tersier text-primary' : 'text-primary'
                                         }`}
                                 >
-                                    <IconChartDots3 size={20} stroke={1.5} /> Control
+                                    <IconChartDots3 size={20} stroke={1.5} /> Kontrol
                                 </div>
                             </a>
                         </li>
@@ -41,7 +41,7 @@ export default function Sidebar() {
                                     className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/harvest' ? 'bg-tersier text-primary' : 'text-primary'
                                         }`}
                                 >
-                                    <IconFeather size={20} stroke={1.5} /> Harvest
+                                    <IconFeather size={20} stroke={1.5} /> Panen
                                 </div>
                             </a>
                         </li>
@@ -51,7 +51,7 @@ export default function Sidebar() {
                                     className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/profile' ? 'bg-tersier text-primary' : 'text-primary'
                                         }`}
                                 >
-                                    <IconUser size={20} stroke={1.5} /> Profile
+                                    <IconUser size={20} stroke={1.5} /> Profil
                                 </div>
                             </a>
                         </li>
@@ -68,7 +68,7 @@ export default function Sidebar() {
                                         className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/dashboard' ? 'bg-tersier text-primary' : 'text-primary'
                                             }`}
                                     >
-                                        <IconHome size={20} stroke={1.5} /> Dashboard
+                                        <IconHome size={20} stroke={1.5} /> Beranda
                                     </div>
                                 </a>
                             </li>
@@ -78,7 +78,17 @@ export default function Sidebar() {
                                         className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/control' ? 'bg-tersier text-primary' : 'text-primary'
                                             }`}
                                     >
-                                        <IconChartDots3 size={20} stroke={1.5} /> Control
+                                        <IconChartDots3 size={20} stroke={1.5} /> Kontrol
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/harvest">
+                                    <div
+                                        className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/harvest' ? 'bg-tersier text-primary' : 'text-primary'
+                                            }`}
+                                    >
+                                        <IconFeather size={20} stroke={1.5} /> Panen
                                     </div>
                                 </a>
                             </li>
@@ -88,7 +98,7 @@ export default function Sidebar() {
                                         className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/profile' ? 'bg-tersier text-primary' : 'text-primary'
                                             }`}
                                     >
-                                        <IconUser size={20} stroke={1.5} /> Profile
+                                        <IconUser size={20} stroke={1.5} /> Profil
                                     </div>
                                 </a>
                             </li>

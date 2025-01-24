@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
+import { IconInfoCircle } from "@tabler/icons-react";
 
 const RequestUninstallationModal = ({ isOpen, onClose, deviceData, houseNameData }) => {
     const [reason, setReason] = useState("");
@@ -32,16 +33,16 @@ const RequestUninstallationModal = ({ isOpen, onClose, deviceData, houseNameData
             });
 
             toast({
-                title: "Success",
-                description: "Uninstallation request submitted successfully.",
+                title: "Sukses!",
+                description: "Pengajuan uninstalasi berhasil dibuat.",
                 variant: "success",
             });
             onClose();
         } catch (error) {
             console.error("Error submitting uninstallation request:", error);
             toast({
-                title: "Error",
-                description: "Failed to submit uninstallation request.",
+                title: "Galat!",
+                description: "Gagal membuat pengajuan uninstalasi.",
                 variant: "destructive",
             });
         }
@@ -50,26 +51,39 @@ const RequestUninstallationModal = ({ isOpen, onClose, deviceData, houseNameData
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
-                <DialogTitle>Request Uninstallation</DialogTitle>
+                <DialogTitle>Pengajuan Uninstalasi Perangkat</DialogTitle>
                 <div className="space-y-4">
-                    <div>
-                        <strong>House:</strong> {houseName}
+                    <div className="table w-full">
+                        <div className="table-row">
+                            <div className="table-cell w-2/5 py-1">Nama kandang</div>
+                            <div className="table-cell text-muted-foreground">{houseName}</div>
+                        </div>
+                        <div className="table-row">
+                            <div className="table-cell w-2/5 py-1">Lantai</div>
+                            <div className="table-cell text-muted-foreground">{floor}</div>
+                        </div>
                     </div>
-                    <div>
-                        <strong>Floor:</strong> {floor}
+                    <div className="space-y-2">
+                        <div>
+                            <label>Pilih tanggal temu uninstalasi</label>
+                            <p className='flex items-center gap-1 text-sm text-muted-foreground'><IconInfoCircle size={16}></IconInfoCircle> Buatlah janji di hari dan di jam kerja.</p>
+                        </div>
+                        <Input
+                            type="date"
+                            placeholder="Select appointment date"
+                            value={appointmentDate}
+                            onChange={(e) => setAppointmentDate(e.target.value)}
+                        />
                     </div>
-                    <Input
-                        type="date"
-                        placeholder="Select appointment date"
-                        value={appointmentDate}
-                        onChange={(e) => setAppointmentDate(e.target.value)}
-                    />
-                    <Input
-                        type="text"
-                        placeholder="Enter reason"
-                        value={reason}
-                        onChange={(e) => setReason(e.target.value)}
-                    />
+                    <div className="space-y-2">
+                        <label>Alasan uninstalasi perangkat</label>
+                        <Input
+                            type="text"
+                            placeholder="Jelaskan alasan sedetail mungkin"
+                            value={reason}
+                            onChange={(e) => setReason(e.target.value)}
+                        />
+                    </div>
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>Cancel</Button>

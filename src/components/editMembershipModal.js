@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import Spinner from "./ui/spinner";
 
 // Fungsi Format Tanggal
 const formatISOToDateInput = (isoString) => {
@@ -25,15 +26,14 @@ export default function EditMembershipModal({ isOpen, onClose, membershipId, onM
         status: '',
     });
     const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false); // State untuk tombol simpan
+    const [saving, setSaving] = useState(false);
     const { toast } = useToast();
 
-    // Fetch data saat modal dibuka dan ID tersedia
     useEffect(() => {
         if (membershipId && isOpen) {
             fetchMembershipDetails();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [membershipId, isOpen]);
 
     const fetchMembershipDetails = async () => {
@@ -54,8 +54,8 @@ export default function EditMembershipModal({ isOpen, onClose, membershipId, onM
         } catch (error) {
             console.error("Error fetching membership details:", error);
             toast({
-                title: "Error",
-                description: "Failed to fetch membership details",
+                title: "Galat!",
+                description: "Gagal mendapatkan detail membership.",
                 variant: "destructive"
             });
         } finally {
@@ -77,24 +77,22 @@ export default function EditMembershipModal({ isOpen, onClose, membershipId, onM
             setSaving(true);
             await axios.put(`${apiUrl}/membership/${membershipId}`, formData);
             toast({
-                title: "Success",
-                description: "Membership updated successfully",
+                title: "Sukses!",
+                description: "Membership berhasil diperbarui.",
                 variant: "success"
             });
 
-            // Panggil prop untuk fetch data terbaru
             if (typeof onMembershipUpdated === "function") {
                 onMembershipUpdated();
             }
 
-            // Tutup modal
             onClose();
 
         } catch (error) {
             console.error("Error updating membership:", error);
             toast({
-                title: "Error",
-                description: "Failed to update membership",
+                title: "Galat!",
+                description: "Gagal memperbarui membership.",
                 variant: "destructive"
             });
         } finally {
@@ -107,45 +105,58 @@ export default function EditMembershipModal({ isOpen, onClose, membershipId, onM
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Edit Membership</DialogTitle>
+                    <DialogTitle>Memperbarui Membership</DialogTitle>
                 </DialogHeader>
                 {loading ? (
-                    <p>Loading...</p>
+                    <div className="flex items-center justify-center h-32">
+                        <Spinner />
+                    </div>
                 ) : (
                     <div className="space-y-4">
-                        <p><strong>Name:</strong> {formData.name}</p>
-                        <p><strong>Email:</strong> {formData.email}</p>
-                        <label>Join Date</label>
-                        <Input
-                            type="date"
-                            name="join_date"
-                            value={formData.join_date}
-                            onChange={handleChange}
-                        />
-                        <label>Expiration Date</label>
-                        <Input
-                            type="date"
-                            name="exp_date"
-                            value={formData.exp_date}
-                            onChange={handleChange}
-                        />
-                        <label>Status</label>
-                        <Select
-                            value={formData.status}
-                            onValueChange={(value) => setFormData({ ...formData, status: value })}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select Status" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="0">Inactive</SelectItem>
-                                <SelectItem value="1">Active</SelectItem>
-                                <SelectItem value="2">Suspended</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Button onClick={handleUpdate} disabled={saving} className="w-full">
-                            {saving ? 'Saving...' : 'Update Membership'}
-                        </Button>
+                        <div className="space-y-2">
+                            <p className="text-muted-foreground"><span className="text-black">Nama:</span> {formData.name}</p>
+                            <p className="text-muted-foreground"><span className="text-black">Email:</span> {formData.email}</p>
+                        </div>
+                        <div className="space-y-2">
+                            <label>Tanggal bergabung</label>
+                            <Input
+                                type="date"
+                                name="join_date"
+                                value={formData.join_date}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label>Tanggal kadaluarsa</label>
+                            <Input
+                                type="date"
+                                name="exp_date"
+                                value={formData.exp_date}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label>Status</label>
+                            <Select
+                                value={formData.status}
+                                onValueChange={(value) => setFormData({ ...formData, status: value })}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Pilih Status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="0">Tidak aktif</SelectItem>
+                                    <SelectItem value="1">Aktif</SelectItem>
+                                    <SelectItem value="2">Ditangguhkan</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="flex justify-end gap-4">
+                            <Button variant="outline" onClick={onClose}>Batal</Button>
+                            <Button onClick={handleUpdate} disabled={saving} className="">
+                                {saving ? 'Menyimpan...' : 'Perbarui Membership'}
+                            </Button>
+                        </div>
                     </div>
                 )}
             </DialogContent>

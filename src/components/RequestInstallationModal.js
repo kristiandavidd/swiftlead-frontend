@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
+import { IconInfoCircle } from "@tabler/icons-react";
 
-const RequestInstallationModal = ({ houses, onClose, isOpen }) => {
+export default function RequestInstallationModal({ houses, onClose, isOpen }) {
     const [selectedHouse, setSelectedHouse] = useState("");
     const [selectedFloors, setSelectedFloors] = useState("");
     const [sensorCount, setSensorCount] = useState("");
@@ -29,24 +30,23 @@ const RequestInstallationModal = ({ houses, onClose, isOpen }) => {
                 console.log("Installation request submitted:", response.data);
 
                 toast({
-                    title: "Success",
-                    description: "Request installation added successfully.",
+                    title: "Sukses!",
+                    description: "Pengajuan instalasi berhasil dibuat.",
                     variant: "success",
                 });
 
-                // Close modal and clear inputs
                 setSelectedHouse("");
                 setSelectedFloors("");
                 setSensorCount("");
                 setAppointmentDate(""); // Clear appointment date
                 setActiveTab("management");
                 onClose(true);
-                
+
             })
             .catch((error) => {
                 toast({
-                    title: "Error",
-                    description: error.response?.data?.message || "Failed to request installation.",
+                    title: "Galat!",
+                    description: error.response?.data?.message || "Gagal membuat pengajuan instalasi.",
                     variant: "destructive",
                 });
                 console.error("Error submitting installation request:", error.response?.data || error.message);
@@ -56,53 +56,67 @@ const RequestInstallationModal = ({ houses, onClose, isOpen }) => {
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
-                <DialogTitle>Ajukan Instalasi</DialogTitle>
-                <div className="space-y-4">
-                    {/* Pilihan Kandang */}
-                    <select
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                        value={selectedHouse}
-                        onChange={(e) => setSelectedHouse(e.target.value)}
-                    >
-                        <option value="">Pilih Kandang</option>
-                        {Object.keys(houses).map((houseId) => (
-                            <option key={houseId} value={houseId}>
-                                {houses[houseId].name}
-                            </option>
-                        ))}
-                    </select>
+                <DialogTitle>Ajukan Instalasi Perangkat Baru</DialogTitle>
+                {Object.keys(houses).length > 0 ? (
 
-                    {/* Input Lantai */}
-                    <Input
-                        type="text"
-                        placeholder='Lantai ("1, 2, 3")'
-                        value={selectedFloors}
-                        onChange={(e) => setSelectedFloors(e.target.value)}
-                    />
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <label for="">Pilih kandang </label>
+                            <select
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                value={selectedHouse}
+                                onChange={(e) => setSelectedHouse(e.target.value)}
+                            >
+                                <option value="">Pilih Kandang</option>
+                                {Object.keys(houses).map((houseId) => (
+                                    <option key={houseId} value={houseId}>
+                                        {houses[houseId].name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="space-y-2">
+                            <label for="">Pilih lantai mana saja yang akan diinstal </label>
+                            <Input
+                                type="text"
+                                placeholder='1, 2, 3'
+                                value={selectedFloors}
+                                onChange={(e) => setSelectedFloors(e.target.value)}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label for="">Masukkan jumlah sensor </label>
+                            <Input
+                                type="number"
+                                placeholder="Jumlah sensor"
+                                value={sensorCount}
+                                onChange={(e) => setSensorCount(e.target.value)}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <div>
+                                <label for="">Pilih tanggal janji temu </label>
+                                <p className='flex items-center gap-1 text-sm text-muted-foreground'><IconInfoCircle size={16}></IconInfoCircle> Buatlah janji di hari dan di jam kerja.</p>
+                            </div>
+                            <Input
+                                type="date"
+                                placeholder="Tanggal janji temu"
+                                value={appointmentDate}
+                                onChange={(e) => setAppointmentDate(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                ) : (
 
-                    {/* Input Jumlah Sensor */}
-                    <Input
-                        type="number"
-                        placeholder="Jumlah Sensor"
-                        value={sensorCount}
-                        onChange={(e) => setSensorCount(e.target.value)}
-                    />
-
-                    {/* Input Appointment Date */}
-                    <Input
-                        type="date"
-                        placeholder="Tanggal Appointment"
-                        value={appointmentDate}
-                        onChange={(e) => setAppointmentDate(e.target.value)}
-                    />
-                </div>
+                    <p className="p-4 space-y-4 text-center rounded-md bg-tersier">Kandang belum tersedia. Silahkan tambahkan kandang terlebih dahulu.</p>
+                )}
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>Batal</Button>
-                    <Button onClick={handleSubmit}>Kirim</Button>
+                    {houses && (
+                        <Button onClick={handleSubmit}>Kirim</Button>
+                    )}
                 </DialogFooter>
             </DialogContent>
         </Dialog>
     );
 };
-
-export default RequestInstallationModal;

@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/table";
 import UserLayout from "@/layout/UserLayout";
 import Image from "next/image";
-import ProgressStatus from "@/components/salesStatus";
 import { useUser } from "@/context/userContext";
 import { useToast } from "@/hooks/use-toast";
 

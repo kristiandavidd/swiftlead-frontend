@@ -5,6 +5,7 @@ import axios from "axios";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Badge } from "./ui/badge";
+import { Button } from "@/components/ui/button";
 import {
     Select,
     SelectTrigger,
@@ -16,8 +17,10 @@ import {
 } from "@/components/ui/select";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
+import { toast } from "@/hooks/use-toast";
+import Spinner from "./ui/spinner";
 
-const ArticleForm = () => {
+export default function ArticleForm() {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [cover, setCover] = useState(null);
@@ -34,9 +37,9 @@ const ArticleForm = () => {
             : process.env.NEXT_PUBLIC_API_URL;
 
     useEffect(() => {
-        fetchTags(); // Fetch tags when component mounts
+        fetchTags();
         if (id) {
-            fetchArticle(); // Fetch article data if editing
+            fetchArticle();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
@@ -47,6 +50,7 @@ const ArticleForm = () => {
             setTags(res.data[0]);
         } catch (error) {
             console.error("Error fetching tags:", error);
+            toast({ title: "Galat!", description: "Gagal mendapatkan kata kunci.", variant: "error" });
         }
     };
 
@@ -56,14 +60,15 @@ const ArticleForm = () => {
             const res = await axios.get(`${apiUrl}/articles/${id}`);
             if (res.data.length > 0) {
                 const { title, content, cover_image, tags_id, status } = res.data[0];
-                setTitle(title || ""); // Set title
-                setContent(content || ""); // Set content
-                setCover(cover_image || null); // Set cover image
-                setSelectedTag(tags_id || ""); // Set selected tag ID
-                setStatus(status !== undefined ? status.toString() : "0"); // Set status as default
+                setTitle(title || "");
+                setContent(content || "");
+                setCover(cover_image || null);
+                setSelectedTag(tags_id || "");
+                setStatus(status !== undefined ? status.toString() : "0");
             }
         } catch (error) {
             console.error("Error fetching article:", error);
+            toast({ title: "Galat!", description: "Gagal mendapatkan artikel.", variant: "error" });
         } finally {
             setLoading(false);
         }
@@ -74,7 +79,7 @@ const ArticleForm = () => {
         const formData = new FormData();
         formData.append("title", title);
         formData.append("content", content);
-        formData.append("tags_id", selectedTag); // Add tag ID
+        formData.append("tags_id", selectedTag);
         formData.append("status", status);
 
         console.log("data:", title, selectedTag, status, cover);
@@ -91,20 +96,23 @@ const ArticleForm = () => {
             } else {
                 await axios.post(`${apiUrl}/articles`, formData);
             }
+            toast({ title: "Sukses!", description: "Artikel berhasil disimpan.", variant: "success" });
             router.push("/admin/content");
         } catch (error) {
             console.error("Error submitting article:", error);
+            toast({ title: "Galat!", description: "Gagal menyimpan artikel.", variant: "error" });
         }
     };
 
     return (
         <div className="max-w-3xl p-6 mx-auto mt-10 bg-white rounded-md shadow-md">
-            <h1 className="mb-4 text-2xl font-bold">{id ? "Edit Article" : "Create Article"}</h1>
+            <h1 className="mb-4 text-2xl font-bold">{id ? "Mengubah Artikel" : "Menulis Artikel"}</h1>
             {loading ? (
-                <p>Loading...</p>
+                <div className="flex items-center justify-center h-32">
+                    <Spinner />
+                </div>
             ) : (
                 <form onSubmit={(e) => handleSubmit(e)}>
-                    {/* Cover Image */}
                     <div className="flex flex-col items-center gap-2 mb-4">
                         {cover && (
                             <Image
@@ -122,26 +130,23 @@ const ArticleForm = () => {
                         />
                     </div>
 
-                    {/* Title */}
                     <div className="mb-4">
-                        <label className="block mb-2 font-medium text-gray-700">Title</label>
+                        <label className="block mb-2 font-medium text-gray-700">Judul artikel</label>
                         <Input
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
+                            placeholder="Judul artikel yang menarik.."
                             required
                         />
                     </div>
 
-                    {/* Content */}
                     <div className="mb-4">
-                        <label className="block mb-2 font-medium text-gray-700">Content</label>
+                        <label className="block mb-2 font-medium text-gray-700">Konten artikel</label>
                         <ReactQuill value={content} onChange={setContent} theme="snow" />
                     </div>
 
-                    {/* Tags and Status */}
                     <div className="flex justify-between gap-4 mb-4">
-                        {/* Status */}
                         <div className="w-1/2">
                             <label className="block mb-2 font-medium text-gray-700">Status</label>
                             <Select
@@ -149,12 +154,12 @@ const ArticleForm = () => {
                                 onValueChange={(value) => setStatus(value)}
                             >
                                 <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select Status" />
+                                    <SelectValue placeholder="Pilih status publikasi" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectLabel>Status</SelectLabel>
-                                        <SelectItem value="1">Published</SelectItem>
+                                        <SelectLabel>Status Publikasi</SelectLabel>
+                                        <SelectItem value="1">Publik</SelectItem>
                                         <SelectItem value="2">Membership</SelectItem>
                                         <SelectItem value="0">Draft</SelectItem>
                                     </SelectGroup>
@@ -162,15 +167,14 @@ const ArticleForm = () => {
                             </Select>
                         </div>
 
-                        {/* Tags */}
                         <div className="w-1/2">
-                            <label className="block mb-2 font-medium text-gray-700">Tag</label>
+                            <label className="block mb-2 font-medium text-gray-700">Pilih kata kunci</label>
                             <select
                                 value={selectedTag}
                                 onChange={(e) => setSelectedTag(e.target.value)}
                                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
-                                <option value="">Select Tag</option>
+                                <option value="">Pilih kata kunci</option>
                                 {tags.map((tag) => (
                                     <option key={tag.id} value={tag.id}>
                                         {tag.name}
@@ -180,19 +184,23 @@ const ArticleForm = () => {
                         </div>
                     </div>
 
-                    {/* Buttons */}
-                    <div className="flex gap-4">
-                        <button
+                    <div className="flex justify-end gap-4">
+                        <Button
+                            variant="outline"
+                            onClick={() => router.push("/admin/content")}
+                        >
+                            Batal
+                        </Button>
+                        <Button
                             type="submit"
                             className="px-6 py-2 font-medium text-white rounded-md bg-primary hover:bg-primary/90"
                         >
-                            {id ? "Update Article" : "Create Article"}
-                        </button>
+                            {id ? "Perbarui Artikel" : "Buat Artikel"}
+                        </Button>
                     </div>
                 </form>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 };
-
-export default ArticleForm;

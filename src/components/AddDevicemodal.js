@@ -27,12 +27,11 @@ export default function AddDeviceModal({ isOpen, onClose, requestData, onSuccess
         try {
             const response = await axios.get(`${apiUrl}/device/generate-code`);
             setInstallCode(response.data.install_code);
-            console.log("response", response);
         } catch (error) {
             console.error("Error generating install code:", error);
             toast({
-                title: "Error",
-                description: "Failed to generate install code.",
+                title: "Galat!",
+                description: "Gagal menghasilkan kode instalasi.",
                 variant: "destructive",
             });
         }
@@ -42,8 +41,8 @@ export default function AddDeviceModal({ isOpen, onClose, requestData, onSuccess
     const handleSubmit = async () => {
         if (!floor) {
             toast({
-                title: "Error",
-                description: "Floor is required.",
+                title: "Galat!",
+                description: "Lantai penempatan dibutuhkan.",
                 variant: "destructive",
             });
             return;
@@ -62,8 +61,8 @@ export default function AddDeviceModal({ isOpen, onClose, requestData, onSuccess
             });
 
             toast({
-                title: "Success",
-                description: "Device added successfully.",
+                title: "Sukses!",
+                description: "Perangkat berhasil ditambahkan.",
                 variant: "success",
             });
 
@@ -73,8 +72,8 @@ export default function AddDeviceModal({ isOpen, onClose, requestData, onSuccess
         } catch (error) {
             console.error("Error adding device:", error);
             toast({
-                title: "Error",
-                description: "Failed to add device.",
+                title: "Galat!",
+                description: "Gagal menambahkan perangkat.",
                 variant: "destructive",
             });
         }
@@ -84,30 +83,30 @@ export default function AddDeviceModal({ isOpen, onClose, requestData, onSuccess
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Add Device</DialogTitle>
+                    <DialogTitle>Tambah Perangkat</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                     <div>
-                        <strong>House Name:</strong> {requestData?.house_name || "N/A"}
+                        <strong>Nama Kandang:</strong> {requestData?.house_name || "N/A"}
                     </div>
                     <div>
-                        <strong>Location:</strong> {requestData?.location || "N/A"}
+                        <strong>Alamat:</strong> {requestData?.location || "N/A"}
                     </div>
                     <div>
-                        <strong>Install Code:</strong> {installCode}
+                        <strong>Kode Instalasi:</strong> {installCode}
                     </div>
                     <Input
                         type="number"
-                        placeholder="Enter Floor"
+                        placeholder="Lantai penempatan perangkat.."
                         value={floor}
                         onChange={(e) => setFloor(e.target.value)}
                     />
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>
-                        Cancel
+                        Batal
                     </Button>
-                    <Button onClick={handleSubmit}>Submit</Button>
+                    <Button onClick={handleSubmit}>Tambahkan</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

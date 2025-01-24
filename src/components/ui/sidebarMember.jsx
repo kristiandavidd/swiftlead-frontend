@@ -27,7 +27,7 @@ export default function SidebarMember() {
                                     className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/member' ? 'bg-tersier text-primary' : 'text-primary'
                                         }`}
                                 >
-                                    <IconHome size={20} stroke={1.5} /> Dashboard
+                                    <IconHome size={20} stroke={1.5} /> Beranda
                                 </div>
                             </a>
                         </li>
@@ -37,7 +37,7 @@ export default function SidebarMember() {
                                     className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/member/article' ? 'bg-tersier text-primary' : 'text-primary'
                                         }`}
                                 >
-                                    <IconArticle size={20} stroke={1.5} /> Article
+                                    <IconArticle size={20} stroke={1.5} /> Artikel
                                 </div>
                             </a>
                         </li>
@@ -74,7 +74,7 @@ export default function SidebarMember() {
                                         className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/member' ? 'bg-tersier text-primary' : 'text-primary'
                                             }`}
                                     >
-                                        <IconHome size={20} stroke={1.5} /> Dashboard
+                                        <IconHome size={20} stroke={1.5} /> Beranda
                                     </div>
                                 </a>
                             </li>
@@ -84,7 +84,7 @@ export default function SidebarMember() {
                                         className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/member/article' ? 'bg-tersier text-primary' : 'text-primary'
                                             }`}
                                     >
-                                        <IconArticle size={20} stroke={1.5} /> Article
+                                        <IconArticle size={20} stroke={1.5} /> Artikel
                                     </div>
                                 </a>
                             </li>

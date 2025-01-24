@@ -21,7 +21,7 @@ export default function SidebarAdmin() {
                                     className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/admin' ? 'bg-tersier text-primary' : 'text-primary'
                                         }`}
                                 >
-                                    <IconHome size={20} stroke={1.5} /> Dashboard
+                                    <IconHome size={20} stroke={1.5} /> Beranda
                                 </div>
                             </a>
                         </li>
@@ -31,7 +31,7 @@ export default function SidebarAdmin() {
                                     className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/admin/user' ? 'bg-tersier text-primary' : 'text-primary'
                                         }`}
                                 >
-                                    <IconUser size={20} stroke={1.5} /> User
+                                    <IconUser size={20} stroke={1.5} /> Pengguna
                                 </div>
                             </a>
                         </li>
@@ -41,7 +41,7 @@ export default function SidebarAdmin() {
                                     className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/admin/installation' ? 'bg-tersier text-primary' : 'text-primary'
                                         }`}
                                 >
-                                    <IconAlarmSmoke size={20} stroke={1.5} /> Installation
+                                    <IconAlarmSmoke size={20} stroke={1.5} /> Instalasi
                                 </div>
                             </a>
                         </li>
@@ -51,7 +51,7 @@ export default function SidebarAdmin() {
                                     className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/admin/transaction' ? 'bg-tersier text-primary' : 'text-primary'
                                         }`}
                                 >
-                                    <IconCurrencyDollar size={20} stroke={1.5} /> Transaction
+                                    <IconCurrencyDollar size={20} stroke={1.5} /> Transaksi
                                 </div>
                             </a>
                         </li>
@@ -61,7 +61,7 @@ export default function SidebarAdmin() {
                                     className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/admin/content' ? 'bg-tersier text-primary' : 'text-primary'
                                         }`}
                                 >
-                                    <IconLayout2 size={20} stroke={1.5} /> Content
+                                    <IconLayout2 size={20} stroke={1.5} /> Konten
                                 </div>
                             </a>
                         </li>
@@ -71,7 +71,7 @@ export default function SidebarAdmin() {
                                     className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/admin/profile' ? 'bg-tersier text-primary' : 'text-primary'
                                         }`}
                                 >
-                                    <IconUser size={20} stroke={1.5} /> Profile
+                                    <IconUser size={20} stroke={1.5} /> Profil
                                 </div>
                             </a>
                         </li>
@@ -88,7 +88,7 @@ export default function SidebarAdmin() {
                                         className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/admin' ? 'bg-tersier text-primary' : 'text-primary'
                                             }`}
                                     >
-                                        <IconHome size={20} stroke={1.5} /> Dashboard
+                                        <IconHome size={20} stroke={1.5} /> Beranda
                                     </div>
                                 </a>
                             </li>
@@ -98,7 +98,7 @@ export default function SidebarAdmin() {
                                         className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/admin/user' ? 'bg-tersier text-primary' : 'text-primary'
                                             }`}
                                     >
-                                        <IconUser size={20} stroke={1.5} /> User
+                                        <IconUser size={20} stroke={1.5} /> Pengguna
                                     </div>
                                 </a>
                             </li>
@@ -108,7 +108,7 @@ export default function SidebarAdmin() {
                                         className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/admin/installation' ? 'bg-tersier text-primary' : 'text-primary'
                                             }`}
                                     >
-                                        <IconAlarmSmoke size={20} stroke={1.5} /> Installation
+                                        <IconAlarmSmoke size={20} stroke={1.5} /> Instalasi
                                     </div>
                                 </a>
                             </li>
@@ -118,7 +118,7 @@ export default function SidebarAdmin() {
                                         className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/admin/transaction' ? 'bg-tersier text-primary' : 'text-primary'
                                             }`}
                                     >
-                                        <IconCurrencyDollar size={20} stroke={1.5} /> Transaction
+                                        <IconCurrencyDollar size={20} stroke={1.5} /> Transaksi
                                     </div>
                                 </a>
                             </li>
@@ -128,7 +128,7 @@ export default function SidebarAdmin() {
                                         className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/content' ? 'bg-tersier text-primary' : 'text-primary'
                                             }`}
                                     >
-                                        <IconLayout2 size={20} stroke={1.5} /> Content
+                                        <IconLayout2 size={20} stroke={1.5} /> Konten
                                     </div>
                                 </a>
                             </li>
@@ -138,7 +138,7 @@ export default function SidebarAdmin() {
                                         className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/profile' ? 'bg-tersier text-primary' : 'text-primary'
                                             }`}
                                     >
-                                        <IconUser size={20} stroke={1.5} /> Profile
+                                        <IconUser size={20} stroke={1.5} /> Profil
                                     </div>
                                 </a>
                             </li>

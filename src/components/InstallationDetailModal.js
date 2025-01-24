@@ -3,20 +3,22 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useState, useEffect } from "react";
-
+import { useToast } from "@/hooks/use-toast";
+import Spinner from "@/components/ui/spinner";
 
 export default function InstallationDetailModal({ isOpen, onClose, installationId }) {
     const [installation, setInstallation] = useState(null);
     const [loading, setLoading] = useState(true);
+    const { toast } = useToast();
 
     const statusMapping = {
-        0: 'Pending',
-        1: 'Checking',
-        2: 'Approved',
-        3: 'Completed',
-        4: 'Cancelled',
-        5: 'Rejected',
-        6: "Rescheduled"
+        0: 'Menunggu',
+        1: 'Pengecekan',
+        2: 'Disetujui',
+        3: 'Selesai',
+        4: 'Dibatalkan',
+        5: 'Ditolak',
+        6: "Dijadwalkan Ulang"
     };
 
     useEffect(() => {
@@ -36,6 +38,7 @@ export default function InstallationDetailModal({ isOpen, onClose, installationI
             setInstallation(res.data);
         } catch (error) {
             console.error("Error fetching installation details:", error);
+            toast({ title: "Galat!", description: "Gagal mendapatkan detail instalasi.", variant: "destructive" });
         } finally {
             setLoading(false);
         }
@@ -44,33 +47,51 @@ export default function InstallationDetailModal({ isOpen, onClose, installationI
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="p-4 max-h-[80vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle>Installation Details</DialogTitle>
+                    <DialogTitle>Detail Pengajuan Instalasi</DialogTitle>
                 </DialogHeader>
                 {loading ? (
-                    <p>Loading...</p>
+                    <div className="flex items-center justify-center h-32">
+                        <Spinner />
+                    </div>
                 ) : installation ? (
-                    <div className="space-y-4">
-                        <div>
-                            <strong>Nama Peternak:</strong> {installation.user_name}
+                    <div className="table w-full">
+                        <div className="table-row">
+                            <div className="table-cell w-2/5 py-1">Nama Peternak</div>
+                            <div className="table-cell text-muted-foreground">{installation.user_name}</div>
                         </div>
-                        <div>
-                            <strong>Lokasi Kandang:</strong> {installation.location}
+                        <div className="table-row">
+                            <div className="table-cell w-2/5 py-1">Lokasi Kandang</div>
+                            <div className="table-cell text-muted-foreground">{installation.location}</div>
                         </div>
-                        <div>
-                            <strong>Lantai yang dipasang:</strong> {installation.floors}
+                        <div className="table-row">
+                            <div className="table-cell w-2/5 py-1">Lantai yang dipasang</div>
+                            <div className="table-cell text-muted-foreground">{installation.floors}</div>
                         </div>
-                        <div>
-                            <strong>Jumlah Sensor:</strong> {installation.sensor_count}
+                        <div className="table-row">
+                            <div className="table-cell w-2/5 py-1">Jumlah Sensor</div>
+                            <div className="table-cell text-muted-foreground">{installation.sensor_count}</div>
                         </div>
-                        <div>
-                            <strong>Status:</strong> {statusMapping[installation.status]}
+                        <div className="table-row">
+                            <div className="table-cell w-2/5 py-1">Tanggal janji temu</div>
+                            <div className="table-cell text-muted-foreground">
+                                {new Date(installation.appointment_date).toLocaleDateString("id-ID", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                })}
+                            </div>
+                        </div>
+                        <div className="table-row">
+                            <div className="table-cell w-2/5 py-1">Status</div>
+                            <div className="table-cell text-muted-foreground">{statusMapping[installation.status]}</div>
                         </div>
                     </div>
+
                 ) : (
-                    <p>Installation details not found.</p>
+                    <p>Detail instalasi tidak ditemukan.</p>
                 )}
-                <Button onClick={onClose} className="mt-4">
-                    Close
+                <Button onClick={onClose} variant="outline" className="mt-4">
+                    Tutup
                 </Button>
             </DialogContent>
         </Dialog>

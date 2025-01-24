@@ -8,7 +8,7 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 
-const EditDeviceModal = ({ isOpen, onClose, selectedDevice, onSuccess }) => {
+export default function EditDeviceModal({ isOpen, onClose, selectedDevice, onSuccess }) {
     const [floor, setFloor] = useState(selectedDevice?.floor || "");
     const [installCode, setInstallCode] = useState(selectedDevice?.install_code || "");
     const [status, setStatus] = useState(selectedDevice?.status || 0);
@@ -43,8 +43,8 @@ const EditDeviceModal = ({ isOpen, onClose, selectedDevice, onSuccess }) => {
             });
 
             toast({
-                title: "Success",
-                description: "Device updated successfully.",
+                title: "Sukses!",
+                description: "Perangkat berhasil diperbarui.",
                 variant: "success",
             });
 
@@ -53,8 +53,8 @@ const EditDeviceModal = ({ isOpen, onClose, selectedDevice, onSuccess }) => {
         } catch (error) {
             console.error("Error updating device:", error);
             toast({
-                title: "Error",
-                description: "Failed to update device.",
+                title: "Galat!",
+                description: "Gagal memperbarui perangkat.",
                 variant: "destructive",
             });
         }
@@ -64,24 +64,24 @@ const EditDeviceModal = ({ isOpen, onClose, selectedDevice, onSuccess }) => {
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Edit Device</DialogTitle>
+                    <DialogTitle>Memperbarui Perangkat</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                     <div>
-                        <label className="block mb-1 text-sm font-medium">Install Code</label>
+                        <label className="block mb-1 text-sm font-medium">Kode instalasi</label>
                         <Input type="text" value={installCode} readOnly disabled className="bg-gray-100 cursor-not-allowed" />
                     </div>
                     <div>
-                        <label className="block mb-1 text-sm font-medium">Floor</label>
+                        <label className="block mb-1 text-sm font-medium">Lantai pemasangan</label>
                         <Input
                             type="number"
-                            placeholder="Enter floor"
+                            placeholder="Masukan lantai yang baru.."
                             value={floor}
                             onChange={(e) => setFloor(e.target.value)}
                         />
                     </div>
                     <div>
-                        <label className="block mb-1 text-sm font-medium">Installation Date</label>
+                        <label className="block mb-1 text-sm font-medium">Tanggal instalasi</label>
                         <Input
                             type="date"
                             value={createdAt}
@@ -89,7 +89,7 @@ const EditDeviceModal = ({ isOpen, onClose, selectedDevice, onSuccess }) => {
                         />
                     </div>
                     <div>
-                        <label className="block mb-1 text-sm font-medium">Last Maintenance Date</label>
+                        <label className="block mb-1 text-sm font-medium">Tanggal terakhir pemeliharaan</label>
                         <Input
                             type="date"
                             value={updatedAt}
@@ -100,24 +100,23 @@ const EditDeviceModal = ({ isOpen, onClose, selectedDevice, onSuccess }) => {
                         <label className="block mb-1 text-sm font-medium">Status</label>
                         <Select value={status.toString()} onValueChange={(value) => setStatus(parseInt(value, 10))}>
                             <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select Status" />
+                                <SelectValue placeholder="Pilih status" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="0">Inactive</SelectItem>
-                                <SelectItem value="1">Active</SelectItem>
+                                <SelectItem value="0">Tidak Aktif</SelectItem>
+                                <SelectItem value="1">Aktif</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>
-                        Cancel
+                        Batal
                     </Button>
-                    <Button onClick={handleSubmit}>Save</Button>
+                    <Button onClick={handleSubmit}>Perbarui</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
     );
 };
 
-export default EditDeviceModal;

@@ -11,7 +11,7 @@ export default function MembershipForm() {
 
     const handleSubscribe = async () => {
         if (!isChecked) {
-            toast({ title: "Error", description: "You must agree to the terms and conditions", variant: "destructive" });
+            toast({ title: "Galat!", description: "Anda harus menyetujui syarat dan ketentuan yang berlaku.", variant: "destructive" });
             return;
         }
 
@@ -29,15 +29,15 @@ export default function MembershipForm() {
             window.location.href = response.data.redirect_url;
         } catch (error) {
             console.error("Error initiating payment:", error);
-            toast({ title: "Error", description: "Failed to initiate payment", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal untuk beralih ke halaman pembayaran.", variant: "destructive" });
         }
     };
 
     return (
         <div className="space-y-4">
             <p>
-                By subscribing to our membership, you agree to our{" "}
-                <a href="#" className="text-blue-500 underline">Terms and Conditions</a>.
+                Dengan berlangganan, anda telah menyetujui{" "}
+                <a href="#" className="text-blue-500 underline">syarat dan ketentuan yang berlaku.</a>.
             </p>
             <label>
                 <input
@@ -45,9 +45,9 @@ export default function MembershipForm() {
                     checked={isChecked}
                     onChange={() => setIsChecked(!isChecked)}
                 />{" "}
-                I agree to the terms and conditions
+                Saya telah membaca dan menyetujui syarat dan ketentuan yang berlaku.
             </label>
-            <Button onClick={handleSubscribe}>Subscribe to Membership</Button>
+            <Button onClick={handleSubscribe}>Berlangganan ke Membership</Button>
         </div>
     );
 }

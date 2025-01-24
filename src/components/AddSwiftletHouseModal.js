@@ -8,7 +8,7 @@ import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/context/userContext";
 
-const AddSwiftletHouseModal = ({ onClose, isOpen }) => {
+export default function AddSwiftletHouseModal({ onClose, isOpen }) {
     const [houseName, setHouseName] = useState("");
     const [houseAddress, setHouseAddress] = useState("");
     const { toast } = useToast();
@@ -21,8 +21,8 @@ const AddSwiftletHouseModal = ({ onClose, isOpen }) => {
 
         if (!houseName || !houseAddress) {
             toast({
-                title: "Error",
-                description: "Please fill out all fields.",
+                title: "Galat!",
+                description: "Tolong isi semua bagian.",
                 variant: "destructive",
             });
             return;
@@ -36,19 +36,18 @@ const AddSwiftletHouseModal = ({ onClose, isOpen }) => {
             });
 
             toast({
-                title: "Success",
-                description: "Swiftlet house added successfully.",
+                title: "Sukses!",
+                description: "Kandang walet berhasil ditambahkan.",
                 variant: "success",
             });
 
-            // Close modal and clear inputs
             setHouseName("");
             setHouseAddress("");
             onClose(true);
         } catch (error) {
             toast({
-                title: "Error",
-                description: error.response?.data?.message || "Failed to add swiftlet house.",
+                title: "Galat!",
+                description: error.response?.data?.message || "Gagal menambahkan kandang walet.",
                 variant: "destructive",
             });
         }
@@ -57,17 +56,17 @@ const AddSwiftletHouseModal = ({ onClose, isOpen }) => {
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent>
-                <DialogTitle>Tambah Rumah Walet</DialogTitle>
+                <DialogTitle>Tambah Kandang Walet</DialogTitle>
                 <div className="space-y-4">
                     <Input
                         type="text"
-                        placeholder="Nama Rumah"
+                        placeholder="Nama kandang"
                         value={houseName}
                         onChange={(e) => setHouseName(e.target.value)}
                     />
                     <Input
                         type="text"
-                        placeholder="Alamat Rumah"
+                        placeholder="Alamat kandang walet"
                         value={houseAddress}
                         onChange={(e) => setHouseAddress(e.target.value)}
                     />
@@ -80,5 +79,3 @@ const AddSwiftletHouseModal = ({ onClose, isOpen }) => {
         </Dialog>
     );
 };
-
-export default AddSwiftletHouseModal;

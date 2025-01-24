@@ -19,11 +19,11 @@ export default function GuestLayout({ children, head, className = '' }) {
                     </Link>
                     {user ? (
                         <Link href={"/dashboard"} className="px-6 py-2 font-medium border rounded-md text-primary border-primary hover:bg-muted/90">
-                            Dashboard
+                            Beranda
                         </Link>
                     ) : (
                         <Link href={"/login"} className="px-6 py-2 font-medium text-white rounded-md bg-primary hover:bg-primary/90">
-                            Login
+                            Masuk
                         </Link>
                     )}
                 </div>
