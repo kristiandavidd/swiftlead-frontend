@@ -28,6 +28,11 @@ const Video = () => {
             setVideos(res.data[0]);
         } catch (error) {
             console.error('Failed to fetch videos:', error);
+            toast({
+                title: "Galat!",
+                description: "Gagal mengambil data video.",
+                variant: "destructive"
+            })
         }
     };
 
@@ -86,7 +91,7 @@ const Video = () => {
                             </div>
                         ))
                     ) : (
-                        <p>No videos found.</p>
+                        <p>Tidak ada konten video ditemukan.</p>
                     )}
                 </div>
             </div>

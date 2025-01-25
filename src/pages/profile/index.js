@@ -28,6 +28,7 @@ export default function Profile() {
     const [isActive, setIsActive] = useState(null);
     const router = useRouter();
     const { user, setUser } = useUser();
+    const [membership, setMembership] = useState(null);
     console.log("user", user);
 
     // State untuk form
@@ -113,12 +114,15 @@ export default function Profile() {
             console.log(userId);
             const { data } = await axios.get(`${apiUrl}/membership/user/${userId}`);
             setIsActive(data.isActive);
+            setMembership(data.membership);
             console.log(data);
         } catch (error) {
             console.error('Error fetching membership status:', error);
             setIsActive(false); // Jika terjadi error, anggap user tidak aktif
         }
     };
+
+    console.log("membership", membership);
 
     useEffect(() => {
         if (user) {
@@ -135,8 +139,8 @@ export default function Profile() {
     return (
         <UserLayout head={"Profile"}>
             <div className="flex flex-col w-full">
-                <p className="text-lg font-semibold">Profile</p>
-                <p className="text-sm">Personalize Account Settings and Manage User Access Securely.</p>
+                <p className="text-lg font-semibold">Profil</p>
+                <p className="text-sm">Personalisasi akun anda serta bergabunglah bersama membership!</p>
             </div>
             <Card className="p-4 my-4">
                 <CardContent className="flex">
@@ -159,8 +163,8 @@ export default function Profile() {
                                     </div>
                                 </div>
                                 <div className="flex justify-center gap-4">
-                                    <Button size="sm" className="text-sm bg-white border border-primary text-primary hover:bg-muted">Change Photo</Button>
-                                    <Button size="sm" className="text-sm bg-white border border-primary text-primary hover:bg-muted">Remove Photo</Button>
+                                    <Button size="sm" className="text-sm bg-white border border-primary text-primary hover:bg-muted">Ganti Foto</Button>
+                                    <Button size="sm" className="text-sm bg-white border border-destructive text-destructive hover:bg-muted">Hapus Foto</Button>
                                 </div>
                             </div>
                             <div className="flex flex-col justify-between w-1/2 gap-4">
@@ -169,76 +173,94 @@ export default function Profile() {
                                     <Input
                                         type="text"
                                         id="name"
-                                        placeholder="Name"
+                                        placeholder="Nama anda.."
                                         value={formData.name}
                                         onChange={handleInputChange}
                                     />
-                                    {errors.name && <p className="text-sm text-red-500">Name is required</p>}
+                                    {errors.name && <p className="text-sm text-red-500">Nama diperlukan.</p>}
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor="no_telp">Phone Number</Label>
+                                    <Label htmlFor="no_telp">Nomor Telepon</Label>
                                     <Input
                                         type="text"
                                         id="no_telp"
-                                        placeholder="Phone Number"
+                                        placeholder="Nomor Telepon anda.."
                                         value={formData.no_telp}
                                         onChange={handleInputChange}
                                     />
-                                    {errors.no_telp && <p className="text-sm text-red-500">Phone number is required</p>}
+                                    {errors.no_telp && <p className="text-sm text-red-500">Nomor Telepon diperlukan.</p>}
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor="location">Location</Label>
+                                    <Label htmlFor="location">Alamat</Label>
                                     <Input
                                         type="text"
                                         id="location"
-                                        placeholder="Location"
+                                        placeholder="Alamat anda.."
                                         value={formData.location}
                                         onChange={handleInputChange}
                                     />
-                                    {errors.location && <p className="text-sm text-red-500">Location is required</p>}
+                                    {errors.location && <p className="text-sm text-red-500">Alamat diperlukan.</p>}
                                 </div>
                             </div>
                         </div>
                     )}
                 </CardContent>
                 <CardFooter className="flex justify-end gap-4">
-                    <Button onClick={handleLogout} className="bg-white border border-primary text-primary hover:bg-muted">Logout</Button>
-                    <Button onClick={handleEditProfile}>Save</Button>
+                    <Button onClick={handleLogout} className="bg-white border border-primary text-primary hover:bg-muted">Keluar</Button>
+                    <Button onClick={handleEditProfile}>Simpan</Button>
                 </CardFooter>
             </Card>
             <Card className="flex items-center justify-center p-8 my-4">
                 <CardHeader className="flex flex-col w-1/2 gap-4">
-                    <div>
-                        <CardTitle className='text-lg font-bold'>Join & Unlock Exclusive Perks!</CardTitle>
-                        <CardDescription>Sign up now for premium access and more!</CardDescription>
-                    </div>
                     {isActive === null ? (
-                        <p>Loading...</p>
+                        <div className="flex items-center justify-center h-32">
+                            <Spinner />
+                        </div>
                     ) : isActive ? (
-                        <Link href="/member">
-                            <Button className="px-8 py-2 w-fit">
-                                Membership Dashboard
-                            </Button>
-                        </Link>
+                        <div className='flex flex-col gap-4'>
+                            <div>
+                                <CardTitle className='text-lg font-bold'>Nikmati Konten Premium Anda!</CardTitle>
+                                <CardDescription>Anda adalah peternak kelas atas, Terus naik level!</CardDescription>
+                            </div>
+                            <Link href="/member">
+                                <Button className="px-8 py-2 w-fit">
+                                    Beranda Member
+                                </Button>
+                            </Link>
+                        </div>
                     ) : (
-                        <Link href="/member/register">
-                            <Button className="px-8 py-2 w-fit">
-                                Join Now!
-                            </Button>
-                        </Link>
+                        <div className='flex flex-col gap-4'>
+                            <div>
+                                <CardTitle className='text-lg font-bold'>Bergabung dan Dapatkan Konten Premium!</CardTitle>
+                                <CardDescription>Akses berbagai konten menarik yang hanya dimiliki oleh peternak kelas atas.</CardDescription>
+                            </div>
+                            <Link href="/member/register">
+                                <Button className="px-8 py-2 w-fit">
+                                    Bergabung Sekarang!
+                                </Button>
+                            </Link>
+                        </div>
                     )}
                 </CardHeader>
                 <CardContent className="w-1/2 p-0 px-6">
                     <Card className="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 background-animate">
                         <CardHeader className="flex flex-col justify-between h-36">
-                            <Image alt='Membership' src={"/images/logo_transparent.png"} width={100} height={100}></Image>
+                            <Image alt="Membership" src="/images/logo_transparent.png" width={100} height={100} />
                             <CardDescription className="text-white">
-                                <p>1208 2109 9812 9012</p>
+                                <p>{membership ? membership.order_id : "MEM-1732372442611"}</p>
                             </CardDescription>
                         </CardHeader>
                         <CardFooter className="flex items-center justify-between p-4 text-white rounded-b-lg bg-slate-700">
-                            <p>{user && user.name}</p>
-                            <p><span className='text-muted-foreground'>Exp</span> 18/26</p>
+                            <p>{user?.name}</p>
+                            <p>
+                                <span className="text-muted-foreground">Exp</span>{" "}
+                                {membership
+                                    ? new Intl.DateTimeFormat("id-ID", {
+                                        month: "2-digit",
+                                        year: "2-digit",
+                                    }).format(new Date(membership.exp_date))
+                                    : "18/26"}
+                            </p>
                         </CardFooter>
                     </Card>
                 </CardContent>

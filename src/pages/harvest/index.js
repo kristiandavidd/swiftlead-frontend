@@ -6,6 +6,7 @@ import UserLayout from "@/layout/UserLayout";
 import { useUser } from "@/context/userContext";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { toast } from "@/hooks/use-toast";
 
 export default function HarvestPage() {
     const [groupedHarvests, setGroupedHarvests] = useState({});
@@ -27,6 +28,11 @@ export default function HarvestPage() {
             setGroupedHarvests(grouped);
         } catch (error) {
             console.error("Error fetching harvests:", error);
+            toast({
+                title: "Galat!",
+                description: "Gagal mengambil data panen.",
+                variant: "destructive",
+            })
         }
     };
 
@@ -46,29 +52,29 @@ export default function HarvestPage() {
     };
 
     return (
-        <UserLayout>
-            <h1 className="mb-4 text-2xl font-bold">Harvest Monitoring</h1>
+        <UserLayout head={"Hasil Panen"}>
+            <h1 className="mb-4 text-2xl font-bold">Pantau Hasil Panen</h1>
             <div className="p-4 bg-white rounded-lg ">
                 <div className="flex gap-4">
                     <Link href="/harvest/add-harvest" className="my-4">
                         <Button>Add Harvest</Button>
                     </Link>
                     <Link href="/sales/sell-harvest" className="my-4">
-                        <Button>Sell Your Harvest</Button>
+                        <Button variant="outline">Jual Hasil Panenmu</Button>
                     </Link>
                 </div>
                 {Object.entries(groupedHarvests).map(([date, harvests]) => (
                     <div key={date} className="p-4 my-4 border rounded-lg">
-                        <h2 className="mb-4 text-xl font-semibold">{date} Harvest</h2>
+                        <h2 className="mb-4 text-xl font-semibold">Panen {date}</h2>
                         <div className="grid grid-cols-3 gap-4">
 
                             {harvests.map((harvest) => (
                                 <div key={harvest.id} className="w-full p-2 mb-2 border rounded-md">
-                                    <h3 className="mb-2 font-semibold">Floor {harvest.floor}</h3>
-                                    <p>Bowl: {harvest.bowl} kg (Ideal: {harvest.ideal_bowl} kg)</p>
+                                    <h3 className="mb-2 font-semibold">Lantai {harvest.floor}</h3>
+                                    <p>Mangkok: {harvest.bowl} kg (Ideal: {harvest.ideal_bowl} kg)</p>
                                     <p>Oval: {harvest.oval} kg (Ideal: {harvest.ideal_oval} kg)</p>
-                                    <p>Corner: {harvest.corner} kg (Ideal: {harvest.ideal_corner} kg)</p>
-                                    <p>Broken: {harvest.broken} kg (Ideal: {harvest.ideal_broken} kg)</p>
+                                    <p>Sudut: {harvest.corner} kg (Ideal: {harvest.ideal_corner} kg)</p>
+                                    <p>Patahan: {harvest.broken} kg (Ideal: {harvest.ideal_broken} kg)</p>
                                 </div>
                             ))}
                         </div>

@@ -13,7 +13,7 @@ export default function ErrorPage() {
         // Redirect ke /membership setelah 3 detik
         const timeout = setTimeout(() => {
             router.push('/membership/register');
-        }, 3000);
+        }, 2000);
 
         // Membersihkan timeout ketika komponen di-unmount
         return () => clearTimeout(timeout);
@@ -21,10 +21,10 @@ export default function ErrorPage() {
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
-            <h1 className="mb-4 text-3xl font-bold">❌ Payment Failed!</h1>
-            <p>There was an issue with your payment. Please try again.</p>
+            <h1 className="mb-4 text-3xl font-bold">❌ Pembayaran Gagal!</h1>
+            <p>Terdapat kesalahan dalam pembayaran. Silakan coba lagi .</p>
             <Button className="mt-4" onClick={() => router.push('/membership/register')}>
-                Retry Payment
+                Coba Lagi
             </Button>
         </div>
     );

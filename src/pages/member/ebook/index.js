@@ -7,12 +7,14 @@ import Link from 'next/link';
 import AddEditEbook from '@/components/AddEditEbookModal';
 import { IconArrowUpRight, IconPencil, IconDownload } from '@tabler/icons-react';
 import MemberLayout from '@/layout/MemberLayout';
+import { useToast } from '@/hooks/use-toast';
 
 const Ebook = () => {
     const [ebooks, setEbooks] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [editingEbook, setEditingEbook] = useState(null);
+    const { toast } = useToast();
     const apiUrl = process.env.NODE_ENV === 'production'
         ? process.env.NEXT_PUBLIC_API_PROD_URL
         : process.env.NEXT_PUBLIC_API_URL;
@@ -23,6 +25,11 @@ const Ebook = () => {
             setEbooks(res.data);
         } catch (error) {
             console.error('Error fetching ebooks:', error);
+            toast({
+                title: "Galat!",
+                description: "Gagal mengambil data E-Book.",
+                variant: "destructive"
+            })
         }
     };
     const downloadEbook = (ebookUrl, ebookName) => {
@@ -53,6 +60,10 @@ const Ebook = () => {
         <MemberLayout>
             <div className="container p-4 mx-auto">
                 <div className="grid grid-cols-3 gap-4 mt-4">
+                    {(ebooks.length === 0) && (
+                        <div className="col-span-3 text-center">Tidak ada E-Book.</div>
+                    )}
+
                     {ebooks.map((ebook) => (
                         <div key={ebook.id} className="p-4 border rounded">
                             <Image
@@ -67,7 +78,7 @@ const Ebook = () => {
 
                                 <Button className="w-3/4 bg-white" variant="outline">
                                     <Link href={`${apiUrl}${ebook.file_path}`} target="_blank" className='inline-flex items-center gap-2 '>
-                                        <IconArrowUpRight /> Baca
+                                        <IconArrowUpRight /> Baca E-Book
                                     </Link>
                                 </Button>
                                 <Button className="w-1/4" onClick={downloadEbook(`${apiUrl}${ebook.file_path}`, ebook.title)} >

@@ -113,7 +113,7 @@ const ArticlePreview = () => {
     };
 
     return (
-        <GuestLayout>
+        <GuestLayout head={article.title}>
             <div className="max-w-3xl p-6 mx-auto mt-4 bg-white rounded-md shadow-md">
                 <h1 className="mb-4 text-3xl font-bold text-center">{article.title}</h1>
                 {article.cover_image && (
@@ -129,7 +129,7 @@ const ArticlePreview = () => {
 
                 {/* Recommendations */}
                 <div className="mt-10">
-                    <h2 className="mb-4 text-2xl font-bold">Recommended Articles</h2>
+                    <h2 className="mb-4 text-2xl font-bold">Artikel Direkomendasikan</h2>
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                         {recommendations.map((rec) => (
                             <Link key={rec.id} href={`/article/${rec.id}`} className="p-4 border rounded-md hover:shadow-md">
@@ -155,23 +155,23 @@ const ArticlePreview = () => {
                 {
                     user ? (
                         <div className="mt-10">
-                            <h2 className="mb-4 text-2xl font-bold">Comments</h2>
+                            <h2 className="mb-4 text-2xl font-bold">Komentar</h2>
                             <div className="mb-6">
                                 <input
                                     type="text"
-                                    placeholder="Your Name"
+                                    placeholder="Nama anda.."
                                     value={user.name}
                                     onChange={(e) => setNewComment(user.user_id)}
                                     className="block w-full px-4 py-2 mb-2 border rounded-md"
                                     disabled
                                 />
                                 <textarea
-                                    placeholder="Write a comment..."
+                                    placeholder="Tulis sebuah komentar..."
                                     value={newComment.content}
                                     onChange={(e) => setNewComment({ ...newComment, content: e.target.value, user_id: user.id })}
                                     className="block w-full px-4 py-2 mb-2 border rounded-md"
                                 />
-                                <Button onClick={handleAddComment}>Post Comment</Button>
+                                <Button onClick={handleAddComment}>Unggah Komentar</Button>
                             </div>
                             <div className="space-y-4">
                                 {comments.map((comment) => (
@@ -190,12 +190,12 @@ const ArticlePreview = () => {
                                                     </AlertDialogTrigger>
                                                     <AlertDialogContent>
                                                         <AlertDialogHeader>
-                                                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                                            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+                                                            <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
+                                                            <AlertDialogDescription>Aksi ini tidak bisa dikembalikan.</AlertDialogDescription>
                                                         </AlertDialogHeader>
                                                         <AlertDialogFooter>
-                                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                            <AlertDialogAction onClick={() => handleDeleteComment(comment.id)}>Delete</AlertDialogAction>
+                                                            <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                            <AlertDialogAction onClick={() => handleDeleteComment(comment.id)}>Hapus</AlertDialogAction>
                                                         </AlertDialogFooter>
                                                     </AlertDialogContent>
                                                 </AlertDialog>
@@ -208,7 +208,7 @@ const ArticlePreview = () => {
                         </div>
 
                     ) : (
-                        <p className="mt-6 text-center">Please <Link href="/login" className="text-blue-500">login</Link> to post a comment</p>
+                        <p className="mt-6 text-center">Tolong <Link href="/login" className="text-blue-500">Masuk</Link> untuk mengunggah komentar.</p>
                     )}
             </div>
         </GuestLayout >

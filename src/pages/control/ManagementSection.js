@@ -12,6 +12,7 @@ import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader,
 import RequestMaintenanceModal from "@/components/RequestMaintenanceModal";
 import { Badge } from "@/components/ui/badge";
 import RequestUninstallationModal from "@/components/RequestUninstallationModal";
+import Spinner from "@/components/ui/spinner";
 
 export default function ManagementSection() {
     const [houses, setHouses] = useState([]);
@@ -42,7 +43,7 @@ export default function ManagementSection() {
             setHouses(res.data);
         } catch (error) {
             console.error("Error fetching houses:", error);
-            toast({ title: "Error", description: "Failed to fetch houses.", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal mendapatkan data kandang.", variant: "destructive" });
         } finally {
             setLoading(false);
         }
@@ -55,11 +56,11 @@ export default function ManagementSection() {
 
         try {
             await axios.delete(`${apiUrl}/device/house/${houseId}`);
-            toast({ title: "Success", description: "House deleted successfully.", variant: "success" });
+            toast({ title: "Sukses!", description: "Berhasil menghapus data kandang.", variant: "success" });
             fetchHouses();
         } catch (error) {
             console.error("Error deleting house:", error);
-            toast({ title: "Error", description: error.response?.data?.error || "Failed to delete house.", variant: "destructive" });
+            toast({ title: "Galat!", description: error.response?.data?.error || "Gagal menghapus data kandang.", variant: "destructive" });
         }
     };
 
@@ -104,7 +105,9 @@ export default function ManagementSection() {
     return (
         <div>
             {loading ? (
-                <p>Loading...</p>
+                <div className="flex items-center justify-center h-64">
+                    <Spinner />
+                </div>
             ) : (
                 houses.map((house) => (
                     <div key={house.house_id} className="p-4 mb-4 border rounded-lg">
@@ -122,7 +125,7 @@ export default function ManagementSection() {
                                         openModal(house);
                                     }}
                                 >
-                                    <IconEdit /> Edit
+                                    <IconEdit /> Perbarui
                                 </Button>
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
@@ -133,28 +136,26 @@ export default function ManagementSection() {
                                             className="border-destructive"
 
                                         >
-                                            <IconTrash /> Delete
+                                            <IconTrash /> Hapus
                                         </Button>
                                     </AlertDialogTrigger>
                                     <AlertDialogContent>
                                         <AlertDialogHeader>
-                                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                This action cannot be undone.
-                                            </AlertDialogDescription>
+                                            <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
+                                            <AlertDialogDescription>Aksi ini tidak bisa dikembalikan.</AlertDialogDescription>
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogCancel>Batal</AlertDialogCancel>
                                             <AlertDialogAction
                                                 onClick={() => {
                                                     if (house.devices.length > 0) {
-                                                        toast({ title: "Error", description: "House has devices installed. Cannot edit.", variant: "destructive" });
+                                                        toast({ title: "Gagal!", description: "Tidak bisa menghapus kandang dengan perangkat terpasang.", variant: "destructive" });
                                                     } else {
                                                         deleteHouse(house.house_id);
                                                     }
                                                 }}
                                             >
-                                                Delete
+                                                Hapus
                                             </AlertDialogAction>
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
@@ -172,7 +173,7 @@ export default function ManagementSection() {
                                             {device.floor}
                                         </span>
                                         {console.log("status", device.status)}
-                                        Sensor {index + 1} {device.status === 0 ? <Badge className="font-normal text-white bg-destructive">Inactive</Badge> : ""}
+                                        Sensor {index + 1} {device.status === 0 ? <Badge className="font-normal text-white bg-destructive">Tidak Aktif</Badge> : ""}
                                     </span>
                                     <div className="flex gap-2">
                                         <Button
@@ -180,7 +181,7 @@ export default function ManagementSection() {
                                             variant="outline"
                                             onClick={() => openMaintenanceModal(device, house.house_name)}
                                         >
-                                            <IconSettings2 /> Maintenance
+                                            <IconSettings2 /> Perbaiki
                                         </Button>
 
                                         <Button
@@ -188,7 +189,7 @@ export default function ManagementSection() {
                                             variant="outline"
                                             onClick={() => openUninstallationModal(device, house.house_name)}
                                         >
-                                            <IconTrash /> Uninstall
+                                            <IconTrash /> Copot
                                         </Button>
 
                                     </div>

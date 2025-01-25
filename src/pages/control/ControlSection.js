@@ -22,8 +22,8 @@ import { useToast } from '@/hooks/use-toast';
 export default function ControlSection({ setActiveTab }) {
     const pdfRef = useRef();
     const [sensorData, setSensorData] = useState({ Suhu: null, Kelembaban: null });
-    const [dailyData, setDailyData] = useState({ suhu: [], kelembapan: [], labels: [] });
-    const [monthlyData, setMonthlyData] = useState({ suhu: [], kelembapan: [], labels: [] });
+    const [dailyData, setDailyData] = useState({ Suhu: [], Kelembaban: [], labels: [] });
+    const [monthlyData, setMonthlyData] = useState({ Suhu: [], Kelembaban: [], labels: [] });
     const [isAddSwiftletModalOpen, setIsAddSwiftletModalOpen] = useState(false);
     const [isInstallationModalOpen, setIsInstallationModalOpen] = useState(false);
     const [selectedHouse, setSelectedHouse] = useState(null);
@@ -36,11 +36,11 @@ export default function ControlSection({ setActiveTab }) {
     const router = useRouter();
     const socket = initSocket();
     const { user } = useUser();
-    const toast = useToast();
+    const { toast } = useToast();
     const userId = user?.id;
 
     const statusSuhu = sensorData.Suhu > 29 ? 'Too warm' : sensorData.Suhu < 27 ? 'Too cold' : 'Good';
-    const statusKelembapan = sensorData.Kelembaban > 70 ? 'Too humid' : sensorData.Kelembaban < 65 ? 'Too dry' : 'Good';
+    const statusKelembaban = sensorData.Kelembaban > 70 ? 'Too humid' : sensorData.Kelembaban < 65 ? 'Too dry' : 'Good';
 
     const fetchDailyData = async () => {
         const apiUrl = process.env.NODE_ENV === "production"
@@ -49,11 +49,16 @@ export default function ControlSection({ setActiveTab }) {
         try {
             const res = await axios.get(`${apiUrl}/control/daily`);
             const labels = res.data.map((d) => `${String(d.hour).padStart(2, '0')}:00`);
-            const suhu = res.data.map((d) => Number(d.avgSuhu));
-            const kelembapan = res.data.map((d) => Number(d.avgKelembapan));
-            setDailyData({ suhu, kelembapan, labels });
+            const Suhu = res.data.map((d) => Number(d.avgSuhu));
+            const Kelembaban = res.data.map((d) => Number(d.avgKelembaban));
+            setDailyData({ Suhu, Kelembaban, labels });
         } catch (error) {
             console.error('Error fetching daily data:', error);
+            toast({
+                title: "Galat!",
+                description: "Gagal mendapatkan data harian.",
+                variant: "destructive",
+            });
         }
     };
 
@@ -71,11 +76,16 @@ export default function ControlSection({ setActiveTab }) {
                     year: 'numeric',
                 });
             });
-            const suhu = res.data.map((d) => Number(d.avgSuhu));
-            const kelembapan = res.data.map((d) => Number(d.avgKelembapan));
-            setMonthlyData({ suhu, kelembapan, labels });
+            const Suhu = res.data.map((d) => Number(d.avgSuhu));
+            const Kelembaban = res.data.map((d) => Number(d.avgKelembaban));
+            setMonthlyData({ Suhu, Kelembaban, labels });
         } catch (error) {
             console.error('Error fetching monthly data:', error);
+            toast({
+                title: "Galat!",
+                description: "Gagal mendapatkan data bulanan.",
+                variant: "destructive",
+            });
         }
     };
 
@@ -131,8 +141,8 @@ export default function ControlSection({ setActiveTab }) {
         } catch (error) {
             console.error("Error fetching houses:", error);
             toast({
-                title: "Error",
-                description: "Failed to fetch swiftlet houses.",
+                title: "Galat!",
+                description: "Gagal mendapatkan data kandang.",
                 variant: "destructive",
             });
         } finally {
@@ -218,15 +228,15 @@ export default function ControlSection({ setActiveTab }) {
         labels: chartData.labels,
         datasets: [
             {
-                label: 'Temperature (°C)',
-                data: chartData.suhu,
+                label: 'Suhu (°C)',
+                data: chartData.Suhu,
                 borderColor: 'rgba(255, 99, 132, 1)',
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 yAxisID: 'y',
             },
             {
-                label: 'Humidity (%)',
-                data: chartData.kelembapan,
+                label: 'Kelebaban (%)',
+                data: chartData.Kelembaban,
                 borderColor: 'rgba(54, 162, 235, 1)',
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 yAxisID: 'y1',
@@ -298,9 +308,9 @@ export default function ControlSection({ setActiveTab }) {
             printWindow.document.write(`<iframe width="100%" height="100%" src="${pdfUrl}"></iframe>`);
 
             if (timeRange == "daily") {
-                doc.save('Daily Data.pdf');
+                doc.save('Data Harian.pdf');
             } else if (timeRange == "monthly") {
-                doc.save('Monthly Data.pdf');
+                doc.save('Data Bulanan.pdf');
             } else {
                 doc.save('Data.pdf');
             }
@@ -314,7 +324,6 @@ export default function ControlSection({ setActiveTab }) {
             <div className="my-6">
                 <div className="space-y-4">
                     <div className='flex justify-between'>
-                        {/* Dropdown Kandang */}
                         <div className='flex w-2/5 gap-4'>
                             <Select
                                 onValueChange={handleHouseChange}
@@ -358,8 +367,6 @@ export default function ControlSection({ setActiveTab }) {
 
                     </div>
 
-                    {/* Tombol Sensor */}
-
                 </div>
 
                 {isLoading ? (
@@ -377,14 +384,14 @@ export default function ControlSection({ setActiveTab }) {
                         <div className='flex gap-4'>
                             <Card className="md:w-1/2">
                                 <CardHeader>
-                                    <CardDescription>Real-Time Temperature</CardDescription>
+                                    <CardDescription>Suhu Real-Time</CardDescription>
                                     <CardTitle>{sensorData.Suhu ? sensorData.Suhu.toFixed(2) : 0}°C</CardTitle>
                                 </CardHeader>
                             </Card>
 
                             <Card className="md:w-1/2">
                                 <CardHeader>
-                                    <CardDescription>Real-Time Humidity</CardDescription>
+                                    <CardDescription>Kelembaban Real-Time</CardDescription>
                                     <CardTitle>{sensorData.Kelembaban ? sensorData.Kelembaban.toFixed(2) : 0}%</CardTitle>
                                 </CardHeader>
                             </Card>
@@ -411,8 +418,8 @@ export default function ControlSection({ setActiveTab }) {
                 <Tabs defaultValue="daily" onValueChange={(value) => setTimeRange(value)} className='flex flex-col gap-4'>
                     <div className='flex items-center justify-between'>
                         <div>
-                            <p className="text-lg font-semibold">Temperature & Humidity Trends</p>
-                            <p className="text-sm">View historical sensor data trends per day and month.</p>
+                            <p className="text-lg font-semibold">Grafik Suhu dan Kelembaban</p>
+                            <p className="text-sm">Visualisasi grafik suhu dan kelembaban dalam jangka waktu harian maupun bulanan.</p>
                         </div>
                         <div className='flex items-center justify-between gap-2 no-print'>
                             <Button onClick={downloadPDF} size="sm" >
@@ -423,13 +430,13 @@ export default function ControlSection({ setActiveTab }) {
                                     value="daily"
                                     className="flex items-center  justify-center px-4 py-2 text-sm font-medium rounded-l-md transition-colors data-[state=active]:bg-primary data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-gray-600"
                                 >
-                                    Daily Trend
+                                    Data Harian
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="monthly"
                                     className="px-4 flex items-center py-2 text-sm font-medium rounded-r-md transition-colors data-[state=active]:bg-primary data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-gray-600"
                                 >
-                                    <p>Monthly Trend</p>
+                                    Data Bulanan
                                 </TabsTrigger>
                             </TabsList>
 
@@ -447,17 +454,17 @@ export default function ControlSection({ setActiveTab }) {
                     <table className="w-full border border-collapse border-gray-300 table-auto">
                         <thead>
                             <tr>
-                                <th className="px-4 py-2 border border-gray-300">Time</th>
-                                <th className="px-4 py-2 border border-gray-300">Temperature (°C)</th>
-                                <th className="px-4 py-2 border border-gray-300">Humidity (%)</th>
+                                <th className="px-4 py-2 border border-gray-300">Waktu</th>
+                                <th className="px-4 py-2 border border-gray-300">Suhu (°C)</th>
+                                <th className="px-4 py-2 border border-gray-300">Kelembaban (%)</th>
                             </tr>
                         </thead>
                         <tbody>
                             {chartData.labels.map((label, index) => (
                                 <tr key={index}>
                                     <td className="px-4 py-2 border border-gray-300">{label}</td>
-                                    <td className="px-4 py-2 border border-gray-300">{chartData.suhu[index].toFixed(2)}</td>
-                                    <td className="px-4 py-2 border border-gray-300">{chartData.kelembapan[index].toFixed(2)}</td>
+                                    <td className="px-4 py-2 border border-gray-300">{chartData.Suhu[index].toFixed(2)}</td>
+                                    <td className="px-4 py-2 border border-gray-300">{chartData.Kelembaban[index].toFixed(2)}</td>
                                 </tr>
                             ))}
                         </tbody>

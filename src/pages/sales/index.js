@@ -19,6 +19,7 @@ import UserLayout from "@/layout/UserLayout";
 import Image from "next/image";
 import { useUser } from "@/context/userContext";
 import { useToast } from "@/hooks/use-toast";
+import Spinner from "@/components/ui/spinner";
 
 export default function SalesMonitoringPage() {
     const [sales, setSales] = useState([]);
@@ -28,13 +29,13 @@ export default function SalesMonitoringPage() {
     const [rescheduleData, setRescheduleData] = useState({ id: null, newDate: "" });
 
     const statusMapping = {
-        0: { label: "Pending", progress: 25, color: "default" },
-        1: { label: "Checking", progress: 50, color: "default" },
-        2: { label: "Approved", progress: 75, color: "default" },
-        3: { label: "Completed", progress: 100, color: "default" },
-        4: { label: "Cancelled", progress: 100, color: "destructive" },
-        5: { label: "Rejected", progress: 100, color: "destructive" },
-        6: { label: "Rescheduled", progress: 100, color: "reschedule" },
+        0: { label: "Menunggu", progress: 25, color: "default" },
+        1: { label: "Pengecekan", progress: 50, color: "default" },
+        2: { label: "Disetujui", progress: 75, color: "default" },
+        3: { label: "Selesai", progress: 100, color: "default" },
+        4: { label: "Dibatalkan", progress: 100, color: "destructive" },
+        5: { label: "Ditolak", progress: 100, color: "destructive" },
+        6: { label: "Dijadwalkan Ulang", progress: 100, color: "reschedule" },
     };
 
     useEffect(() => {
@@ -56,8 +57,8 @@ export default function SalesMonitoringPage() {
             });
 
             toast({
-                title: "Success",
-                description: response.data.message,
+                title: "Sukses!",
+                description: response.data.message || "Berhasil menjadwalkan ulang penjualan.",
                 variant: "success",
             });
 
@@ -66,8 +67,8 @@ export default function SalesMonitoringPage() {
         } catch (error) {
             console.error("Error rescheduling sale:", error);
             toast({
-                title: "Error",
-                description: error.response?.data?.message || "Failed to reschedule sale.",
+                title: "Galat!",
+                description: error.response?.data?.message || "Gagal menjadwalkan ulang penjualan.",
                 variant: "destructive",
             });
         }
@@ -92,6 +93,11 @@ export default function SalesMonitoringPage() {
             setSales(res.data);
         } catch (error) {
             console.error("Error fetching sales:", error);
+            toast({
+                title: "Galat!",
+                description: "Gagal mengambil data penjualan.",
+                variant: "destructive",
+            });
         } finally {
             setLoading(false);
         }
@@ -106,8 +112,8 @@ export default function SalesMonitoringPage() {
             const response = await axios.put(`${apiUrl}/sales/cancel/${id}`);
 
             toast({
-                title: "Success",
-                description: response.data.message,
+                title: "Sukses!",
+                description: response.data.message || "Penjualan berhasil dibatalkan.",
                 variant: "success",
             });
 
@@ -116,36 +122,39 @@ export default function SalesMonitoringPage() {
         } catch (error) {
             console.error("Error cancelling sale:", error);
             toast({
-                title: "Error",
-                description: error.response?.data?.message || "Failed to cancel sale.",
+                title: "Galat!",
+                description: error.response?.data?.message || "Gagal membatalkan penjualan.",
                 variant: "destructive",
             });
         }
     };
 
     return (
-        <UserLayout >
-            <h1 className="mb-4 text-2xl font-bold">Sales Monitoring</h1>
+        <UserLayout head={"Penjualan"}>
+            <h1 className="mb-4 text-2xl font-bold">Pemantauan Penjualan</h1>
             <div className="p-4 bg-white rounded-lg ">
                 <Link href="/sales/sell-harvest" className="my-4">
-                    <Button>Add Sale</Button>
+                    <Button>Jual Hasil Panen</Button>
                 </Link>
                 {loading ? (
-                    <p>Loading...</p>
+                    <div className="flex items-center justify-center w-full h-32">
+                        <Spinner />
+                    </div>
                 ) : (
                     sales.map((sale) => (
                         <div key={sale.id} className="w-full pb-4 my-4 border-b">
                             <div className="flex justify-between w-full">
                                 <div className="w-3/5">
                                     <h2 className="font-semibold capitalize">
+                                        Penjualan {" "}
                                         {new Date(sale.created_at).toLocaleDateString("id-ID", {
                                             day: "2-digit",
                                             month: "short",
                                             year: "numeric",
-                                        })} Harvest Sale
+                                        })}
                                     </h2>
                                     <p className="text-sm text-muted-foreground">
-                                        Quantity:{" "}
+                                        Total berat:{" "}
                                         {(
                                             sale.bowl_weight +
                                             sale.oval_weight +
@@ -155,7 +164,7 @@ export default function SalesMonitoringPage() {
                                         kg
                                     </p>
                                     <p className="text-sm text-muted-foreground">
-                                        Appointment Date:{" "}
+                                        Janji temu:{" "}
                                         {new Date(sale.appointment_date).toLocaleDateString("id-ID", {
                                             day: "2-digit",
                                             month: "short",
@@ -176,7 +185,7 @@ export default function SalesMonitoringPage() {
                                                 size="sm"
                                                 disabled={!rescheduleData.newDate || rescheduleData.id !== sale.id}
                                             >
-                                                Reschedule
+                                                Jadwalkan Ulang
                                             </Button>
                                         </div>
                                     )}
@@ -209,22 +218,21 @@ export default function SalesMonitoringPage() {
                                                 className="w-1/4 mt-2 border-destructive text-destructive"
                                                 disabled={sale.status === 3 || sale.status === 4 || sale.status === 5}
                                             >
-                                                Cancel
+                                                Batal
                                             </Button>
                                         </AlertDialogTrigger>
                                         <AlertDialogContent>
                                             <AlertDialogHeader>
-                                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    This action cannot be undone.
-                                                </AlertDialogDescription>
+                                                <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
+                                                <AlertDialogDescription>Aksi ini tidak bisa dikembalikan.</AlertDialogDescription>
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
-                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                <AlertDialogCancel>Batal</AlertDialogCancel>
                                                 <AlertDialogAction
                                                     onClick={() => handleCancel(sale.id)}
+                                                    className="bg-destructive hover:bg-destructive/80"
                                                 >
-                                                    Confirm
+                                                    Konfirmasi
                                                 </AlertDialogAction>
                                             </AlertDialogFooter>
                                         </AlertDialogContent>

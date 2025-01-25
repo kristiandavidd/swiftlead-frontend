@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useUser } from '@/context/userContext';
 import Image from 'next/image';
+import Spinner from '@/components/ui/spinner';
 
 export default function Custom404() {
     const router = useRouter();
@@ -27,7 +28,7 @@ export default function Custom404() {
 
     if (isLoading) {
         <div className='flex items-center justify-center w-full h-full'>
-            <Image className='' alt='loading..' src={"/images/dots_2.gif"}></Image>
+            <Spinner />
         </div>
     }
 

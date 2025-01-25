@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import UserLayout from '@/layout/UserLayout';
-import { IconBellFilled } from '@tabler/icons-react';
+import { IconBell } from '@tabler/icons-react';
 import {
   Card,
   CardContent,
@@ -64,7 +64,7 @@ export default function Home() {
         setArticles(response.data[0]); // Menyimpan array pertama ke dalam state articles
         setLoading(false);
       } catch (err) {
-        setError('Failed to load articles');
+        setError('Gagal memuat data. Silakan coba lagi.');
         setLoading(false);
       }
     };
@@ -82,26 +82,26 @@ export default function Home() {
   }
 
   return (
-    <UserLayout head={"Dashboard"}>
+    <UserLayout head={"Beranda"}>
       <div className='flex items-center'>
         <div className='flex flex-col w-full'>
-          <p className='text-lg font-semibold'>Dashboard</p>
+          <p className='text-lg font-semibold'>Beranda</p>
           <p className='hidden text-sm md:block'>
-            Provides an overview of key activities and statistics, helping users quickly assess performance and notifications.
+            Menyediakan gambaran umum tentang aktivitas dan statistik utama, membantu pengguna dengan cepat menilai kinerja dan notifikasi.
           </p>
         </div>
         <Popover>
           <PopoverTrigger asChild className='duration-300 ease-in cursor-pointer text-primary hover:text-primary/80'>
-            <IconBellFilled />
+            <IconBell strokeWidth={1.2} />
           </PopoverTrigger>
           <PopoverContent className="flex flex-col gap-2 w-80">
             <Alert>
-              <AlertTitle className="font-semibold">Congratulations!</AlertTitle>
-              <AlertDescription>Your first device installation has been successful!</AlertDescription>
+              <AlertTitle className="font-semibold">Selamat!</AlertTitle>
+              <AlertDescription>Instalasi perangkat pertama Anda berhasil!</AlertDescription>
             </Alert>
             <Alert>
-              <AlertTitle className="font-semibold">Welcome!</AlertTitle>
-              <AlertDescription>Your account registration is successful!</AlertDescription>
+              <AlertTitle className="font-semibold">Selamat Datang!</AlertTitle>
+              <AlertDescription>Pendaftaran akun Anda berhasil!</AlertDescription>
             </Alert>
           </PopoverContent>
         </Popover>
@@ -110,25 +110,25 @@ export default function Home() {
       <div className='flex flex-col gap-2 my-4 md:flex-row'>
         <Card className="md:w-1/2">
           <CardHeader>
-            <CardDescription>Total Revenue</CardDescription>
-            <CardTitle>No data available.</CardTitle>
+            <CardDescription>Total Pendapatan</CardDescription>
+            <CardTitle>Tidak ada data tersedia.</CardTitle>
           </CardHeader>
           <CardFooter className="flex justify-between">
-            <span className='text-sm text-muted-foreground'>Same as last month.</span>
+            <span className='text-sm text-muted-foreground'>Sama seperti bulan lalu.</span>
             <Link href={"/sales"}>
-              <Button>See Details</Button>
+              <Button>Lihat Detail</Button>
             </Link>
           </CardFooter>
         </Card>
         <Card className="md:w-1/2">
           <CardHeader>
-            <CardDescription>Total Harvest</CardDescription>
-            <CardTitle>No data available.</CardTitle>
+            <CardDescription>Total Panen</CardDescription>
+            <CardTitle>Tidak ada data tersedia.</CardTitle>
           </CardHeader>
           <CardFooter className="flex justify-between">
-            <span className='text-sm text-muted-foreground'>Same as last month.</span>
+            <span className='text-sm text-muted-foreground'>Sama seperti bulan lalu.</span>
             <Link href={"/harvest"}>
-              <Button>See Details</Button>
+              <Button>Lihat Detail</Button>
             </Link>
           </CardFooter>
         </Card>
@@ -136,13 +136,15 @@ export default function Home() {
 
       <div className='flex items-center gap-4'>
         <div className='flex flex-col w-full'>
-          <p className='text-lg font-semibold'>Recent Articles</p>
+          <p className='text-lg font-semibold'>Artikel Terbaru</p>
           <p className='text-sm'>
-            Explore the fascinating lives and vital roles of swallow birds in nature, culture, and agriculture.
+            Jelajahi kehidupan menarik dan peran penting burung walet dalam alam, budaya, dan pertanian.
           </p>
         </div>
         <div className='flex items-center gap-2'>
-          <Link className="px-6 py-2 font-medium text-white rounded-md bg-primary hover:bg-primary/90" href={"/article"}>More</Link>
+          <Button variant='outline'>
+            <Link href={"/article"}>Selengkapnya</Link>
+          </Button>
         </div>
       </div>
 
@@ -163,19 +165,25 @@ export default function Home() {
                     />
                   </div>
                   <div className='5/6'>
-                    <p className='text-[12px] mb-2 text-muted-foreground'>{new Date(article.created_at).toLocaleDateString()}</p>
+                    <p className='text-[12px] mb-2 text-muted-foreground'>
+                      {new Date(article.created_at).toLocaleDateString("id-ID", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </p>
                     <AlertTitle className="font-semibold">{article.title}</AlertTitle>
                     <AlertDescription>{truncateText(stripHtmlTags(article.content), 100)}</AlertDescription>
                   </div>
                 </div>
                 <Link href={`/article/${article.id}`} target='_blank' className='inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none h-9 px-3 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground'>
-                  Read Article
+                  Baca Artikel
                 </Link>
               </div>
             </Alert>
           ))
         ) : (
-          <div>No articles available.</div>
+          <div>Tidak ada Artikel.</div>
         )}
       </div>
     </UserLayout>

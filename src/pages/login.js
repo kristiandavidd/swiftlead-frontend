@@ -50,7 +50,7 @@ export default function Login() {
         setError('');
 
         if (!email || !password) {
-            setError('Email and password are required');
+            setError('Email dan password harus diisi.');
             return;
         }
 
@@ -73,10 +73,10 @@ export default function Login() {
             } else if (role === 0) {
                 router.push('/dashboard');
             } else {
-                setError('Unknown user role');
+                setError('Peran pengguna tidak valid.');
             }
         } catch (err) {
-            let errorMessage = "Login failed. Please try again.";
+            let errorMessage = "Gagal masuk. Silakan coba lagi.";
 
             if (err.response && err.response.data.message) {
                 errorMessage = err.response.data.message;
@@ -89,11 +89,11 @@ export default function Login() {
     return (
         <Card className='w-full m-auto my-10 sm:w-1/2 lg:w-1/3'>
             <Head>
-                <title>Login</title>
+                <title>Masuk Akun</title>
             </Head>
             <CardHeader className="flex flex-col items-center justify-center text-center">
                 <Image src='/images/logo.png' width={100} height={100} alt='Swiftlead' className='my-1' />
-                <CardDescription>Login to your account</CardDescription>
+                <CardDescription>Masuk ke Akun Anda</CardDescription>
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleLogin} className='flex flex-col gap-6'>
@@ -107,12 +107,12 @@ export default function Login() {
                     </div>
                     <div className='flex flex-col gap-2'>
                         {error && <p className='text-sm text-red-500'>{error}</p>}
-                        <Button type="submit">Login</Button>
+                        <Button type="submit">Masuk</Button>
                     </div>
                 </form>
             </CardContent>
             <CardFooter className="flex justify-center">
-                <p className='text-sm text-muted-foreground'>Don&apos;t have an account? <Link href="/register" className="text-primary">Register</Link></p>
+                <p className='text-sm text-muted-foreground'>Belum punya akun? <Link href="/register" className="text-primary">Daftar</Link></p>
             </CardFooter>
             <Toaster />
         </Card>

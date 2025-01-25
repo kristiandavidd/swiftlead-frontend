@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
+import Spinner from "@/components/ui/spinner";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,18 +28,18 @@ export default function TrackingSection() {
     const { user } = useUser();
 
     const statusMapping = {
-        0: { label: "Pending", progress: 25, color: "default" },
-        1: { label: "Checking", progress: 50, color: "default" },
-        2: { label: "Approved", progress: 75, color: "default" },
-        3: { label: "Completed", progress: 100, color: "default" },
-        4: { label: "Cancelled", progress: 100, color: "destructive" },
-        5: { label: "Rejected", progress: 100, color: "destructive" },
-        6: { label: "Rescheduled", progress: 100, color: "reschedule" },
+        0: { label: "Menunggu", progress: 25, color: "default" },
+        1: { label: "Pengecekan", progress: 50, color: "default" },
+        2: { label: "Disetujui", progress: 75, color: "default" },
+        3: { label: "Selesai", progress: 100, color: "default" },
+        4: { label: "Dibatalkan", progress: 100, color: "destructive" },
+        5: { label: "Ditolak", progress: 100, color: "destructive" },
+        6: { label: "Dijadwalkan Ulang", progress: 100, color: "reschedule" },
     };
 
     useEffect(() => {
         if (user?.id) fetchTrackingData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     const fetchTrackingData = async () => {
@@ -56,8 +57,8 @@ export default function TrackingSection() {
         } catch (error) {
             console.error("Error fetching tracking data:", error);
             toast({
-                title: "Error",
-                description: "Failed to fetch tracking data.",
+                title: "Galat!",
+                description: "Gagal mendapatkan data riwayat pengajuan.",
                 variant: "destructive",
             });
         } finally {
@@ -74,7 +75,7 @@ export default function TrackingSection() {
             const response = await axios.put(`${apiUrl}/request/cancel/${id}`, { type });
 
             toast({
-                title: "Success",
+                title: "Sukses!",
                 description: response.data.message,
                 variant: "success",
             });
@@ -84,7 +85,7 @@ export default function TrackingSection() {
             console.error("Error cancelling request:", error);
             toast({
                 title: "Error",
-                description: error.response?.data?.message || "Failed to cancel request.",
+                description: error.response?.data?.message || "Gagal untuk membatalkan pengajuan.",
                 variant: "destructive",
             });
         }
@@ -103,7 +104,7 @@ export default function TrackingSection() {
             });
 
             toast({
-                title: "Success",
+                title: "Sukses!",
                 description: response.data.message,
                 variant: "success",
             });
@@ -113,8 +114,8 @@ export default function TrackingSection() {
         } catch (error) {
             console.error("Error rescheduling request:", error);
             toast({
-                title: "Error",
-                description: error.response?.data?.message || "Failed to reschedule request.",
+                title: "Galat!",
+                description: error.response?.data?.message || "Gagal menjadwalkan ulang pengajuan.",
                 variant: "destructive",
             });
         }
@@ -127,7 +128,9 @@ export default function TrackingSection() {
     return (
         <div className="p-4">
             {loading ? (
-                <p>Loading...</p>
+                <div className="flex items-center justify-center h-32">
+                    <Spinner />
+                </div>
             ) : (
                 trackingData.map((item) => (
                     <div key={item.uniqueId} className="w-full pb-4 mb-4 border-b">
@@ -140,7 +143,7 @@ export default function TrackingSection() {
                                     Lantai {item.floors}
                                 </p>
                                 <p className="text-sm text-muted-foreground">
-                                    Appointment Date:{" "}
+                                    Janji Temu:{" "}
                                     {new Date(item.appointment_date).toLocaleDateString("id-ID", {
                                         day: "2-digit",
                                         month: "short",
@@ -162,7 +165,7 @@ export default function TrackingSection() {
                                             size="sm"
                                             disabled={!rescheduleData.newDate || rescheduleData.uniqueId !== item.uniqueId}
                                         >
-                                            Reschedule
+                                            Jadwalkan Ulang
                                         </Button>
                                     </div>
                                 )}
@@ -195,20 +198,18 @@ export default function TrackingSection() {
                                             className="w-1/4 mt-2 border-destructive text-destructive"
                                             disabled={item.status === 3 || item.status === 4 || item.status === 5}
                                         >
-                                            Cancel
+                                            Batalkan
                                         </Button>
                                     </AlertDialogTrigger>
                                     <AlertDialogContent>
                                         <AlertDialogHeader>
-                                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                This action cannot be undone.
-                                            </AlertDialogDescription>
+                                            <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
+                                            <AlertDialogDescription>Aksi ini tidak bisa dikembalikan.</AlertDialogDescription>
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogCancel>Batal</AlertDialogCancel>
                                             <AlertDialogAction onClick={() => handleCancel(item.id, item.type)}>
-                                                Confirm
+                                                Konfirmasi
                                             </AlertDialogAction>
                                         </AlertDialogFooter>
                                     </AlertDialogContent>

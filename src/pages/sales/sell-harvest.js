@@ -58,7 +58,7 @@ export default function AddSalePage() {
             setPrice(res.data.price);
         } catch (error) {
             console.error("Error fetching weekly price:", error);
-            toast({ title: "Error", description: "Failed to fetch weekly price", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal mendapatkan data harga acuan.", variant: "destructive" });
         }
     };
 
@@ -89,79 +89,110 @@ export default function AddSalePage() {
                 }
             });
             router.push("/sales");
-            toast({ title: "Success", description: "Harvest sale submitted successfully", variant: "success" });
+            toast({ title: "Sukses!", description: "Pengajuan jual hasil panen berhasil.", variant: "success" });
         } catch (error) {
             console.error("Error submitting harvest sale:", error);
-            toast({ title: "Error", description: "Failed to submit harvest sale", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal mengajukan jual hasil panen.", variant: "destructive" });
         }
     };
 
     return (
         <UserLayout>
-            <h1 className="mb-4 text-2xl font-bold">Sell your Birdnest</h1>
-            <div className="p-4 bg-white rounded-lg ">
+            <div className="container w-2/3 p-4 mx-auto bg-white rounded shadow">
+                <h1 className="mb-4 text-2xl font-bold ">Jual Hasil Panenmu</h1>
                 <div className="space-y-4">
-                    <Select onValueChange={setProvince}>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select Province" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {provinces.map((prov) => (
-                                <SelectItem key={prov} value={prov}>
-                                    {prov}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <Input
-                        type="text"
-                        value={`Rp ${price ? formatCurrency(price).replace('Rp', '').trim() : ''} / Kg`}
-                        readOnly
-                        disabled
-                    />
-                    <Input
-                        type="number"
-                        step="0.1"
-                        min="0"
-                        placeholder="Bowl Weight (kg)"
-                        value={bowlWeight}
-                        onChange={(e) => setBowlWeight(e.target.value)}
-                    />
-                    <Input
-                        type="number"
-                        step="0.1"
-                        min="0"
-                        placeholder="Oval Weight (kg)"
-                        value={ovalWeight}
-                        onChange={(e) => setOvalWeight(e.target.value)}
-                    />
-                    <Input
-                        type="number"
-                        step="0.1"
-                        min="0"
-                        placeholder="Corner Weight (kg)"
-                        value={cornerWeight}
-                        onChange={(e) => setCornerWeight(e.target.value)}
-                    />
-                    <Input
-                        type="number"
-                        step="0.1"
-                        min="0"
-                        placeholder="Broken Weight (kg)"
-                        value={brokenWeight}
-                        onChange={(e) => setBrokenWeight(e.target.value)}
-                    />
-                    <Input
-                        type="date"
-                        placeholder="Appointment Date"
-                        value={appointmentDate}
-                        onChange={(e) => setAppointmentDate(e.target.value)}
-                    />
-                    <Input
-                        type="file"
-                        onChange={handleFileChange}
-                    />
-                    <Button onClick={handleSubmit}>Submit</Button>
+                    <div className="space-y-2">
+                        <label for="">Provinsi</label>
+                        <Select onValueChange={setProvince}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Pilih Provinsi" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {provinces.map((prov) => (
+                                    <SelectItem key={prov} value={prov}>
+                                        {prov}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="space-y-2">
+                        <label>Harga acuan</label>
+                        <Input
+                            type="text"
+                            value={`Rp ${price ? formatCurrency(price).replace('Rp', '').trim() : ''} / Kg`}
+                            readOnly
+                            disabled
+                        />
+                    </div>
+                    <div className="flex w-full gap-4">
+                        <div className="w-1/2 space-y-2">
+                            <label>Berat sarang berbentuk mangkok (kg)</label>
+                            <Input
+                                type="number"
+                                step="0.1"
+                                min="0"
+                                placeholder="Sarang berbentuk mangkok (kg)"
+                                value={bowlWeight}
+                                onChange={(e) => setBowlWeight(e.target.value)}
+                            />
+                        </div>
+                        <div className="w-1/2 space-y-2">
+                            <label>Berat sarang berbentuk oval (kg)</label>
+                            <Input
+                                type="number"
+                                step="0.1"
+                                min="0"
+                                placeholder="Sarang berbentuk oval (kg)"
+                                value={ovalWeight}
+                                onChange={(e) => setOvalWeight(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex w-full gap-4">
+                        <div className="w-1/2 space-y-2">
+                            <label>Berat sarang berbentuk sudut (kg)</label>
+                            <Input
+                                type="number"
+                                step="0.1"
+                                min="0"
+                                placeholder="Sarang berbentuk sudut (kg)"
+                                value={cornerWeight}
+                                onChange={(e) => setCornerWeight(e.target.value)}
+                            />
+                        </div>
+                        <div className="w-1/2 space-y-2">
+                            <label for="">Berat sarang berbentuk patahan (kg)</label>
+                            <Input
+                                type="number"
+                                step="0.1"
+                                min="0"
+                                placeholder="Sarang berbentuk patahan (kg)"
+                                value={brokenWeight}
+                                onChange={(e) => setBrokenWeight(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <label for="">Tanggal janji jual</label>
+                        <Input
+                            type="date"
+                            placeholder="Tanggal janji temu"
+                            value={appointmentDate}
+                            onChange={(e) => setAppointmentDate(e.target.value)}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label for="">Bukti hasil panen</label>
+                        <Input
+                            type="file"
+                            onChange={handleFileChange}
+                        />
+                    </div>
+                    <div className="flex items-center justify-end gap-4">
+                        <Button variant="outline" onClick={() => router.push("/sales")}>Batal</Button>
+                        <Button onClick={handleSubmit}>Jual Panen</Button>
+                    </div>
                 </div>
             </div>
         </UserLayout>

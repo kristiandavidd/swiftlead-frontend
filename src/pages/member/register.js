@@ -11,12 +11,12 @@ export default function MembershipPage() {
     return (
         <UserLayout>
             <div className="container p-4 mx-auto">
-                <h1 className="mb-4 text-2xl font-bold">Membership Registration</h1>
+                <h1 className="mb-4 text-2xl font-bold">Pendaftaran Membership</h1>
                 <p>
-                    Join our exclusive membership to enjoy premium benefits!
+                    Bergabung dengan Komunitas Peternak Walet Kelas Atas!
                 </p>
                 <Button className="mt-4" onClick={() => setIsModalOpen(true)}>
-                    Register Membership
+                    Daftar Membership
                 </Button>
                 <RegistMembershipModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
             </div>
