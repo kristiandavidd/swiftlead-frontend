@@ -27,6 +27,9 @@ export default function SalesMonitoringPage() {
     const { user } = useUser();
     const { toast } = useToast();
     const [rescheduleData, setRescheduleData] = useState({ id: null, newDate: "" });
+    const [totalRevenue, setTotalRevenue] = useState(0);
+    const [countRevenue, setCountRevenue] = useState(0);
+    const [averagePrice, setAveragePrice] = useState(0);
 
     const statusMapping = {
         0: { label: "Menunggu", progress: 25, color: "default" },
@@ -42,7 +45,7 @@ export default function SalesMonitoringPage() {
         if (user?.id) {
             fetchSales();
         }
-
+        fetchWeeklyAveragePrice();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
@@ -91,6 +94,11 @@ export default function SalesMonitoringPage() {
         try {
             const res = await axios.get(`${apiUrl}/sales/user/${user.id}`);
             setSales(res.data);
+
+            setTotalRevenue(res.data
+                .filter(sale => sale.status === 3) // Filter status 3
+                .reduce((total, sale) => total + parseFloat(sale.price), 0))
+            setCountRevenue(res.data.filter(sale => sale.status === 3).length)
         } catch (error) {
             console.error("Error fetching sales:", error);
             toast({
@@ -129,11 +137,64 @@ export default function SalesMonitoringPage() {
         }
     };
 
+    const fetchWeeklyAveragePrice = async () => {
+        const apiUrl = process.env.NODE_ENV === "production"
+            ? process.env.NEXT_PUBLIC_API_PROD_URL
+            : process.env.NEXT_PUBLIC_API_URL;
+
+        try {
+            setLoading(true);
+            const response = await axios.get(`${apiUrl}/weekly-price/average`); // URL sesuai dengan backend endpoint
+
+            // Set average price from backend to the state
+            setAveragePrice(response.data.averagePrice);
+        } catch (err) {
+            console.error("Error fetching weekly average price:", err);
+            toast({
+                title: "Galat!",
+                description: "Gagal mendapatkan harga rata-rata mingguan.",
+                variant: "destructive",
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <UserLayout head={"Penjualan"}>
-            <h1 className="mb-4 text-2xl font-bold">Pemantauan Penjualan</h1>
+            <div className="flex flex-col justify-between mb-4">
+                <h1 className="text-2xl font-bold">Penjualan</h1>
+                <p className="text-sm">Dapatkan keuntungan maksimal dengan menjual hasil panenmu kepada Swiftlead.</p>
+            </div>
+            <div className="grid grid-cols-3 gap-4 my-4 rounded-lg">
+                <div className="p-4 bg-yellow-200 rounded-lg ">
+                    <p className="text-muted-foreground">Rata-rata harga nasional</p>
+                    <p className="text-xl font-semibold text-primary">
+                        {parseFloat(averagePrice).toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                        })}
+                    </p>
+                </div>
+                <div className="p-4 bg-green-200 rounded-lg ">
+                    <p className="text-muted-foreground">Total Pendapatan</p>
+                    <p className="text-xl font-semibold text-primary">
+                        {parseFloat(totalRevenue).toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                        })}
+                    </p>
+                </div>
+                <div className="p-4 bg-orange-200 rounded-lg ">
+                    <p className="text-muted-foreground">Jumlah Penjualan</p>
+                    <p className="text-xl font-semibold text-primary">
+                        {countRevenue} Kali
+                    </p>
+                </div>
+            </div>
             <div className="p-4 bg-white rounded-lg ">
-                <Link href="/sales/sell-harvest" className="my-4">
+                <Link href="/sales/sell-harvest" className="flex justify-between my-4">
+                    <h2 className="mb-4 text-xl font-semibold">Lacak Penjualan sarangmu</h2>
                     <Button>Jual Hasil Panen</Button>
                 </Link>
                 {loading ? (

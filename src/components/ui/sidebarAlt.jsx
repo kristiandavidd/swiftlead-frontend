@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { IconHome, IconChartDots3, IconUser, IconFeather } from '@tabler/icons-react';
+import { IconHome, IconChartDots3, IconUser, IconFeather, IconBuildingStore } from '@tabler/icons-react';
 
 export default function Sidebar() {
     const router = useRouter();
@@ -42,6 +42,16 @@ export default function Sidebar() {
                                         }`}
                                 >
                                     <IconFeather size={20} stroke={1.5} /> Panen
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/sales">
+                                <div
+                                    className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/sales' ? 'bg-tersier text-primary' : 'text-primary'
+                                        }`}
+                                >
+                                    <IconBuildingStore size={20} stroke={1.5} /> Penjualan
                                 </div>
                             </a>
                         </li>
@@ -89,6 +99,16 @@ export default function Sidebar() {
                                             }`}
                                     >
                                         <IconFeather size={20} stroke={1.5} /> Panen
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/sales">
+                                    <div
+                                        className={`flex gap-2 px-4 py-2 rounded-md items-center cursor-pointer ${router.pathname === '/sales' ? 'bg-tersier text-primary' : 'text-primary'
+                                            }`}
+                                    >
+                                        <IconBuildingStore size={20} stroke={1.5} /> Penjualan
                                     </div>
                                 </a>
                             </li>

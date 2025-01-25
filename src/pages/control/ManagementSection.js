@@ -39,7 +39,7 @@ export default function ManagementSection() {
             : process.env.NEXT_PUBLIC_API_URL;
 
         try {
-            const res = await axios.get(`${apiUrl}/device/house/${user.id}`);
+            const res = await axios.get(`${apiUrl}/device/houses/${user.id}`);
             setHouses(res.data);
         } catch (error) {
             console.error("Error fetching houses:", error);

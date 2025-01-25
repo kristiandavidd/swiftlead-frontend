@@ -21,6 +21,7 @@ import { get, useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
+import Spinner from '@/components/ui/spinner';
 
 export default function Profile() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
