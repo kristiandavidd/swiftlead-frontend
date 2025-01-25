@@ -12,17 +12,17 @@ import {
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import AddDeviceModal from "@/components/AddDevicemodal";
-import { set } from "react-hook-form";
+import Spinner from "@/components/ui/spinner";
 import MaintenanceDetailModal from "@/components/MaintenanceDetailModal";
 
 const statusOptions = [
-    { value: 0, label: "Pending" },
-    { value: 1, label: "Checking" },
-    { value: 2, label: "Approved" },
-    { value: 3, label: "Completed" },
-    { value: 4, label: "Cancelled" },
-    { value: 5, label: "Rejected" },
-    { value: 6, label: "Rescheduled" },
+    { value: 0, label: "Menunggu" },
+    { value: 1, label: "Pengecekan" },
+    { value: 2, label: "Disetujui" },
+    { value: 3, label: "Selesai" },
+    { value: 4, label: "Dibatalkan" },
+    { value: 5, label: "Ditolak" },
+    { value: 6, label: "Dijadwalkan Ulang" },
 ];
 
 export default function MaintenanceSection({ setActiveTab }) {
@@ -57,11 +57,11 @@ export default function MaintenanceSection({ setActiveTab }) {
 
         try {
             await axios.put(`${apiUrl}/request/maintenance/${id}/status`, { status: newStatus });
-            toast({ title: "Success", description: "Status updated successfully", variant: "success" });
+            toast({ title: "Sukses!", description: "Berhasil memperbarui status pemeliharaan.", variant: "success" });
             fetchMaintenances();
         } catch (error) {
             console.error("Error updating maintenance status:", error);
-            toast({ title: "Error", description: "Failed to update status", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal memperbarui status pemeliharaan.", variant: "destructive" });
         }
     };
 
@@ -75,7 +75,7 @@ export default function MaintenanceSection({ setActiveTab }) {
             setMaintenances(res.data);
         } catch (error) {
             console.error("Error fetching maintenances:", error);
-            toast({ title: "Error", description: "Failed to fetch maintenances data", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal mengambil data pemeliharaan.", variant: "destructive" });
         } finally {
             setLoading(false);
         }
@@ -86,17 +86,20 @@ export default function MaintenanceSection({ setActiveTab }) {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Nama</TableHead>
+                        <TableHead>Nama Pemilik</TableHead>
                         <TableHead>Lokasi RBW</TableHead>
-                        <TableHead>Lantai maintenance</TableHead>
+                        <TableHead>Lantai Pemeliharaan</TableHead>
+                        <TableHead>Tanggal Pemeliharaan</TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead>Action</TableHead>
+                        <TableHead>Aksi</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {loading ? (
                         <TableRow>
-                            <TableCell colSpan="5" className="text-center">Loading...</TableCell>
+                            <TableCell colSpan="5" className="text-center">
+                                <Spinner />
+                            </TableCell>
                         </TableRow>
                     ) : (
                         maintenances.map((maintenance) => (
@@ -109,12 +112,19 @@ export default function MaintenanceSection({ setActiveTab }) {
                                     {maintenance.floors}
                                 </TableCell>
                                 <TableCell>
+                                    {new Date(maintenance.appointment_date).toLocaleDateString("id-ID", {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    })}
+                                </TableCell>
+                                <TableCell>
                                     <Select
                                         value={maintenance.status.toString()}
                                         onValueChange={(value) => handleStatusChange(maintenance.id, parseInt(value))}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select Status" />
+                                            <SelectValue placeholder="Pilih Status" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {statusOptions.map((option) => (
@@ -131,7 +141,7 @@ export default function MaintenanceSection({ setActiveTab }) {
                                         variant="outline"
                                         onClick={() => openModal(maintenance.id)}
                                     >
-                                        Details
+                                        Detail
                                     </Button>
                                 </TableCell>
 

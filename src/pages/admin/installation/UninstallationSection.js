@@ -15,15 +15,16 @@ import InstallationDetailModal from "@/components/InstallationDetailModal";
 import AddDeviceModal from "@/components/AddDevicemodal";
 import { set } from "react-hook-form";
 import UninstallationDetailModal from "@/components/UninstallationDetailModal";
+import Spinner from "@/components/ui/spinner";
 
 const statusOptions = [
-    { value: 0, label: "Pending" },
-    { value: 1, label: "Checking" },
-    { value: 2, label: "Approved" },
-    { value: 3, label: "Completed" },
-    { value: 4, label: "Cancelled" },
-    { value: 5, label: "Rejected" },
-    { value: 6, label: "Rescheduled" },
+    { value: 0, label: "Menunggu" },
+    { value: 1, label: "Pengecekan" },
+    { value: 2, label: "Disetujui" },
+    { value: 3, label: "Selesai" },
+    { value: 4, label: "Dibatalkan" },
+    { value: 5, label: "Ditolak" },
+    { value: 6, label: "Dijadwalkan Ulang" },
 ];
 
 export default function UninstallationSection({ setActiveTab }) {
@@ -58,11 +59,11 @@ export default function UninstallationSection({ setActiveTab }) {
 
         try {
             await axios.put(`${apiUrl}/request/uninstallation/${id}/status`, { status: newStatus });
-            toast({ title: "Success", description: "Status updated successfully", variant: "success" });
+            toast({ title: "Sukses!", description: "Berhasil memperbarui status uninstalasi.", variant: "success" });
             fetchUninstallations();
         } catch (error) {
             console.error("Error updating installation status:", error);
-            toast({ title: "Error", description: "Failed to update status", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal memperbarui status uninstalasi.", variant: "destructive" });
         }
     };
 
@@ -76,7 +77,7 @@ export default function UninstallationSection({ setActiveTab }) {
             setUninstallations(res.data);
         } catch (error) {
             console.error("Error fetching uninstallations:", error);
-            toast({ title: "Error", description: "Failed to fetch uninstallations data", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal mengambil data uninstalasi.", variant: "destructive" });
         } finally {
             setLoading(false);
         }
@@ -87,17 +88,20 @@ export default function UninstallationSection({ setActiveTab }) {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Nama</TableHead>
+                        <TableHead>Nama Pemilik</TableHead>
                         <TableHead>Lokasi RBW</TableHead>
-                        <TableHead>Lantai pencopotan</TableHead>
+                        <TableHead>Lantai Uninstalasi</TableHead>
+                        <TableHead>Tanggal Janji</TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead>Action</TableHead>
+                        <TableHead>Aksi</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {loading ? (
                         <TableRow>
-                            <TableCell colSpan="5" className="text-center">Loading...</TableCell>
+                            <TableCell colSpan="7" className="text-center">
+                                <Spinner />
+                            </TableCell>
                         </TableRow>
                     ) : (
                         uninstallations.map((uninstallation) => (
@@ -110,12 +114,19 @@ export default function UninstallationSection({ setActiveTab }) {
                                     {uninstallation.floors}
                                 </TableCell>
                                 <TableCell>
+                                    {new Date(uninstallation.appointment_date).toLocaleDateString("id-ID", {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    })}
+                                </TableCell>
+                                <TableCell>
                                     <Select
                                         value={uninstallation.status.toString()}
                                         onValueChange={(value) => handleStatusChange(uninstallation.id, parseInt(value))}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select Status" />
+                                            <SelectValue placeholder="Pilih Status" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {statusOptions.map((option) => (
@@ -132,7 +143,7 @@ export default function UninstallationSection({ setActiveTab }) {
                                         variant="outline"
                                         onClick={() => openModal(uninstallation.id)}
                                     >
-                                        Details
+                                        Detail
                                     </Button>
                                 </TableCell>
 
@@ -146,6 +157,6 @@ export default function UninstallationSection({ setActiveTab }) {
                 onClose={closeModal}
                 uninstallationId={selectedUninstallationId}
             />
-        </div>
+        </div >
     )
 }

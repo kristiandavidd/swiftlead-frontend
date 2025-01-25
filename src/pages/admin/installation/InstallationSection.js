@@ -13,16 +13,16 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import InstallationDetailModal from "@/components/InstallationDetailModal";
 import AddDeviceModal from "@/components/AddDevicemodal";
-import { set } from "react-hook-form";
+import Spinner from "@/components/ui/spinner";
 
 const statusOptions = [
-    { value: 0, label: "Pending" },
-    { value: 1, label: "Checking" },
-    { value: 2, label: "Approved" },
-    { value: 3, label: "Completed" },
-    { value: 4, label: "Cancelled" },
-    { value: 5, label: "Rejected" },
-    { value: 6, label: "Rescheduled" },
+    { value: 0, label: "Menunggu" },
+    { value: 1, label: "Pengecekan" },
+    { value: 2, label: "Disetujui" },
+    { value: 3, label: "Selesai" },
+    { value: 4, label: "Dibatalkan" },
+    { value: 5, label: "Ditolak" },
+    { value: 6, label: "Dijadwalkan Ulang" },
 ];
 
 export default function InstallationSection({ setActiveTab }) {
@@ -67,11 +67,11 @@ export default function InstallationSection({ setActiveTab }) {
 
         try {
             await axios.put(`${apiUrl}/request/installation/${id}/status`, { status: newStatus });
-            toast({ title: "Success", description: "Status updated successfully", variant: "success" });
+            toast({ title: "Sukses!", description: "Berhasil memperbarui status instalasi.", variant: "success" });
             fetchInstallations();
         } catch (error) {
             console.error("Error updating installation status:", error);
-            toast({ title: "Error", description: "Failed to update status", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal memperbarui status instalasi", variant: "destructive" });
         }
     };
 
@@ -85,13 +85,12 @@ export default function InstallationSection({ setActiveTab }) {
             setInstallations(res.data);
         } catch (error) {
             console.error("Error fetching installations:", error);
-            toast({ title: "Error", description: "Failed to fetch installations data", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal mengambil data instalasi.", variant: "destructive" });
         } finally {
             setLoading(false);
         }
     };
 
-    console.log("data", installations)
     return (
         <div>
             <Table>
@@ -101,6 +100,7 @@ export default function InstallationSection({ setActiveTab }) {
                         <TableHead>Lokasi RBW</TableHead>
                         <TableHead>Lantai pemasangan</TableHead>
                         <TableHead>Jumlah Sensor</TableHead>
+                        <TableHead>Tanggal Janji</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Action</TableHead>
                     </TableRow>
@@ -108,7 +108,9 @@ export default function InstallationSection({ setActiveTab }) {
                 <TableBody>
                     {loading ? (
                         <TableRow>
-                            <TableCell colSpan="5" className="text-center">Loading...</TableCell>
+                            <TableCell colSpan="7" className="text-center">
+                                <Spinner />
+                            </TableCell>
                         </TableRow>
                     ) : (
                         installations.map((installation) => (
@@ -122,6 +124,13 @@ export default function InstallationSection({ setActiveTab }) {
                                 </TableCell>
                                 <TableCell>
                                     {installation.sensor_count}
+                                </TableCell>
+                                <TableCell>
+                                    {new Date(installation.appointment_date).toLocaleDateString("id-ID", {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    })}
                                 </TableCell>
                                 <TableCell>
                                     <Select
@@ -146,13 +155,13 @@ export default function InstallationSection({ setActiveTab }) {
                                         variant="outline"
                                         onClick={() => openModal(installation.id)}
                                     >
-                                        Details
+                                        Detail
                                     </Button>
                                     <Button
                                         size="sm"
                                         onClick={() => openModalProcess(installation)}
                                     >
-                                        Process
+                                        Proses
                                     </Button>
 
                                 </TableCell>

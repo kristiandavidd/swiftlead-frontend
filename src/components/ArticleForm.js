@@ -199,8 +199,7 @@ export default function ArticleForm() {
                         </Button>
                     </div>
                 </form>
-            )
-            }
+            )}
         </div >
     );
 };

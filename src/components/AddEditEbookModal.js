@@ -82,8 +82,8 @@ export default function AddEditEbook({ open, onClose, onSubmit, editingEbook, ap
                             </div>
                         )}
                     </div>
-                    <div className='flex justify-end gap-2 mt-3 space-y-1'>
-                        <Button onClick={onClose} variant="secondary">Batal</Button>
+                    <div className='flex items-center justify-end gap-2 mt-3 space-y-1'>
+                        <Button onClick={onClose} variant="outline">Batal</Button>
                         <Button type="submit">Unggah</Button>
                     </div>
                 </form>

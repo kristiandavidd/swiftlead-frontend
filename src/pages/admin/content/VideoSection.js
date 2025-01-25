@@ -3,7 +3,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { AlertDialog, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { AlertDialog, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription } from '@/components/ui/alert-dialog';
 import VideoModal from '@/components/AddEditVideoModal';
 import Link from 'next/link';
 import { IconTrash, IconPencil, IconArrowUpRight } from '@tabler/icons-react';
@@ -27,6 +27,7 @@ const VideoSection = () => {
             setVideos(res.data[0]);
         } catch (error) {
             console.error('Failed to fetch videos:', error);
+            toast({ title: 'Galat!', description: 'Gagal mengambil data video.', variant: 'error' });
         }
     };
 
@@ -35,10 +36,10 @@ const VideoSection = () => {
             await axios.delete(`${apiUrl}/video/${deletingId}`);
             fetchVideos();
             setIsAlertOpen(false);
-            toast({ title: 'Success', description: 'Video deleted successfully.', variant: 'success' });
+            toast({ title: 'Sukses!', description: 'Video berhasil dihapus.', variant: 'success' });
         } catch (error) {
             console.error('Failed to delete video:', error);
-            toast({ title: 'Error', description: 'Failed to delete video.', variant: 'error' });
+            toast({ title: 'Galat!', description: 'Gagal menghapus video.', variant: 'error' });
         }
     };
 
@@ -75,7 +76,7 @@ const VideoSection = () => {
 
     return (
         <div className="container p-4 mx-auto">
-            <Button onClick={() => setIsModalOpen(true)}>Add Video</Button>
+            <Button onClick={() => setIsModalOpen(true)}>Tambah Video</Button>
             <div className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3">
                 {Array.isArray(videos) && videos.length > 0 ? (
                     videos.map((video) => (
@@ -96,7 +97,7 @@ const VideoSection = () => {
                             <div className="flex justify-end w-full gap-2 mt-4">
                                 <Button variant="outline" className="w-2/4 ">
                                     <Link className='inline-flex items-center gap-2' href={`${video.youtube_link}`} target='_blank'>
-                                        <IconArrowUpRight /> Preview
+                                        <IconArrowUpRight /> Pratinjau
                                     </Link>
                                 </Button>
                                 <Button onClick={() => openEditModal(video)} className="w-1/4">
@@ -116,7 +117,7 @@ const VideoSection = () => {
                         </div>
                     ))
                 ) : (
-                    <p>No videos found.</p>
+                    <p>Tidak ada konten video ditemukan.</p>
                 )}
             </div>
 
@@ -136,16 +137,15 @@ const VideoSection = () => {
                 toast={toast}
             />
 
-            {/* AlertDialog for Delete Confirmation */}
             <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
+                        <AlertDialogDescription>Aksi ini tidak bisa dikembalikan.</AlertDialogDescription>
                     </AlertDialogHeader>
-                    <p>This action cannot be undone. The video will be permanently deleted.</p>
                     <AlertDialogFooter>
-                        <Button onClick={() => setIsAlertOpen(false)} variant="secondary">Cancel</Button>
-                        <Button onClick={handleDelete} variant="destructive">Delete</Button>
+                        <Button onClick={() => setIsAlertOpen(false)} variant="outline">Batal</Button>
+                        <Button onClick={handleDelete} variant="destructive">Hapus</Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

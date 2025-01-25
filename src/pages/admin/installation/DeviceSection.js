@@ -20,8 +20,8 @@ export default function Installation() {
     const [selectedDevice, setSelectedDevice] = useState(null);
     const [loading, setLoading] = useState(true);
     const statusOptions = [
-        { value: 0, label: "Inactive" },
-        { value: 1, label: "Active" },
+        { value: 0, label: "Tidak Aktif" },
+        { value: 1, label: "Aktif" },
     ];
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDeviceId, setSelectedDeviceId] = useState(null);
@@ -38,8 +38,8 @@ export default function Installation() {
         } catch (error) {
             console.error("Error fetching device data:", error);
             toast({
-                title: "Error",
-                description: "Failed to fetch device data.",
+                title: "Galat!",
+                description: "Gagal mengambil data perangkat user.",
                 variant: "destructive",
             });
         }
@@ -60,6 +60,7 @@ export default function Installation() {
             setDevices(res.data);
         } catch (error) {
             console.error("Error fetching device:", error);
+            toast({ title: "Galat!", description: "Gagal mengambil data perangkat.", variant: "destructive" });
         } finally {
             setLoading(false);
         }
@@ -74,11 +75,11 @@ export default function Installation() {
             await axios.put(`${apiUrl}/device/update/${id}/status`, {
                 status: newStatus,
             });
-            toast({ title: "Success", description: "Device status updated", variant: "success" });
+            toast({ title: "Sukses!", description: "Berhasil memperbarui status perangkat.", variant: "success" });
             fetchDevice();
         } catch (error) {
             console.error("Error updating device status:", error);
-            toast({ title: "Error", description: "Failed to update device status", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal memperbarui status perangkat.", variant: "destructive" });
         }
     }
 
@@ -89,22 +90,21 @@ export default function Installation() {
 
         try {
             await axios.delete(`${apiUrl}/device/delete/${selectedDevice}`);
-            toast({ title: "Success", description: "Device deleted", variant: "success" });
+            toast({ title: "Sukses!", description: "Perangkat berhasil dihapus.", variant: "success" });
             fetchDevice();
         } catch (error) {
             console.error("Error deleting device:", error);
-            toast({ title: "Error", description: "Failed to delete device", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal menghapus perangkat.", variant: "destructive" });
         }
     }
 
     return (
-        <div>
-            <Table>
+        <div >
+            <Table >
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Install Code</TableHead>
+                        <TableHead>Kode instal</TableHead>
                         <TableHead>Pemilik RBW</TableHead>
-                        <TableHead>Lokasi Kandang</TableHead>
                         <TableHead>Lantai</TableHead>
                         <TableHead>Tanggal Pemasangan</TableHead>
                         <TableHead>Terakhir Maintenance</TableHead>
@@ -115,17 +115,14 @@ export default function Installation() {
                 <TableBody>
                     {loading ? (
                         <TableRow>
-                            <TableCell colSpan="5" className="text-center">Loading...</TableCell>
+                            <TableCell colSpan="7" className="text-center">Loading...</TableCell>
                         </TableRow>
                     ) : (
                         devices.map((device) => (
-                            <TableRow key={device.id}>
+                            <TableRow key={device.id} >
                                 <TableCell>{device.install_code}</TableCell>
                                 <TableCell>
                                     {device.user_name}
-                                </TableCell>
-                                <TableCell>
-                                    {device.house_location}
                                 </TableCell>
                                 <TableCell>
                                     {device.floor}
@@ -165,21 +162,20 @@ export default function Installation() {
                                     <Button size="sm" onClick={() => openEditModal(device.id)}>
                                         <IconPencil size={16} />
                                     </Button>
-
                                     <AlertDialog>
                                         <AlertDialogTrigger asChild>
-                                            <Button size="sm" variant="destructive" onClick={() => setSelectedDevice(device.id)}>
+                                            <Button size="sm" variant="destructive" onClick={() => setSelectedDeviceId(device.id)}>
                                                 <IconTrash size={16} />
                                             </Button>
                                         </AlertDialogTrigger>
                                         <AlertDialogContent>
                                             <AlertDialogHeader>
-                                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                                <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+                                                <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
+                                                <AlertDialogDescription>Aksi ini tidak bisa dikembalikan.</AlertDialogDescription>
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
-                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                <AlertDialogAction onClick={handleDeleteDevice}>Delete</AlertDialogAction>
+                                                <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                <AlertDialogAction onClick={handleDeleteDevice}>Hapus</AlertDialogAction>
                                             </AlertDialogFooter>
                                         </AlertDialogContent>
                                     </AlertDialog>

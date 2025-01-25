@@ -6,7 +6,7 @@ import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { IconInfoCircle } from "@tabler/icons-react";
 
-const RequestUninstallationModal = ({ isOpen, onClose, deviceData, houseNameData }) => {
+export default function RequestUninstallationModal({ isOpen, onClose, deviceData, houseNameData }) {
     const [reason, setReason] = useState("");
     const [houseName, setHouseName] = useState("");
     const [appointmentDate, setAppointmentDate] = useState("");
@@ -93,5 +93,3 @@ const RequestUninstallationModal = ({ isOpen, onClose, deviceData, houseNameData
         </Dialog>
     );
 };
-
-export default RequestUninstallationModal;

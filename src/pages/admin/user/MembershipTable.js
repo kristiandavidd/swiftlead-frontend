@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import Link from "next/link";
 import EditMembershipModal from "@/components/editMembershipModal";
+import Spinner from "@/components/ui/spinner";
 
 export default function MembershipTable() {
     const [memberships, setMemberships] = useState([]);
@@ -34,18 +35,17 @@ export default function MembershipTable() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedMembershipId, setSelectedMembershipId] = useState(null);
-    const [filteredMember, setFilteredMember] = useState([]); // Artikel yang sudah difilter
-    const [searchQuery, setSearchQuery] = useState(""); // State untuk input pencarian
-    const [selectedMemberId, setSelectedMemberId] = useState(""); // ID membership yang akan dihapus
+    const [filteredMember, setFilteredMember] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedMemberId, setSelectedMemberId] = useState("");
     const { toast } = useToast();
-
 
     useEffect(() => {
         fetchMemberships();
     }, []);
 
     useEffect(() => {
-        handleSearch(); // Memperbarui data pencarian setiap kali query berubah
+        handleSearch();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [memberships, searchQuery]);
 
@@ -59,6 +59,7 @@ export default function MembershipTable() {
             setMemberships(res.data);
         } catch (error) {
             console.error("Error fetching memberships:", error);
+            toast({ title: "Galat!", description: "Gagal mengambil data membership.", variant: "error" });
         } finally {
             setLoading(false);
         }
@@ -71,12 +72,12 @@ export default function MembershipTable() {
 
         try {
             await axios.delete(`${apiUrl}/membership/${selectedMemberId}`);
-            toast({ title: "Success", description: "Member deleted successfully", variant: "success" });
+            toast({ title: "Sukses!", description: "Berhasil menghapus member.", variant: "success" });
             fetchMemberships();
             setSelectedMemberId(null);
         } catch (err) {
             console.error("Error deleting member:", err);
-            toast({ title: "Error", description: "Failed to delete member", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal menghapus member.", variant: "destructive" });
         }
     };
 
@@ -122,7 +123,7 @@ export default function MembershipTable() {
                     <input
                         type="text"
                         size="sm"
-                        placeholder="Search user"
+                        placeholder="Cari member.."
                         className="px-4 py-2 border border-gray-300 rounded-md"
                         value={searchQuery}
                         onChange={(e) => {
@@ -131,23 +132,25 @@ export default function MembershipTable() {
                     />
                     <Button size="sm"><IconSearch className="w-8 h-8 " strokeWidth={2.4} /></Button>
                 </div>
-                <Button onClick={() => setIsModalOpen(true)}>Add Membership</Button>
+                <Button onClick={() => setIsModalOpen(true)}>Tambah Membership</Button>
             </div>
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Name</TableHead>
+                        <TableHead>Nama</TableHead>
                         <TableHead>Email</TableHead>
-                        <TableHead>Start Date</TableHead>
-                        <TableHead>End Date</TableHead>
+                        <TableHead>Tanggal Berlangganan</TableHead>
+                        <TableHead>Tanggal Kadaluarsa</TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead>Action</TableHead>
+                        <TableHead>Aksi</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {loading ? (
                         <TableRow>
-                            <TableCell colSpan="4" className="text-center">Loading...</TableCell>
+                            <TableCell colSpan="6" className="text-center">
+                                <Spinner />
+                            </TableCell>
                         </TableRow>
                     ) : (
                         filteredMember.map((membership) => (
@@ -190,14 +193,12 @@ export default function MembershipTable() {
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>
-                                                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        This action cannot be undone.
-                                                    </AlertDialogDescription>
+                                                    <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
+                                                    <AlertDialogDescription>Aksi ini tidak bisa dikembalikan.</AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
-                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={handleDeleteMember}>Delete</AlertDialogAction>
+                                                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                    <AlertDialogAction onClick={handleDeleteMember} className="bg-destructive hover:bg-destructive/80">Hapus</AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>

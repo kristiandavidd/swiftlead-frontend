@@ -2,54 +2,101 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import {
+    Table,
+    TableHeader,
+    TableBody,
+    TableRow,
+    TableHead,
+    TableCell,
+} from "@/components/ui/table"; // Sesuaikan dengan path komponen Anda
+import { useToast } from "@/hooks/use-toast";
 
-const MembershipSection = () => {
+export default function MembershipSection() {
     const [transactions, setTransactions] = useState([]);
+    const { toast } = useToast();
 
     useEffect(() => {
         fetchTransactions();
     }, []);
 
     const fetchTransactions = async () => {
-        const apiUrl = process.env.NODE_ENV === "production"
-            ? process.env.NEXT_PUBLIC_API_PROD_URL
-            : process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl =
+            process.env.NODE_ENV === "production"
+                ? process.env.NEXT_PUBLIC_API_PROD_URL
+                : process.env.NEXT_PUBLIC_API_URL;
         try {
             const response = await axios.get(`${apiUrl}/transactions`);
             setTransactions(response.data);
         } catch (error) {
+            toast({ title: "Galat!", description: "Gagal mengambil data transaksi.", variant: "destructive" });
             console.error("Error fetching transactions:", error);
         }
     };
 
     return (
         <div className="container mx-auto mt-8">
-            <table className="min-w-full bg-white">
-                <thead>
-                    <tr>
-                        <th className="px-6 py-2 text-xs text-gray-500">Order ID</th>
-                        <th className="px-6 py-2 text-xs text-gray-500">Status</th>
-                        <th className="px-6 py-2 text-xs text-gray-500">Amount</th>
-                        <th className="px-6 py-2 text-xs text-gray-500">Payment Type</th>
-                        <th className="px-6 py-2 text-xs text-gray-500">Transaction Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {transactions.map((transaction) => (
-                        <tr key={transaction.id}>
-                            <td className="px-6 py-4 text-sm">{transaction.order_id}</td>
-                            <td className="px-6 py-4 text-sm">{transaction.status}</td>
-                            <td className="px-6 py-4 text-sm">{transaction.amount}</td>
-                            <td className="px-6 py-4 text-sm">{transaction.payment_type}</td>
-                            <td className="px-6 py-4 text-sm">
-                                {new Date(transaction.transaction_time).toLocaleString()}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead className="px-6 py-2 text-gray-500">
+                            Order ID
+                        </TableHead>
+                        <TableHead className="px-6 py-2 text-gray-500">
+                            Status
+                        </TableHead>
+                        <TableHead className="px-6 py-2 text-gray-500">
+                            Total Pembayaran
+                        </TableHead>
+                        <TableHead className="px-6 py-2 text-gray-500">
+                            Tipe Pembayaran
+                        </TableHead>
+                        <TableHead className="px-6 py-2 text-gray-500">
+                            Waktu Transaksi
+                        </TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {transactions.length > 0 ? (
+                        transactions.map((transaction) => (
+                            <TableRow key={transaction.id}>
+                                <TableCell className="px-6 py-4 text-sm">
+                                    {transaction.order_id}
+                                </TableCell>
+                                <TableCell className="px-6 py-4 text-sm">
+                                    {transaction.status}
+                                </TableCell>
+                                <TableCell className="px-6 py-4 text-sm">
+                                    {transaction.amount}
+                                </TableCell>
+                                <TableCell className="px-6 py-4 text-sm">
+                                    {transaction.payment_type}
+                                </TableCell>
+                                <TableCell className="px-6 py-4 text-sm">
+                                    {new Intl.DateTimeFormat("id-ID", {
+                                        day: "2-digit",
+                                        month: "long",
+                                        year: "numeric",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        second: "2-digit",
+                                    }).format(new Date(transaction.transaction_time))}
+                                </TableCell>
+
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell
+                                colSpan={5}
+                                className="px-6 py-4 text-sm text-center"
+                            >
+                                No transactions available.
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
         </div>
     );
 };
-
-export default MembershipSection;

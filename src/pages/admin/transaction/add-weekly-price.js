@@ -46,28 +46,35 @@ export default function AddWeeklyPricePage() {
             setWeekStart("");
             setWeekEnd("");
 
-            toast({ title: "Success", description: "Weekly prices added successfully", variant: "success" });
+            toast({ title: "Sukses!", description: "Berhasil menambahkan harga mingguan.", variant: "success" });
         } catch (err) {
             console.error("Error adding weekly prices:", err);
-            toast({ title: "Error", description: "Failed to add weekly prices", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal menambahkan harga mingguan.", variant: "destructive" });
         }
     };
 
     return (
-        <AdminLayout className="p-4">
-            <h1 className="mb-4 text-2xl font-bold">Add Weekly Bird Nest Prices</h1>
+        <AdminLayout className="">
+            <div className="flex flex-col justify-between mb-4">
+                <h1 className="text-2xl font-bold">Tambahkan Harga Acuan Per Minggu</h1>
+                <p className="text-sm">Menambahkan harga acuan sarang burung wlaet per minggu.</p>
+            </div>
             <div className="container p-4 bg-white rounded-lg">
-                <div className="mb-4">
-                    <label className="block mb-2 font-medium">Week Start:</label>
-                    <Input type="date" value={weekStart} onChange={(e) => setWeekStart(e.target.value)} />
-                    <label className="block mt-4 mb-2 font-medium">Week End:</label>
-                    <Input type="date" value={weekEnd} onChange={(e) => setWeekEnd(e.target.value)} />
+                <div className="flex items-center w-full gap-4 my-4">
+                    <div className="w-1/2 space-y-2">
+                        <label className="block font-medium">Tanggal Minggu Dimulai</label>
+                        <Input type="date" value={weekStart} onChange={(e) => setWeekStart(e.target.value)} />
+                    </div>
+                    <div className="w-1/2 space-y-2">
+                        <label className="block font-medium">Tanggal Minggu Berakhir</label>
+                        <Input type="date" value={weekEnd} onChange={(e) => setWeekEnd(e.target.value)} />
+                    </div>
                 </div>
                 <table className="w-full border border-collapse border-gray-300">
                     <thead>
                         <tr className="bg-gray-200">
-                            <th className="p-2 text-left border border-gray-300">Province</th>
-                            <th className="p-2 text-left border border-gray-300">Price (IDR)/Kg</th>
+                            <th className="p-2 text-left border border-gray-300">Provinsi</th>
+                            <th className="p-2 text-left border border-gray-300">Harga (IDR)/Kg</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -86,7 +93,10 @@ export default function AddWeeklyPricePage() {
                         ))}
                     </tbody>
                 </table>
-                <Button className="mt-4" onClick={handleSubmit}>Submit Prices</Button>
+                <div className="flex items-center justify-end gap-4 mt-4">
+                    <Button variant="outline" onClick={() => router.push("/admin/transaction")}>Batal</Button>
+                    <Button className="" onClick={handleSubmit}>Simpan</Button>
+                </div>
             </div>
         </AdminLayout>
     );

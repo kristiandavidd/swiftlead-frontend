@@ -15,6 +15,7 @@ import {
     SelectItem,
     SelectValue,
 } from "@/components/ui/select";
+import Spinner from "@/components/ui/spinner";
 
 export default function EditUser() {
     const [formData, setFormData] = useState({
@@ -62,7 +63,7 @@ export default function EditUser() {
             });
         } catch (err) {
             console.error("Error fetching user:", err);
-            toast({ title: "Error", description: "Failed to fetch user data", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal mendapatkan data pengguna.", variant: "destructive" });
         } finally {
             setLoading(false);
         }
@@ -81,11 +82,11 @@ export default function EditUser() {
         try {
             setLoading(true);
             await axios.put(`${apiUrl}/user/${params.id}`, formData);
-            toast({ title: "Success", description: "User updated successfully", variant: "success" });
+            toast({ title: "Sukses!", description: "Berhasil memperbarui data pengguna.", variant: "success" });
             router.push('/admin/user');
         } catch (err) {
             console.error("Error updating user:", err);
-            toast({ title: "Error", description: "Failed to update user", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal memperbarui data pengguna.", variant: "destructive" });
         } finally {
             setLoading(false);
         }
@@ -94,7 +95,9 @@ export default function EditUser() {
     if (!isClient || !params?.id) {
         return (
             <AdminLayout>
-                <p className="text-center">Loading...</p>
+                <div className="container w-2/3 p-4 mx-auto bg-white rounded shadow">
+                    <Spinner />
+                </div>
             </AdminLayout>
         );
     }
@@ -102,12 +105,12 @@ export default function EditUser() {
     return (
         <AdminLayout>
             <div className="container w-2/3 p-4 mx-auto bg-white rounded shadow">
-                <h1 className="mb-4 text-2xl font-bold">Edit User</h1>
+                <h1 className="mb-4 text-2xl font-bold">Perbarui Pengguna</h1>
                 <div className="space-y-4">
                     <div>
-                        <label htmlFor="name">Name</label>
+                        <label htmlFor="name">Nama</label>
                         <Input
-                            placeholder="Name"
+                            placeholder="Nama"
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
@@ -123,18 +126,18 @@ export default function EditUser() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="no_telp">Phone Number</label>
+                        <label htmlFor="no_telp">Nomor Telepon</label>
                         <Input
-                            placeholder="Phone"
+                            placeholder="628.."
                             name="no_telp"
                             value={formData.no_telp}
                             onChange={handleChange}
                         />
                     </div>
                     <div>
-                        <label htmlFor="location">Location</label>
+                        <label htmlFor="location">Alamat</label>
                         <Input
-                            placeholder="Location"
+                            placeholder="Alamat"
                             name="location"
                             value={formData.location}
                             onChange={handleChange}
@@ -142,17 +145,17 @@ export default function EditUser() {
                     </div>
                     <div className="flex w-full gap-4">
                         <div className="w-1/2">
-                            <label htmlFor="role">Role</label>
+                            <label htmlFor="role">Peran</label>
                             <Select
                                 value={formData.role.toString()}
                                 onValueChange={(value) => setFormData({ ...formData, role: parseInt(value) })}
                             >
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Select Role" />
+                                    <SelectValue placeholder="Pilih peran" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectItem value="0">User</SelectItem>
+                                        <SelectItem value="0">Peternak Walet</SelectItem>
                                         <SelectItem value="1">Admin</SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
@@ -165,20 +168,25 @@ export default function EditUser() {
                                 onValueChange={(value) => setFormData({ ...formData, status: parseInt(value) })}
                             >
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Select Status" />
+                                    <SelectValue placeholder="Pilih Status" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectItem value="-1">Inactive</SelectItem>
-                                        <SelectItem value="0">Active</SelectItem>
+                                        <SelectItem value="-1">Tidak Aktif</SelectItem>
+                                        <SelectItem value="0">Aktif</SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
                         </div>
                     </div>
-                    <Button onClick={handleSubmit} disabled={loading}>
-                        {loading ? 'Updating...' : 'Update User'}
-                    </Button>
+                    <div className="flex items-center justify-end gap-4">
+                        <Button variant="outline" onClick={() => router.push("/admin/user")}>
+                            Batal
+                        </Button>
+                        <Button onClick={handleSubmit} disabled={loading}>
+                            {loading ? 'Memperbarui...' : 'Perbarui Pengguna'}
+                        </Button>
+                    </div>
                 </div>
             </div>
         </AdminLayout>

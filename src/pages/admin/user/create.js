@@ -42,11 +42,11 @@ export default function CreateUser() {
         try {
             setLoading(true);
             await axios.post(`${apiUrl}/user`, formData);
-            toast({ title: "Success", description: "User created successfully", variant: "success" });
+            toast({ title: "Sukses!", description: "Berhasil Menambahkan pengguna baru.", variant: "success" });
             router.push('/admin/user');
         } catch (err) {
             console.error("Error creating user:", err);
-            toast({ title: "Error", description: "Failed to create user", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal Menambahkan pengguna baru.", variant: "destructive" });
         } finally {
             setLoading(false);
         }
@@ -56,13 +56,13 @@ export default function CreateUser() {
         <AdminLayout>
             <div className="container w-2/3 p-4 mx-auto bg-white rounded shadow">
 
-                <h1 className="mb-4 text-2xl font-bold">Create User</h1>
+                <h1 className="mb-4 text-2xl font-bold">Tambahkan Pengguna</h1>
                 <div className="space-y-4">
 
                     <div>
-                        <label htmlFor="name">Name</label>
+                        <label htmlFor="name">Nama</label>
                         <Input
-                            placeholder="Name"
+                            placeholder="Nama"
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
@@ -78,25 +78,25 @@ export default function CreateUser() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="no_telp">Phone Number</label>
+                        <label htmlFor="no_telp">Nomor Telepon</label>
                         <Input
-                            placeholder="Phone"
+                            placeholder="628.."
                             name="no_telp"
                             value={formData.no_telp}
                             onChange={handleChange}
                         />
                     </div>
                     <div>
-                        <label htmlFor="location">Location</label>
+                        <label htmlFor="location">Alamat</label>
                         <Input
-                            placeholder="Location"
+                            placeholder="Alamat"
                             name="location"
                             value={formData.location}
                             onChange={handleChange}
                         />
                     </div>
                     <div>
-                        <label htmlFor="role">Role</label>
+                        <label htmlFor="role">Peran</label>
                         <Select
                             value={formData.role.toString()}
                             onValueChange={(value) => setFormData({ ...formData, role: parseInt(value) })}
@@ -106,15 +106,18 @@ export default function CreateUser() {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectItem value="0">User</SelectItem>
+                                    <SelectItem value="0">Peternak Walet</SelectItem>
                                     <SelectItem value="1">Admin</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
                     </div>
-                    <Button onClick={handleSubmit} disabled={loading}>
-                        {loading ? 'Creating...' : 'Create User'}
-                    </Button>
+                    <div className="flex items-center justify-end gap-4">
+                        <Button onClick={() => router.push("/admin/user")} variant="outline">Batal</Button>
+                        <Button onClick={handleSubmit} disabled={loading}>
+                            {loading ? 'Menambahkan...' : 'Tambahkan Pengguna'}
+                        </Button>
+                    </div>
                 </div>
             </div>
         </AdminLayout>

@@ -78,6 +78,11 @@ export default function ArticleTable() {
             setFilteredArticles(res.data[0]);
         } catch (error) {
             console.error("Error fetching articles:", error);
+            toast({
+                title: "Galat!",
+                description: error.response?.data?.message || "Gagal mengambil data artikel.",
+                variant: "destructive",
+            });
         }
     };
 
@@ -106,8 +111,8 @@ export default function ArticleTable() {
         try {
             await axios.delete(`${apiUrl}/articles/${selectedArticleId}`);
             toast({
-                title: "Success",
-                description: "Article deleted successfully!",
+                title: "Sukses!",
+                description: "Artikel berhasil dihapus.",
                 variant: "success",
             });
             fetchArticles();
@@ -115,8 +120,8 @@ export default function ArticleTable() {
         } catch (error) {
             console.error("Error deleting article:", error);
             toast({
-                title: "Error",
-                description: error.response?.data?.message || "Failed to delete article",
+                title: "Galat!",
+                description: error.response?.data?.message || "Gagal menghapus artikel.",
                 variant: "destructive",
             });
         }
@@ -130,22 +135,20 @@ export default function ArticleTable() {
         try {
             await axios.put(`${apiUrl}/articles/${id}/status`, { status: newStatus });
             toast({
-                title: "Success",
-                description: "Status updated successfully!",
+                title: "Sukses!",
+                description: "Status berhasil diperbarui.",
                 variant: "success",
             });
             fetchArticles();
         } catch (error) {
             console.error("Error updating status:", error);
             toast({
-                title: "Error",
-                description: error.response?.data?.message || "Failed to update status",
+                title: "Galat!",
+                description: error.response?.data?.message || "Gagal memperbarui status.",
                 variant: "destructive",
             });
         }
     };
-
-    console.log(articles)
 
     return (
         <div className="mx-auto">
@@ -154,7 +157,7 @@ export default function ArticleTable() {
                     <input
                         type="text"
                         size="sm"
-                        placeholder="Search article"
+                        placeholder="Cari artikel.."
                         className="px-4 py-2 border border-gray-300 rounded-md"
                         onChange={handleSearch}
                     />
@@ -162,7 +165,7 @@ export default function ArticleTable() {
                 </div>
                 <Link className="" href={"/admin/content/create"}>
                     <Button size="sm">
-                        <IconPlus className="mr-2" />Create
+                        <IconPlus className="mr-2" /> Buat
                     </Button>
                 </Link>
             </div>
@@ -190,7 +193,7 @@ export default function ArticleTable() {
                             </Link>
                         </CardHeader>
                         <CardFooter className="flex flex-col">
-                            <div className="flex justify-between w-full gap-2">
+                            <div className="flex items-center justify-between w-full gap-2">
                                 <Select
                                     value={article.status === 1 ? "published" : article.status === 2 ? "membership" : "draft"}
                                     onValueChange={(value) => handleStatusChange(article.id, value === "published" ? 1 : value === "membership" ? 2 : 0)}
@@ -201,30 +204,36 @@ export default function ArticleTable() {
                                     <SelectContent>
                                         <SelectGroup>
                                             <SelectLabel>Status</SelectLabel>
-                                            <SelectItem value="published">Published</SelectItem>
+                                            <SelectItem value="published">Publik</SelectItem>
                                             <SelectItem value="membership">Membership</SelectItem>
                                             <SelectItem value="draft">Draft</SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
-                                <Link href={`/admin/content/edit/${article.id}`} className="inline-flex items-center justify-center w-1/5 gap-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
-                                    {console.log("article id: ", article.id)}
-                                    <IconPencil />
-                                </Link>
+                                <Button size="sm" className="w-1/5">
+                                    <Link href={`/admin/content/edit/${article.id}`}>
+                                        {console.log("article id: ", article.id)}
+                                        <IconPencil />
+                                    </Link>
+                                </Button>
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                        <Button variant="destructive" className="w-1/5" onClick={() => setSelectedArticleId(article.id)}>
+                                        <Button variant="destructive" size="sm" className="w-1/5" onClick={() => setSelectedArticleId(article.id)}>
                                             <IconTrash />
                                         </Button>
                                     </AlertDialogTrigger>
                                     <AlertDialogContent>
                                         <AlertDialogHeader>
-                                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+                                            <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
+                                            <AlertDialogDescription>Aksi ini tidak bisa dikembalikan.</AlertDialogDescription>
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+                                            <AlertDialogCancel>
+                                                Batal
+                                            </AlertDialogCancel>
+                                            <AlertDialogAction className="bg-destructive hover:bg-destructive/80" onClick={handleDelete}>
+                                                Hapus
+                                            </AlertDialogAction>
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
                                 </AlertDialog>

@@ -31,6 +31,7 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import Spinner from "@/components/ui/spinner";
 
 
 export default function UserTable() {
@@ -49,7 +50,7 @@ export default function UserTable() {
 
     useEffect(() => {
         handleSearch(); // Memperbarui data pencarian setiap kali query berubah
-    }, );
+    },);
 
 
     const fetchUsers = async () => {
@@ -64,6 +65,7 @@ export default function UserTable() {
             setLoading(false);
         } catch (err) {
             console.error("Error fetching users:", err);
+            toast({ title: "Galat!", description: "Gagal mengambil data pengguna.", variant: "destructive" });
             setLoading(false);
         }
     };
@@ -75,11 +77,11 @@ export default function UserTable() {
 
         try {
             await axios.put(`${apiUrl}/user/${id}/role`, { role: newRole });
-            toast({ title: "Success", description: "Role updated successfully", variant: "success" });
+            toast({ title: "Sukses!", description: "Berhasil memperbarui peran pengguna.", variant: "success" });
             fetchUsers();
         } catch (err) {
             console.error("Error updating role:", err);
-            toast({ title: "Error", description: "Failed to update role", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal memperbarui peran pengguna.", variant: "destructive" });
         }
     };
 
@@ -90,14 +92,14 @@ export default function UserTable() {
 
         try {
             await axios.put(`${apiUrl}/user/${id}/membership`, { status: newStatus });
-            toast({ title: "Success", description: "User status updated successfully", variant: "success" });
+            toast({ title: "Sukses!", description: "Berhasil memperbarui status membership pengguna.", variant: "success" });
             fetchUsers();
         } catch (err) {
             console.error("Error updating membership:", err);
             if (err.response.status === 400) {
-                toast({ title: "Error", description: "Cannot change user status. User password is not set.", variant: "destructive" });
+                toast({ title: "Galat!", description: "Pengguna belum menyiapkan password.", variant: "destructive" });
             } else {
-                toast({ title: "Error", description: "Failed to update user status", variant: "destructive" });
+                toast({ title: "Galat!", description: "Gagal memperbarui status pengguna.", variant: "destructive" });
             }
         }
     };
@@ -109,12 +111,12 @@ export default function UserTable() {
 
         try {
             await axios.delete(`${apiUrl}/user/${selectedUserId}`);
-            toast({ title: "Success", description: "User deleted successfully", variant: "success" });
+            toast({ title: "Sukses!", description: "Pengguna berhasil dihapus.", variant: "success" });
             fetchUsers();
             setSelectedUserId(null);
         } catch (err) {
             console.error("Error deleting user:", err);
-            toast({ title: "Error", description: "Failed to delete user", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal menghapus pengguna.", variant: "destructive" });
         }
     };
 
@@ -147,7 +149,7 @@ export default function UserTable() {
                     <input
                         type="text"
                         size="sm"
-                        placeholder="Search user"
+                        placeholder="Cari pengguna.."
                         className="px-4 py-2 border border-gray-300 rounded-md"
                         value={searchQuery}
                         onChange={(e) => {
@@ -159,7 +161,7 @@ export default function UserTable() {
                 </div>
                 <Link href="/admin/user/create">
                     <Button size="sm" >
-                        <IconPlus className="mr-2" /> Add User
+                        <IconPlus className="mr-2" /> Tambah User
                     </Button>
                 </Link>
             </div>
@@ -167,18 +169,20 @@ export default function UserTable() {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Name</TableHead>
+                        <TableHead>Nama</TableHead>
                         <TableHead>Email</TableHead>
-                        <TableHead>Phone</TableHead>
-                        <TableHead>Role</TableHead>
+                        <TableHead>Nomor Telepon</TableHead>
+                        <TableHead>Peran</TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead>Actions</TableHead>
+                        <TableHead>Aksi</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {loading ? (
                         <TableRow>
-                            <TableCell colSpan="6" className="text-center">Loading...</TableCell>
+                            <TableCell colSpan="6" className="text-center">
+                                <Spinner />
+                            </TableCell>
                         </TableRow>
                     ) : (
                         filteredUser.map((user) => (
@@ -192,11 +196,11 @@ export default function UserTable() {
                                         onValueChange={(value) => handleRoleChange(user.id, parseInt(value))}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select Role" />
+                                            <SelectValue placeholder="Pilih peran" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
-                                                <SelectItem value="0">User</SelectItem>
+                                                <SelectItem value="0">Peternak Walet</SelectItem>
                                                 <SelectItem value="1">Admin</SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
@@ -208,12 +212,12 @@ export default function UserTable() {
                                         onValueChange={(value) => handleStatusChange(user.id, parseInt(value))}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select Membership" />
+                                            <SelectValue placeholder="Pilih status" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
-                                                <SelectItem value="-1">Inactive</SelectItem>
-                                                <SelectItem value="0">Active</SelectItem>
+                                                <SelectItem value="-1">Tidak Aktif</SelectItem>
+                                                <SelectItem value="0">Aktif</SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -233,14 +237,12 @@ export default function UserTable() {
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>
-                                                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        This action cannot be undone.
-                                                    </AlertDialogDescription>
+                                                    <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
+                                                    <AlertDialogDescription>Aksi ini tidak bisa dikembalikan.</AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
-                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={handleDeleteUser}>Delete</AlertDialogAction>
+                                                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                    <AlertDialogAction onClick={handleDeleteUser} className="bg-destructive hover:bg-destructive/80">Hapus</AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>

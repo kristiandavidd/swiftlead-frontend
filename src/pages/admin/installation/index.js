@@ -13,18 +13,18 @@ export default function Installation() {
     const [activeTab, setActiveTab] = useState("devices");
 
     return (
-        <AdminLayout className="mx-auto" head={"Article Page"}>
+        <AdminLayout className="mx-auto" head={"Kelola Perangkat"}>
             <div className="flex flex-col justify-between mb-4">
-                <h1 className="text-2xl font-bold">Manage Devices, Installation, and Maintenance</h1>
-                <p className="text-sm">Manage device, installation and maintenance for user.</p>
+                <h1 className="text-2xl font-bold">Kelola Instalasi, Pemeliharaan, dan Uninstalasi Perangkat</h1>
+                <p className="text-sm">Mengelola pengajuan instalasi, pemeliharaan, dan uninstalasi perangkat untuk user.</p>
             </div>
             <div className="p-4 overflow-x-auto bg-white rounded-lg">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="">
                     <TabsList className="grid w-3/4 grid-cols-4 p-0 px-2 pt-2 bg-white">
-                        <TabsTrigger className="py-2" value="devices">Manage Devices</TabsTrigger>
-                        <TabsTrigger className="py-2" value="installation">Installation Request</TabsTrigger>
-                        <TabsTrigger className="py-2" value="maintenance">Maintenance Request</TabsTrigger>
-                        <TabsTrigger className="py-2" value="uninstallation">Uninstallation Request</TabsTrigger>
+                        <TabsTrigger className="py-2" value="devices">Kelola Perangkat</TabsTrigger>
+                        <TabsTrigger className="py-2" value="installation">Pengajuan instalasi</TabsTrigger>
+                        <TabsTrigger className="py-2" value="maintenance">Pengajuan Pemeliharaan</TabsTrigger>
+                        <TabsTrigger className="py-2" value="uninstallation">Pengajuan Uninstalasi</TabsTrigger>
                     </TabsList>
                     <TabsContent value="devices">
                         <DeviceSection ></DeviceSection>

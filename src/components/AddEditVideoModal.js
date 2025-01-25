@@ -61,8 +61,8 @@ export default function VideoModal({ isOpen, onClose, formData, setFormData, edi
                             required
                         />
                     </div>
-                    <div className="flex justify-end gap-2">
-                        <Button onClick={onClose} type="button" variant="secondary">Batal</Button>
+                    <div className="flex items-center justify-end gap-2">
+                        <Button onClick={onClose} type="button" variant="outline">Batal</Button>
                         <Button type="submit">Simpan</Button>
                     </div>
                 </form>

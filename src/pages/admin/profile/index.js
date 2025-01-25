@@ -21,16 +21,16 @@ export default function Profile() {
     const { user, setUser } = useUser();
 
     const handleLogout = async () => {
-        setUser(null); 
-        localStorage.removeItem('token'); 
-        router.push('/login'); 
+        setUser(null);
+        localStorage.removeItem('token');
+        router.push('/login');
     };
 
     return (
         <AdminLayout head={"Profile"}>
             <div div className='flex flex-col w-full ' >
-                <p className='text-lg font-semibold'>Profile</p>
-                <p className='text-sm'>Personalize Account Settings and Manage User Access Securely.</p>
+                <p className='text-lg font-semibold'>Profil</p>
+                <p className='text-sm'>Mengelola profil admin.</p>
             </div >
             <Card className="flex flex-col items-center my-4">
                 <CardHeader className="items-center w-full">
@@ -40,13 +40,13 @@ export default function Profile() {
                     </Avatar>
                     {user && (
                         <>
-                            <p>Welcome!</p>
+                            <p>Selamat Datang!</p>
                             <p className='font-semibold text-md'>{user.email}</p>
                         </>
                     )}
                 </CardHeader>
                 <CardFooter>
-                    <Button onClick={handleLogout}>Logout</Button>
+                    <Button onClick={handleLogout}>Keluar</Button>
                 </CardFooter>
             </Card>
         </AdminLayout >

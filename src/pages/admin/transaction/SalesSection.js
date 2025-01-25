@@ -15,15 +15,16 @@ import AdminLayout from "@/layout/AdminLayout";
 import SaleDetailsModal from "@/components/salesDetailModal";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import Spinner from "@/components/ui/spinner";
 
 const statusOptions = [
-    { value: 0, label: "Submission" },
-    { value: 1, label: "Checking" },
-    { value: 2, label: "Approved" },
-    { value: 3, label: "Completed" },
-    { value: 4, label: "Cancelled" },
-    { value: 5, label: "Rejected" },
-    { value: 6, label: "Rescheduled" },
+    { value: 0, label: "Menunggu" },
+    { value: 1, label: "Pengecekan" },
+    { value: 2, label: "Disetujui" },
+    { value: 3, label: "Selesai" },
+    { value: 4, label: "Dibatalkan" },
+    { value: 5, label: "Ditolak" },
+    { value: 6, label: "Dijadwalkan Ulang" },
 ];
 
 export default function AdminSalesPage() {
@@ -48,7 +49,7 @@ export default function AdminSalesPage() {
             setSales(res.data);
         } catch (error) {
             console.error("Error fetching sales:", error);
-            toast({ title: "Error", description: "Failed to fetch sales data", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal mendapatkan data penjualan.", variant: "error" });
         } finally {
             setLoading(false);
         }
@@ -61,11 +62,11 @@ export default function AdminSalesPage() {
 
         try {
             await axios.put(`${apiUrl}/sales/${id}/status`, { status: newStatus });
-            toast({ title: "Success", description: "Sale status updated successfully", variant: "success" });
+            toast({ title: "Sukses!", description: "Berhasil memperbarui status penjualan.", variant: "success" });
             fetchSales(); // Refresh the sales data
         } catch (error) {
             console.error("Error updating sale status:", error);
-            toast({ title: "Error", description: "Failed to update sale status", variant: "destructive" });
+            toast({ title: "Galat!", description: "Gagal memperbarui status penjualan.", variant: "error" });
         }
     };
 
@@ -84,28 +85,33 @@ export default function AdminSalesPage() {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Province</TableHead>
-                        <TableHead>Price (IDR)</TableHead>
-                        <TableHead>Total Qty</TableHead>
-                        <TableHead>Appointment Date</TableHead>
+                        <TableHead>Provinsi</TableHead>
+                        <TableHead>Total Harga Beli Acuan</TableHead>
+                        <TableHead>Total Sarang</TableHead>
+                        <TableHead>Tanggal Janji</TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead>Actions</TableHead>
+                        <TableHead>Aksi</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {loading ? (
                         <TableRow>
-                            <TableCell colSpan="5" className="text-center">Loading...</TableCell>
+                            <TableCell colSpan="6" className="text-center">
+                                <Spinner />
+                            </TableCell>
                         </TableRow>
                     ) : (
                         sales.map((sale) => (
                             <TableRow key={sale.id}>
                                 <TableCell>{sale.province}</TableCell>
                                 <TableCell>
-                                    {parseFloat(sale.price).toLocaleString("id-ID", {
-                                        style: "currency",
-                                        currency: "IDR",
-                                    })}
+                                    {parseFloat(sale.price * (parseFloat(sale.bowl_weight) +
+                                        parseFloat(sale.oval_weight) +
+                                        parseFloat(sale.corner_weight) +
+                                        parseFloat(sale.broken_weight))).toLocaleString("id-ID", {
+                                            style: "currency",
+                                            currency: "IDR",
+                                        })}
                                 </TableCell>
                                 <TableCell>
                                     {(
@@ -129,7 +135,7 @@ export default function AdminSalesPage() {
                                         onValueChange={(value) => handleStatusChange(sale.id, parseInt(value))}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select Status" />
+                                            <SelectValue placeholder="Pilih Status" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {statusOptions.map((option) => (
@@ -141,7 +147,7 @@ export default function AdminSalesPage() {
                                     </Select>
                                 </TableCell>
                                 <TableCell>
-                                    <Button onClick={() => openModal(sale.id)}>View Details</Button>
+                                    <Button variant="outline" onClick={() => openModal(sale.id)}>Detail</Button>
                                 </TableCell>
                             </TableRow>
                         ))

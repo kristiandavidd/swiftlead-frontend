@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Spinner from "@/components/ui/spinner";
+import { useToast } from "@/hooks/use-toast";
 
 export default function HarvestSection() {
     const [weeklyPrices, setWeeklyPrices] = useState([]);
@@ -11,6 +13,7 @@ export default function HarvestSection() {
     const [endDate, setEndDate] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { toast } = useToast();
 
     const apiUrl = process.env.NODE_ENV === "production"
         ? process.env.NEXT_PUBLIC_API_PROD_URL
@@ -32,6 +35,7 @@ export default function HarvestSection() {
             setLoading(false);
         } catch (error) {
             console.error("Error fetching weekly prices:", error);
+            toast({ title: "Galat!", description: "Gagal mengambil data harga mingguan.", variant: "destructive" });
             setError("Failed to fetch data");
             setLoading(false);
         }
@@ -50,7 +54,6 @@ export default function HarvestSection() {
                 <div className="flex flex-col">
                     <h2 className="text-xl font-semibold">
                         Harga Sarang Burung Walet
-
                     </h2>
                     <p>
                         Periode {" "}
@@ -69,20 +72,22 @@ export default function HarvestSection() {
                 </div>
 
                 <Link href={`/admin/transaction/add-weekly-price`} className="">
-                    <Button>Add Weekly Price</Button>
+                    <Button>Tambah Data Mingguan</Button>
                 </Link>
             </div>
             <div className="p-4 bg-white rounded-lg">
                 {loading ? (
-                    <p>Loading...</p>
+                    <div className="flex items-center justify-center h-32">
+                        <Spinner />
+                    </div>
                 ) : weeklyPrices.length === 0 ? (
                     <p className="text-center">Belum ada data untuk minggu ini.</p>
                 ) : (
                     <table className="w-full border border-collapse border-gray-300">
                         <thead>
                             <tr className="bg-gray-200">
-                                <th className="px-4 py-2 text-left border border-gray-300">Province</th>
-                                <th className="px-4 py-2 text-left border border-gray-300">Price</th>
+                                <th className="px-4 py-2 text-left border border-gray-300">Provinsi</th>
+                                <th className="px-4 py-2 text-left border border-gray-300">Harga</th>
                             </tr>
                         </thead>
                         <tbody>
