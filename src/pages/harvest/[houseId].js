@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import UserLayout from "@/layout/UserLayout";
 import { useRouter } from "next/router";
@@ -17,6 +18,14 @@ export default function HarvestPage() {
     const router = useRouter();
     const { houseId } = router.query;
     const { toast } = useToast();
+    
+    const shapeLabels = {
+        bowl: "Mangkok",
+        oval: "Oval",
+        corner: "Sudut",
+        fracture: "Patahan",
+    };
+
 
     const [swiftletHouse, setSwiftletHouse] = useState({});
     const [formData, setFormData] = useState({
@@ -82,13 +91,29 @@ export default function HarvestPage() {
     const handlePostHarvestChange = (floorIndex, shape, field, value) => {
         setPostHarvestData((prevData) => {
             const newData = [...prevData];
+
+            // Jika lantai belum ada di array, buat objek baru dengan default struktur
             if (!newData[floorIndex]) {
-                newData[floorIndex] = { bowl: { weight: "", pieces: "" }, oval: { weight: "", pieces: "" }, corner: { weight: "", pieces: "" }, fracture: { weight: "", pieces: "" } };
+                newData[floorIndex] = {
+                    bowl: { weight: "", pieces: "" },
+                    oval: { weight: "", pieces: "" },
+                    corner: { weight: "", pieces: "" },
+                    fracture: { weight: "", pieces: "" }
+                };
             }
+
+            // Pastikan objek bentuk sudah ada sebelum mengaksesnya
+            if (!newData[floorIndex][shape]) {
+                newData[floorIndex][shape] = { weight: "", pieces: "" };
+            }
+
+            // Set nilai yang dimasukkan oleh pengguna
             newData[floorIndex][shape][field] = value;
+
             return newData;
         });
     };
+
 
     const handleSubmitHarvest = async () => {
         const { userId, swiftletHouseId, postHarvestData } = formData;
@@ -98,6 +123,7 @@ export default function HarvestPage() {
         });
 
         if (!userId || !swiftletHouseId || !isDataValid) {
+            console.log(userId, swiftletHouseId, postHarvestData);
             toast({ title: "Galat!", description: "Data panen tidak valid.", variant: "destructive" });
             console.log(formData);
             return;
@@ -114,7 +140,7 @@ export default function HarvestPage() {
                 postHarvestData,
             });
 
-            toast({ title: "Sukses!", description: "Data panen berhasil disimpan.", variant: "success" });  
+            toast({ title: "Sukses!", description: "Data panen berhasil disimpan.", variant: "success" });
             setFormData({
                 userId: "",
                 swiftletHouseId: "",
@@ -130,7 +156,7 @@ export default function HarvestPage() {
     return (
         <UserLayout head="Tambah Panen">
             <div className="w-2/3 p-6 mx-auto">
-                <h1 className="mb-4 text-2xl font-bold ">Harvest Page</h1>
+                <h1 className="mb-4 text-2xl font-bold ">Halaman {!isPostHarvest ? " Pra-panen" : " Pasca-Panen"}</h1>
 
                 {!isPostHarvest ? (
                     <div className="p-6 mx-auto mt-6 bg-white rounded-lg">
@@ -184,7 +210,7 @@ export default function HarvestPage() {
                         <div className="p-4 my-4 bg-gray-100 rounded-md">
                             <h3 className="text-lg font-semibold text-gray-700">Rekomendasi Panen</h3>
                             <p className="text-sm text-gray-500">
-                                Berdasarkan data pre-harvest, berikut adalah perkiraan jumlah panen Anda (60%-75% dari sarang yang terdeteksi):
+                                Berdasarkan data pra-panen, berikut adalah perkiraan jumlah panen Anda (60%-75% dari sarang yang terdeteksi):
                             </p>
                             <div className="mt-4 space-y-2">
                                 {floorData.map((count, index) => {
@@ -205,19 +231,19 @@ export default function HarvestPage() {
                             {floorData.map((data, floorIndex) => (
                                 <div key={floorIndex} className="mt-4">
                                     <h3 className="text-lg font-semibold text-center">Lantai {floorIndex + 1}</h3>
-                                    {["bowl", "oval", "corner", "fracture"].map((shape) => (
-                                        <div key={shape} className="p-4 mt-2 space-y-2 border rounded-lg">
+                                    {Object.keys(shapeLabels).map((shapeKey) => (
+                                        <div key={shapeKey} className="p-4 mt-2 space-y-2 border rounded-lg">
                                             <h4 className="font-medium text-gray-600">
-                                                {shape.charAt(0).toUpperCase() + shape.slice(1)}
+                                                {shapeLabels[shapeKey]}
                                             </h4>
                                             <div className="flex items-center w-full gap-4">
                                                 <div className="w-1/2 space-y-2">
                                                     <label>Berat (kg): </label>
                                                     <Input
                                                         type="number"
-                                                        value={postHarvestData[floorIndex]?.[shape]?.weight || ""}
+                                                        value={postHarvestData[floorIndex]?.[shapeKey]?.weight || ""}
                                                         onChange={(e) =>
-                                                            handlePostHarvestChange(floorIndex, shape, "weight", e.target.value)
+                                                            handlePostHarvestChange(floorIndex, shapeKey, "weight", e.target.value)
                                                         }
                                                         step="0.1"
                                                         min="0"
@@ -229,9 +255,9 @@ export default function HarvestPage() {
                                                     <Input
                                                         type="number"
                                                         min="0"
-                                                        value={postHarvestData[floorIndex]?.[shape]?.pieces || ""}
+                                                        value={postHarvestData[floorIndex]?.[shapeKey]?.pieces || ""}
                                                         onChange={(e) =>
-                                                            handlePostHarvestChange(floorIndex, shape, "pieces", e.target.value)
+                                                            handlePostHarvestChange(floorIndex, shapeKey, "pieces", e.target.value)
                                                         }
                                                         className="w-full"
                                                     />

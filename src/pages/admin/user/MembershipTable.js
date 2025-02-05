@@ -169,7 +169,7 @@ export default function MembershipTable() {
                                         year: 'numeric',
                                     })
                                 }</TableCell>
-                                <TableCell>{membership.status == 1 ? "Active" : membership.status == 2 ? "Suspended" : "Inactive"}</TableCell>
+                                <TableCell>{membership.status == 1 ? "Aktif" : membership.status == 2 ? "Ditanggguhkan" : "Tidak aktif"}</TableCell>
                                 <TableCell>
                                     <div className="flex gap-2">
                                         <Link href={``}>

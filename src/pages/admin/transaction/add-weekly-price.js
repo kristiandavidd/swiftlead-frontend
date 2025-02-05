@@ -57,7 +57,7 @@ export default function AddWeeklyPricePage() {
         <AdminLayout className="">
             <div className="flex flex-col justify-between mb-4">
                 <h1 className="text-2xl font-bold">Tambahkan Harga Acuan Per Minggu</h1>
-                <p className="text-sm">Menambahkan harga acuan sarang burung wlaet per minggu.</p>
+                <p className="text-sm">Menambahkan harga acuan sarang burung walet per minggu.</p>
             </div>
             <div className="container p-4 bg-white rounded-lg">
                 <div className="flex items-center w-full gap-4 my-4">
@@ -84,7 +84,7 @@ export default function AddWeeklyPricePage() {
                                 <td className="p-2 border border-gray-300">
                                     <Input
                                         type="number"
-                                        placeholder="Enter Price"
+                                        placeholder="Masukkan harga.."
                                         value={item.price}
                                         onChange={(e) => handlePriceChange(index, e.target.value)}
                                     />

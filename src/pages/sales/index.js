@@ -237,6 +237,7 @@ export default function SalesMonitoringPage() {
                                             <Input
                                                 type="date"
                                                 value={rescheduleData.id === sale.id ? rescheduleData.newDate : ""}
+                                                min={new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
                                                 onChange={(e) =>
                                                     handleRescheduleChange(sale.id, e.target.value)
                                                 }

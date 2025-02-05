@@ -75,8 +75,8 @@ const VideoSection = () => {
     }, []);
 
     return (
-        <div className="container p-4 mx-auto">
-            <Button onClick={() => setIsModalOpen(true)}>Tambah Video</Button>
+        <div className="container flex flex-col items-end p-4 mx-auto">
+            <Button className="" onClick={() => setIsModalOpen(true)}>Tambah Video</Button>
             <div className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3">
                 {Array.isArray(videos) && videos.length > 0 ? (
                     videos.map((video) => (

@@ -99,6 +99,7 @@ export default function ControlSection({ setActiveTab }) {
         }, 15 * 60 * 1000);
 
         return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [router]);
 
     const chartData = timeRange === 'daily' ? dailyData : monthlyData;

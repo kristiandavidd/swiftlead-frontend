@@ -85,6 +85,7 @@ export default function EditDeviceModal({ isOpen, onClose, selectedDevice, onSuc
                         <Input
                             type="date"
                             value={createdAt}
+                            min={new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
                             onChange={(e) => setCreatedAt(e.target.value)}
                         />
                     </div>
@@ -93,6 +94,7 @@ export default function EditDeviceModal({ isOpen, onClose, selectedDevice, onSuc
                         <Input
                             type="date"
                             value={updatedAt}
+                            min={new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
                             onChange={(e) => setUpdatedAt(e.target.value)}
                         />
                     </div>

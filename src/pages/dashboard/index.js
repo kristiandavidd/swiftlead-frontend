@@ -92,7 +92,7 @@ export default function Home() {
         </div>
         <Popover>
           <PopoverTrigger asChild className='duration-300 ease-in cursor-pointer text-primary hover:text-primary/80'>
-            <IconBell strokeWidth={1.2} />
+            
           </PopoverTrigger>
           <PopoverContent className="flex flex-col gap-2 w-80">
             <Alert>

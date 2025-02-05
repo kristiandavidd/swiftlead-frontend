@@ -156,7 +156,7 @@ const ArticlePreview = () => {
                     user ? (
                         <div className="mt-10">
                             <h2 className="mb-4 text-2xl font-bold">Komentar</h2>
-                            <div className="mb-6">
+                            <div className="flex flex-col items-end mb-6">
                                 <input
                                     type="text"
                                     placeholder="Nama anda.."
@@ -177,14 +177,14 @@ const ArticlePreview = () => {
                                 {comments.map((comment) => (
                                     <div key={comment.id} className="relative flex items-center justify-between p-4 border rounded-md">
                                         <div>
-                                            <p className="text-sm font-semibold text-gray-500">{user.id === comment.user_id ? "You" : comment.author}</p>
+                                            <p className="text-sm font-semibold text-gray-500">{user.id === comment.user_id ? "Anda" : comment.author}</p>
                                             <p className="">{comment.content}</p>
                                         </div>
                                         {user.id === comment.user_id || user.role === 1 ? (
                                             < div >
                                                 < AlertDialog >
                                                     <AlertDialogTrigger asChild>
-                                                        <Button variant="destructive" className="w-1/5" >
+                                                        <Button variant="destructive" >
                                                             <IconTrash />
                                                         </Button>
                                                     </AlertDialogTrigger>

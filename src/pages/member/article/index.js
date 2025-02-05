@@ -112,7 +112,7 @@ export default function Article() {
                         <input
                             type="text"
                             size="sm"
-                            placeholder="Search article"
+                            placeholder="Cari artikel.."
                             className="px-4 py-2 border border-gray-300 rounded-md"
                             onChange={handleSearch}
                         />

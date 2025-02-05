@@ -71,6 +71,7 @@ export default function RequestUninstallationModal({ isOpen, onClose, deviceData
                         <Input
                             type="date"
                             placeholder="Select appointment date"
+                            min={new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
                             value={appointmentDate}
                             onChange={(e) => setAppointmentDate(e.target.value)}
                         />

@@ -77,6 +77,7 @@ export default function RequestMaintenanceModal({ isOpen, onClose, deviceData, h
                         <Input
                             type="date"
                             placeholder="Tanggal temu pemeliharaan"
+                            min={new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
                             value={appointmentDate}
                             onChange={(e) => setAppointmentDate(e.target.value)}
                         />

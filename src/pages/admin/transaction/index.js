@@ -22,7 +22,7 @@ export default function Index() {
                 <Tabs defaultValue="harvest" className="">
                     <TabsList className="grid w-1/2 grid-cols-3 p-0 px-2 pt-2 bg-white">
                         <TabsTrigger className="py-2" value="harvest">Harga Acuan Sarang </TabsTrigger>
-                        <TabsTrigger className="py-2" value="sales">Penjualan Saran</TabsTrigger>
+                        <TabsTrigger className="py-2" value="sales">Penjualan Sarang</TabsTrigger>
                         <TabsTrigger className="py-2" value="membership">Transaksi Member</TabsTrigger>
                     </TabsList>
                     <TabsContent value="harvest">

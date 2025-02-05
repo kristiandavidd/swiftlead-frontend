@@ -58,18 +58,24 @@ export default function AddSwiftletHouseModal({ onClose, isOpen }) {
             <DialogContent>
                 <DialogTitle>Tambah Kandang Walet</DialogTitle>
                 <div className="space-y-4">
-                    <Input
-                        type="text"
-                        placeholder="Nama kandang"
-                        value={houseName}
-                        onChange={(e) => setHouseName(e.target.value)}
-                    />
-                    <Input
-                        type="text"
-                        placeholder="Alamat kandang walet"
-                        value={houseAddress}
-                        onChange={(e) => setHouseAddress(e.target.value)}
-                    />
+                    <div>
+                        <label for="">Nama Kandang</label>
+                        <Input
+                            type="text"
+                            placeholder="Nama kandang"
+                            value={houseName}
+                            onChange={(e) => setHouseName(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <label for="">Alamat Kandang</label>
+                        <Input
+                            type="text"
+                            placeholder="Alamat kandang walet"
+                            value={houseAddress}
+                            onChange={(e) => setHouseAddress(e.target.value)}
+                        />
+                    </div>
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>Batal</Button>

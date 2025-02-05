@@ -178,6 +178,7 @@ export default function AddSalePage() {
                         <Input
                             type="date"
                             placeholder="Tanggal janji temu"
+                            min={new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
                             value={appointmentDate}
                             onChange={(e) => setAppointmentDate(e.target.value)}
                         />

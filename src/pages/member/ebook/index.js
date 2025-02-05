@@ -65,7 +65,7 @@ const Ebook = () => {
                     )}
 
                     {ebooks.map((ebook) => (
-                        <div key={ebook.id} className="p-4 border rounded">
+                        <div key={ebook.id} className="p-4 bg-white border rounded">
                             <Image
                                 src={`${apiUrl}${ebook.thumbnail_path}`}
                                 alt={ebook.title}

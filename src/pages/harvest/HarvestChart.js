@@ -17,6 +17,7 @@ const HarvestChart = () => {
             fetchChartData();
         }
         // Dependensi hanya pada `user.id` agar fetch tidak dipanggil ulang
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user?.id]);
 
     const fetchChartData = async () => {
@@ -78,7 +79,11 @@ const HarvestChart = () => {
             return acc;
         }, {});
 
-        const labels = Object.keys(groupedData);
+        let labels = Object.keys(groupedData);
+
+        // **Sorting labels berdasarkan tanggal ASC**
+        labels.sort((a, b) => new Date(a) - new Date(b));
+
         const totalWeight = labels.map((date) => groupedData[date].totalWeight);
         const totalPieces = labels.map((date) => groupedData[date].totalPieces);
 
@@ -103,10 +108,9 @@ const HarvestChart = () => {
         };
     };
 
-
     return (
         <div className="p-4 bg-white rounded-lg shadow-md">
-            
+
             {chartData ? (
                 <Line
                     data={chartData}

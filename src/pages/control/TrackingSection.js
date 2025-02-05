@@ -137,7 +137,7 @@ export default function TrackingSection() {
                         <div className="flex justify-between w-full">
                             <div className="w-3/5">
                                 <h2 className="font-semibold capitalize">
-                                    {item.type} Sensor {item.house_name}
+                                    {item.type == "installation" ? "Instalasi" : item.type == "maintenance" ? "Pemeliharaan" : "Uninstalasi"} Sensor {item.house_name}
                                 </h2>
                                 <p className="text-sm text-muted-foreground">
                                     Lantai {item.floors}
@@ -156,6 +156,7 @@ export default function TrackingSection() {
                                         <Input
                                             type="date"
                                             value={rescheduleData.uniqueId === item.uniqueId ? rescheduleData.newDate : ""}
+                                            min={new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}
                                             onChange={(e) =>
                                                 handleRescheduleChange(item.uniqueId, item.id, item.type, e.target.value)
                                             }

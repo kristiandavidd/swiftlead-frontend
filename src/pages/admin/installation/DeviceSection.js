@@ -108,7 +108,7 @@ export default function Installation() {
                         <TableHead>Lantai</TableHead>
                         <TableHead>Tanggal Pemasangan</TableHead>
                         <TableHead>Terakhir Maintenance</TableHead>
-                        <TableHead>Status Kandang</TableHead>
+                        <TableHead>Status Perangkat</TableHead>
                         <TableHead>Aksi</TableHead>
                     </TableRow>
                 </TableHeader>
