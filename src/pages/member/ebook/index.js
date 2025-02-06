@@ -34,15 +34,12 @@ const Ebook = () => {
     };
     const downloadEbook = (ebookUrl, ebookName) => {
 
-        // using Java Script method to get PDF file
         fetch(ebookUrl).then((response) => {
             response.blob().then((blob) => {
 
-                // Creating new object of PDF file
                 const fileURL =
                     window.URL.createObjectURL(blob);
 
-                // Setting various property values
                 let alink = document.createElement("a");
                 alink.href = fileURL;
                 alink.download = ebookName;

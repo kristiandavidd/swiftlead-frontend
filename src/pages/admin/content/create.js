@@ -1,4 +1,3 @@
-// pages/admin/articles/create.js
 import AdminLayout from '@/layout/AdminLayout';
 import ArticleForm from '../../../components/ArticleForm';
 

@@ -27,7 +27,7 @@ const statusOptions = [
 
 export default function MaintenanceSection({ setActiveTab }) {
     const [maintenances, setMaintenances] = useState([]);
-    const [selectedMaintenanceId, setSelectedMaintenanceId] = useState(null); // To manage modal state
+    const [selectedMaintenanceId, setSelectedMaintenanceId] = useState(null);
     const [selectedMaintenance, setSelectedMaintenance] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalProcessOpen, setIsModalProcessOpen] = useState(false);

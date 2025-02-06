@@ -16,7 +16,7 @@ export default function AddEditEbook({ open, onClose, onSubmit, editingEbook, ap
                 file: null,
                 thumbnail: null,
             });
-            setThumbnailPreview(editingEbook.thumbnail_path ? `${apiUrl}${editingEbook.thumbnail_path}` : null); // Menampilkan preview thumbnail yang sudah ada
+            setThumbnailPreview(editingEbook.thumbnail_path ? `${apiUrl}${editingEbook.thumbnail_path}` : null);
         } else {
             setFormData({ title: '', file: null, thumbnail: null });
             setThumbnailPreview(null);
@@ -27,7 +27,6 @@ export default function AddEditEbook({ open, onClose, onSubmit, editingEbook, ap
         const { name, files } = e.target;
         setFormData((prev) => ({ ...prev, [name]: files[0] }));
 
-        // Jika file thumbnail, set preview-nya
         if (name === 'thumbnail') {
             const file = files[0];
             if (file) {

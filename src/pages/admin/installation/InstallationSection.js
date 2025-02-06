@@ -27,7 +27,7 @@ const statusOptions = [
 
 export default function InstallationSection({ setActiveTab }) {
     const [installations, setInstallations] = useState([]);
-    const [selectedInstallationId, setSelectedInstallationId] = useState(null); // To manage modal state
+    const [selectedInstallationId, setSelectedInstallationId] = useState(null);
     const [selectedInstallation, setSelectedInstallation] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalProcessOpen, setIsModalProcessOpen] = useState(false);

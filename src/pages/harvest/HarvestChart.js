@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-import "chart.js/auto"; // Import otomatis untuk mendeteksi jenis chart
+import "chart.js/auto"; 
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
 import { useUser } from "@/context/userContext";
@@ -16,7 +16,6 @@ const HarvestChart = () => {
         if (user?.id) {
             fetchChartData();
         }
-        // Dependensi hanya pada `user.id` agar fetch tidak dipanggil ulang
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user?.id]);
 
@@ -31,7 +30,6 @@ const HarvestChart = () => {
             const filteredData = filterLastYearData(res.data);
             const formattedData = formatChartData(filteredData);
 
-            // Ganti data lama sepenuhnya
             setChartData(formattedData);
         } catch (error) {
             console.error("Error fetching harvest data for chart:", error);
@@ -59,7 +57,6 @@ const HarvestChart = () => {
                 year: "numeric",
             });
 
-            // Jika tanggal sudah ada, tambahkan total
             if (!acc[date]) {
                 acc[date] = { totalWeight: 0, totalPieces: 0 };
             }
@@ -81,7 +78,6 @@ const HarvestChart = () => {
 
         let labels = Object.keys(groupedData);
 
-        // **Sorting labels berdasarkan tanggal ASC**
         labels.sort((a, b) => new Date(a) - new Date(b));
 
         const totalWeight = labels.map((date) => groupedData[date].totalWeight);

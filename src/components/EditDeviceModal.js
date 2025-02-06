@@ -23,7 +23,6 @@ export default function EditDeviceModal({ isOpen, onClose, selectedDevice, onSuc
             setInstallCode(selectedDevice.install_code);
             setStatus(selectedDevice.status);
 
-            // Konversi tanggal ke format lokal (YYYY-MM-DD)
             setCreatedAt(new Date(selectedDevice.created_at).toISOString().split("T")[0]);
             setUpdatedAt(new Date(selectedDevice.updated_at).toISOString().split("T")[0]);
         }

@@ -82,11 +82,11 @@ const ArticlePreview = () => {
     const handleDeleteComment = async (commentId) => {
         try {
             await axios.delete(`${apiUrl}/articles/comments/${commentId}`, { user_id: user.id, user_role: user.role }, {
-                headers: { Authorization: `Bearer ${user.token}` }, // Sertakan token autentikasi
+                headers: { Authorization: `Bearer ${user.token}` }, 
             });
 
             toast({ title: "Success", description: "Comment deleted successfully", variant: "success" });
-            fetchComments(); // Refresh komentar
+            fetchComments(); 
         } catch (error) {
             console.error("Error deleting comment:", error);
             toast({ title: "Error", description: "Failed to delete comment", variant: "destructive" });
@@ -97,13 +97,13 @@ const ArticlePreview = () => {
     if (!article) return <p>Loading...</p>;
 
     const stripHtmlTags = (html) => {
-        return html.replace(/<[^>]*>/g, ''); // Menghapus semua tag HTML
+        return html.replace(/<[^>]*>/g, '');
     };
 
 
     const truncateText = (text, maxLength) => {
         if (!text || text.length === 0) {
-            return '';  // Jika text kosong atau undefined, kembalikan string kosong
+            return ''; 
         }
 
         if (text.length > maxLength) {

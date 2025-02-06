@@ -45,7 +45,7 @@ export default function AddSalePage() {
             style: 'currency',
             currency: 'IDR',
             minimumFractionDigits: 0
-        }).format(number).replace(/\u00A0/g, ' '); // Remove non-breaking space if needed
+        }).format(number).replace(/\u00A0/g, ' '); 
     };
 
     const fetchWeeklyPrice = async () => {

@@ -14,10 +14,10 @@ export default function UserLayout({ children, head, className = '' }) {
     const isTokenExpired = (token) => {
         try {
             const decoded = jwtDecode(token);
-            const currentTime = Date.now() / 1000; // Convert to seconds
-            return decoded.exp < currentTime; // True if token is expired
+            const currentTime = Date.now() / 1000; 
+            return decoded.exp < currentTime; 
         } catch (error) {
-            return true; // Treat invalid token as expired
+            return true;
         }
     };
 
@@ -36,7 +36,7 @@ export default function UserLayout({ children, head, className = '' }) {
 
         if (!user) {
             console.log('User is not loaded yet');
-            return; // Wait until `user` is ready
+            return;
         }
 
         try {
@@ -50,7 +50,7 @@ export default function UserLayout({ children, head, className = '' }) {
             console.log('Invalid token', error);
             router.push('/login');
         }
-    }, [router, user]); // Add `user` to dependency array
+    }, [router, user]); 
 
     if (!isAuthorized) {
         return null;

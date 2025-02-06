@@ -32,7 +32,6 @@ export default function Profile() {
     const [membership, setMembership] = useState(null);
     console.log("user", user);
 
-    // State untuk form
     const [formData, setFormData] = useState({
         name: user?.name || '',
         no_telp: user?.no_telp || '',
@@ -40,7 +39,6 @@ export default function Profile() {
     });
 
 
-    // Fungsi untuk menangani perubahan input
     const handleInputChange = (e) => {
         const { id, value } = e.target;
         setFormData((prevData) => ({
@@ -119,7 +117,7 @@ export default function Profile() {
             console.log(data);
         } catch (error) {
             console.error('Error fetching membership status:', error);
-            setIsActive(false); // Jika terjadi error, anggap user tidak aktif
+            setIsActive(false); 
         }
     };
 

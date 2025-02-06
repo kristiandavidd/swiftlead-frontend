@@ -25,7 +25,7 @@ export default function AddHarvestModal({ isOpen, onClose }) {
             ? process.env.NEXT_PUBLIC_API_PROD_URL
             : process.env.NEXT_PUBLIC_API_URL;
 
-        setIsLoading(true); // Set loading sebelum fetch
+        setIsLoading(true); 
 
         try {
             const response = await axios.get(`${apiUrl}/device/user/${user.id}`);
@@ -33,7 +33,6 @@ export default function AddHarvestModal({ isOpen, onClose }) {
 
             setHouses(data);
 
-            // Set default kandang, lantai, dan sensor
             const firstHouseId = Object.keys(data)[0];
             if (firstHouseId) {
                 setSelectedHouse(firstHouseId);
@@ -56,7 +55,7 @@ export default function AddHarvestModal({ isOpen, onClose }) {
                 variant: "destructive",
             });
         } finally {
-            setIsLoading(false); // Matikan loading setelah fetch selesai
+            setIsLoading(false); 
         }
     };
 

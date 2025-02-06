@@ -12,11 +12,11 @@ export default function AdminLayout({ children, head, className = '' }) {
     const isTokenExpired = (token) => {
         try {
             const decoded = jwtDecode(token);
-            const currentTime = Date.now() / 1000; // Convert to seconds
+            const currentTime = Date.now() / 1000; 
             console.log(currentTime);
-            return decoded.exp < currentTime; // True if token is expired
+            return decoded.exp < currentTime; 
         } catch (error) {
-            return true; // Treat invalid token as expired
+            return true; 
         }
     };
 

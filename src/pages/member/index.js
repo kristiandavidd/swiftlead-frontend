@@ -25,13 +25,11 @@ export default function MemberLandingPage() {
 
         const fetchMembership = async () => {
             try {
-                // Atur environment API
                 const apiUrl =
                     process.env.NODE_ENV === "production"
                         ? process.env.NEXT_PUBLIC_API_PROD_URL
                         : process.env.NEXT_PUBLIC_API_URL;
 
-                // Ambil info membership berdasarkan user id
                 const userId = user.id;
                 const { data } = await axios.get(`${apiUrl}/membership/user/${userId}`);
                 setMembership(data.membership);

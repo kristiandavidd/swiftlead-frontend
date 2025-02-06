@@ -7,29 +7,29 @@ import { Toaster } from '@/components/ui/toaster';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { useUser } from '@/context/userContext';
-import Spinner from '@/components/ui/spinner'; // Pastikan Anda memiliki komponen spinner atau ganti dengan loader lain
+import Spinner from '@/components/ui/spinner'; 
 
 export default function MemberLayout({ children, head, className = '' }) {
     const router = useRouter();
     const [isAuthorized, setIsAuthorized] = useState(false);
-    const [loading, setLoading] = useState(false); // Tambahkan state untuk loading
+    const [loading, setLoading] = useState(false);
     const { user } = useUser();
 
     const isTokenExpired = (token) => {
         try {
             const decoded = jwtDecode(token);
             console.log('Decoded token:', decoded);
-            const currentTime = Math.floor(Date.now() / 1000); // Convert to seconds
-            return decoded.exp < currentTime; // True if token is expired
+            const currentTime = Math.floor(Date.now() / 1000);
+            return decoded.exp < currentTime; 
         } catch (error) {
             console.log('Error decoding token:', error);
-            return true; // Treat invalid token as expired
+            return true; 
         }
     };
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        setLoading(true); // Aktifkan loading saat useEffect berjalan
+        setLoading(true);
 
         if (!token || isTokenExpired(token)) {
             console.log(!token);
@@ -39,7 +39,7 @@ export default function MemberLayout({ children, head, className = '' }) {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             router.push('/login');
-            setLoading(false); // Matikan loading jika gagal
+            setLoading(false); 
             return;
         }
 
@@ -48,19 +48,18 @@ export default function MemberLayout({ children, head, className = '' }) {
             const { id, role } = decoded;
 
             if (role !== 0) {
-                router.push('/admin'); // Arahkan admin ke halaman admin
-                setLoading(false); // Matikan loading
+                router.push('/admin'); 
+                setLoading(false); 
                 return;
             }
 
             setIsAuthorized(true);
 
-            // Periksa status member berdasarkan ID pengguna
             checkMemberStatus(id);
         } catch (error) {
             console.error('Invalid token:', error);
             router.push('/login');
-            setLoading(false); // Matikan loading
+            setLoading(false);
         }
     }, [router]);
 
@@ -74,18 +73,16 @@ export default function MemberLayout({ children, head, className = '' }) {
             const { isActive } = response.data;
 
             if (!isActive) {
-                // Jika user tidak aktif atau tidak terdaftar, alihkan ke dashboard
                 router.push('/dashboard');
             }
         } catch (error) {
             console.error('Failed to fetch membership status:', error);
-            router.push('/dashboard'); // Jika terjadi error, anggap user tidak aktif
+            router.push('/dashboard');
         } finally {
-            setLoading(false); // Matikan loading setelah memeriksa status
+            setLoading(false);
         }
     };
 
-    // Tambahkan event listener untuk perubahan rute
     useEffect(() => {
         const handleStart = () => setLoading(true);
         const handleComplete = () => setLoading(false);

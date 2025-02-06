@@ -38,18 +38,19 @@ export default function UserTable() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedUserId, setSelectedUserId] = useState(null);
-    const [filteredUser, setFilteredUser] = useState([]); // Artikel yang sudah difilter
-    const [searchQuery, setSearchQuery] = useState(""); // State untuk input pencarian
-    const [sortColumn, setSortColumn] = useState(""); // Kolom yang sedang di-sort
-    const [sortDirection, setSortDirection] = useState("asc"); // Arah sort: asc / desc
+    const [filteredUser, setFilteredUser] = useState([]);
+    const [searchQuery, setSearchQuery] = useState(""); 
+    const [sortColumn, setSortColumn] = useState(""); 
+    const [sortDirection, setSortDirection] = useState("asc"); 
     const { toast } = useToast();
 
     useEffect(() => {
         fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        handleSearch(); // Memperbarui data pencarian setiap kali query berubah
+        handleSearch(); 
     },);
 
 
@@ -122,7 +123,7 @@ export default function UserTable() {
 
     const handleSearch = () => {
         if (searchQuery.trim() === "") {
-            setFilteredUser(users); // Jika pencarian kosong, tampilkan semua pengguna
+            setFilteredUser(users);
         } else {
             const query = searchQuery.toLowerCase();
 

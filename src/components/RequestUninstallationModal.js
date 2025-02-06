@@ -18,7 +18,7 @@ export default function RequestUninstallationModal({ isOpen, onClose, deviceData
             setHouseName(houseNameData || "");
             setFloor(deviceData.floor || "");
         }
-    }, [deviceData, houseNameData]);  // Menambahkan house sebagai dependency untuk update state
+    }, [deviceData, houseNameData]);  
 
     const handleSubmit = async () => {
         const apiUrl = process.env.NODE_ENV === "production"

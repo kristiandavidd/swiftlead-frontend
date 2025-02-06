@@ -10,12 +10,10 @@ export default function ErrorPage() {
     useEffect(() => {
         console.log("Payment Error");
 
-        // Redirect ke /membership setelah 3 detik
         const timeout = setTimeout(() => {
             router.push('/membership/register');
         }, 2000);
 
-        // Membersihkan timeout ketika komponen di-unmount
         return () => clearTimeout(timeout);
     }, [router]);
 

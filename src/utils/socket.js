@@ -2,7 +2,6 @@ import { io } from "socket.io-client";
 
 let socket;
 
-// Inisialisasi Socket.IO
 export const initSocket = () => {
     if (!socket) {
         const apiUrl =
@@ -21,7 +20,6 @@ export const initSocket = () => {
     return socket;
 };
 
-// Subscribe ke sensor berdasarkan installCode
 export const subscribeToSensor = ({ installCode }) => {
     if (!socket) {
         console.error("Socket not initialized. Call initSocket() first.");
@@ -37,7 +35,6 @@ export const subscribeToSensor = ({ installCode }) => {
     console.log(`Subscribed to sensor with installCode: ${installCode}`);
 };
 
-// Unsubscribe dari sensor yang sedang dipantau
 export const unsubscribeFromSensor = () => {
     if (!socket) {
         console.error("Socket not initialized. Call initSocket() first.");
@@ -48,7 +45,6 @@ export const unsubscribeFromSensor = () => {
     console.log("Unsubscribed from the current sensor.");
 };
 
-// Menutup koneksi Socket.IO
 export const closeSocket = () => {
     if (socket) {
         socket.disconnect();

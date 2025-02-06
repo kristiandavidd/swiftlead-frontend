@@ -42,6 +42,7 @@ export default function MembershipTable() {
 
     useEffect(() => {
         fetchMemberships();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -92,13 +93,13 @@ export default function MembershipTable() {
     };
 
     const handleMembershipUpdated = () => {
-        fetchMemberships(); // Ambil data terbaru setelah edit
-        setIsEditModalOpen(false); // Tutup modal
+        fetchMemberships();
+        setIsEditModalOpen(false);
     };
 
     const handleSearch = () => {
         if (searchQuery.trim() === "") {
-            setFilteredMember(memberships); // Jika pencarian kosong, tampilkan semua pengguna
+            setFilteredMember(memberships);
         } else {
             const query = searchQuery.toLowerCase();
 

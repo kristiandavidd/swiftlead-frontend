@@ -9,7 +9,7 @@ import {
     TableRow,
     TableHead,
     TableCell,
-} from "@/components/ui/table"; // Sesuaikan dengan path komponen Anda
+} from "@/components/ui/table"; 
 import { useToast } from "@/hooks/use-toast";
 
 export default function MembershipSection() {
@@ -18,6 +18,7 @@ export default function MembershipSection() {
 
     useEffect(() => {
         fetchTransactions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const fetchTransactions = async () => {

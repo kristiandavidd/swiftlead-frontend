@@ -43,9 +43,9 @@ import MemberLayout from "@/layout/MemberLayout";
 
 export default function Article() {
     const [articles, setArticles] = useState([]);
-    const [filteredArticles, setFilteredArticles] = useState([]); // Artikel yang sudah difilter
-    const [searchQuery, setSearchQuery] = useState(""); // State untuk input pencarian
-    const [selectedArticleId, setSelectedArticleId] = useState(null); // Untuk ID artikel yang akan dihapus
+    const [filteredArticles, setFilteredArticles] = useState([]); 
+    const [searchQuery, setSearchQuery] = useState(""); 
+    const [selectedArticleId, setSelectedArticleId] = useState(null);
     const { toast } = useToast();
     const apiUrl = process.env.NODE_ENV === 'production'
         ? process.env.NEXT_PUBLIC_API_PROD_URL
@@ -58,12 +58,12 @@ export default function Article() {
     }, []);
 
     const stripHtmlTags = (html) => {
-        return html.replace(/<[^>]*>/g, ''); // Menghapus semua tag HTML
+        return html.replace(/<[^>]*>/g, ''); 
     };
 
     const truncateText = (text, maxLength) => {
         if (!text || text.length === 0) {
-            return '';  // Jika text kosong atau undefined, kembalikan string kosong
+            return ''; 
         }
 
         if (text.length > maxLength) {
@@ -92,7 +92,7 @@ export default function Article() {
         setSearchQuery(query);
 
         if (query.trim() === "") {
-            setFilteredArticles(articles); // Jika pencarian kosong, tampilkan semua artikel
+            setFilteredArticles(articles); 
         } else {
             const filtered = articles.filter((article) => {
                 return (

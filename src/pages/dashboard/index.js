@@ -36,10 +36,9 @@ export default function Home() {
     ? process.env.NEXT_PUBLIC_API_PROD_URL
     : process.env.NEXT_PUBLIC_API_URL;
 
-  // Function to truncate text if it exceeds maxLength
   const truncateText = (text, maxLength) => {
     if (!text || text.length === 0) {
-      return '';  // Jika text kosong atau undefined, kembalikan string kosong
+      return '';  
     }
 
     if (text.length > maxLength) {
@@ -48,8 +47,6 @@ export default function Home() {
     return text;
   };
 
-
-  // Fetch articles on component mount
   useEffect(() => {
     const fetchArticles = async () => {
       try {
@@ -57,11 +54,10 @@ export default function Home() {
           ? process.env.NEXT_PUBLIC_API_PROD_URL
           : process.env.NEXT_PUBLIC_API_URL;
 
-        const response = await axios.get(`${apiUrl}/articles/published`); // Ganti URL API sesuai kebutuhan
+        const response = await axios.get(`${apiUrl}/articles/published`); 
         console.log(response.data);
 
-        // Ambil array pertama dari response.data
-        setArticles(response.data[0]); // Menyimpan array pertama ke dalam state articles
+        setArticles(response.data[0]); 
         setLoading(false);
       } catch (err) {
         setError('Gagal memuat data. Silakan coba lagi.');
@@ -73,7 +69,7 @@ export default function Home() {
   }, []);
 
   const stripHtmlTags = (html) => {
-    return html.replace(/<[^>]*>/g, ''); // Menghapus semua tag HTML
+    return html.replace(/<[^>]*>/g, '');
   };
 
 

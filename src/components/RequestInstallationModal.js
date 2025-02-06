@@ -10,7 +10,7 @@ export default function RequestInstallationModal({ houses, onClose, isOpen }) {
     const [selectedHouse, setSelectedHouse] = useState("");
     const [selectedFloors, setSelectedFloors] = useState("");
     const [sensorCount, setSensorCount] = useState("");
-    const [appointmentDate, setAppointmentDate] = useState(""); // New state for appointment date
+    const [appointmentDate, setAppointmentDate] = useState("");
     const [activeTab, setActiveTab] = useState("installation");
     const { toast } = useToast();
 
@@ -24,7 +24,7 @@ export default function RequestInstallationModal({ houses, onClose, isOpen }) {
                 swiftletHouseId: selectedHouse,
                 floors: selectedFloors,
                 sensorCount: parseInt(sensorCount, 10),
-                appointment_date: appointmentDate, // Include appointment date
+                appointment_date: appointmentDate,
             })
             .then((response) => {
                 console.log("Installation request submitted:", response.data);
@@ -38,7 +38,7 @@ export default function RequestInstallationModal({ houses, onClose, isOpen }) {
                 setSelectedHouse("");
                 setSelectedFloors("");
                 setSensorCount("");
-                setAppointmentDate(""); // Clear appointment date
+                setAppointmentDate(""); 
                 setActiveTab("management");
                 onClose(true);
 

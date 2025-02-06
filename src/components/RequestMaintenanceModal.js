@@ -19,7 +19,7 @@ export default function RequestMaintenanceModal({ isOpen, onClose, deviceData, h
             setHouseName(houseNameData || "");
             setFloor(deviceData.floor || "");
         }
-    }, [deviceData, houseNameData]);  // Menambahkan house sebagai dependency untuk update state
+    }, [deviceData, houseNameData]); 
 
 
     const handleSubmit = async () => {
@@ -30,7 +30,7 @@ export default function RequestMaintenanceModal({ isOpen, onClose, deviceData, h
         try {
             await axios.post(`${apiUrl}/request/maintenance`, {
                 id_device: deviceData.id,
-                appointment_date: appointmentDate, // Default: current date
+                appointment_date: appointmentDate,
                 reason,
             });
 
@@ -51,7 +51,7 @@ export default function RequestMaintenanceModal({ isOpen, onClose, deviceData, h
     };
 
     if (!deviceData) {
-        return null; // Jangan render jika `deviceData` tidak ada
+        return null;
     }
 
     return (

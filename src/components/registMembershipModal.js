@@ -11,14 +11,14 @@ import { useRouter } from 'next/navigation';
 import { Separator } from "@/components/ui/separator";
 
 export default function RegistMembershipModal({ isOpen, onClose }) {
-    const [selectedDuration, setSelectedDuration] = useState('1'); // Default 1 bulan
+    const [selectedDuration, setSelectedDuration] = useState('1');
     const { user } = useUser();
     const { toast } = useToast();
     const router = useRouter();
     console.log("user", user);
 
     const calculatePrice = (duration) => {
-        return 70000 * parseInt(duration); // Harga per bulan adalah 70.000
+        return 70000 * parseInt(duration);
     };
 
     const handleSubmit = async () => {
@@ -42,7 +42,7 @@ export default function RegistMembershipModal({ isOpen, onClose }) {
                 variant: "default",
             });
 
-            window.location.href = response.data.redirect_url; // Redirect ke halaman pembayaran
+            window.location.href = response.data.redirect_url;
         } catch (error) {
             console.error("Error creating membership:", error);
             toast({

@@ -42,13 +42,11 @@ export default function AdminDashboard() {
 
     const fetchDashboardData = async () => {
         try {
-            // Fetch Harvest Sales
             const salesRes = await axios.get(`${apiUrl}/sales`);
             const allSales = salesRes.data;
-            setHarvestSales(allSales.slice(0, 2)); // Ambil 2 terbaru
+            setHarvestSales(allSales.slice(0, 2));
             setStats(prev => ({ ...prev, totalSales: allSales.length }));
 
-            // Fetch Requests (Gabungkan 3 API)
             const [installationRes, maintenanceRes, uninstallationRes] = await Promise.all([
                 axios.get(`${apiUrl}/request/installation`),
                 axios.get(`${apiUrl}/request/maintenance`),
@@ -58,14 +56,13 @@ export default function AdminDashboard() {
                 ...installationRes.data,
                 ...maintenanceRes.data,
                 ...uninstallationRes.data
-            ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Urutkan terbaru
-            setRequests(allRequests.slice(0, 2)); // Ambil 2 terbaru
+            ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            setRequests(allRequests.slice(0, 2));
             setStats(prev => ({ ...prev, totalRequests: allRequests.length }));
 
-            // Fetch Weekly Prices
             const weeklyPricesRes = await axios.get(`${apiUrl}/weekly-price/all`);
             const allPrices = weeklyPricesRes.data;
-            setWeeklyPrices(allPrices.slice(0, 2)); // Ambil 2 terbaru
+            setWeeklyPrices(allPrices.slice(0, 2)); 
             setStats(prev => ({ ...prev, totalWeeklyPrices: allPrices.length }));
         } catch (error) {
             console.error("Error fetching dashboard data:", error);
@@ -75,7 +72,6 @@ export default function AdminDashboard() {
     return (
         <AdminLayout>
             <div className="grid gap-6 md:grid-cols-3">
-                {/* Ringkasan Statistik */}
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0">
                         <CardTitle className="text-sm font-medium">Total Sales</CardTitle>

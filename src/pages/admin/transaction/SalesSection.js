@@ -30,7 +30,7 @@ const statusOptions = [
 export default function AdminSalesPage() {
     const [sales, setSales] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedSaleId, setSelectedSaleId] = useState(null); // To manage modal state
+    const [selectedSaleId, setSelectedSaleId] = useState(null); 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { toast } = useToast();
 
@@ -63,7 +63,7 @@ export default function AdminSalesPage() {
         try {
             await axios.put(`${apiUrl}/sales/${id}/status`, { status: newStatus });
             toast({ title: "Sukses!", description: "Berhasil memperbarui status penjualan.", variant: "success" });
-            fetchSales(); // Refresh the sales data
+            fetchSales(); 
         } catch (error) {
             console.error("Error updating sale status:", error);
             toast({ title: "Galat!", description: "Gagal memperbarui status penjualan.", variant: "error" });

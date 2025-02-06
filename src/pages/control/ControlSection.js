@@ -29,7 +29,7 @@ export default function ControlSection({ setActiveTab }) {
     const [selectedHouse, setSelectedHouse] = useState(null);
     const [selectedFloor, setSelectedFloor] = useState(null);
     const [timeRange, setTimeRange] = useState('daily');
-    const [isLoading, setIsLoading] = useState(false); // State untuk loading
+    const [isLoading, setIsLoading] = useState(false); 
     const [houses, setHouses] = useState({});
     const [dropdownData, setDropdownData] = useState({});
     const [selectedSensor, setSelectedSensor] = useState(null);
@@ -109,7 +109,7 @@ export default function ControlSection({ setActiveTab }) {
                 fetchDailyData(selectedSensor);
                 fetchMonthlyData(selectedSensor);
             }
-        }, 30000);
+        }, 60 * 60 * 1000);
 
         // per15menit 15 * 60 * 1000
         // permenit 60 * 1000
@@ -133,7 +133,7 @@ export default function ControlSection({ setActiveTab }) {
             ? process.env.NEXT_PUBLIC_API_PROD_URL
             : process.env.NEXT_PUBLIC_API_URL;
 
-        setIsLoading(true); // Set loading sebelum fetch
+        setIsLoading(true); 
 
         try {
             const response = await axios.get(`${apiUrl}/device/user/${userId}`);
@@ -141,7 +141,6 @@ export default function ControlSection({ setActiveTab }) {
 
             setHouses(data);
 
-            // Set default kandang, lantai, dan sensor
             const firstHouseId = Object.keys(data)[0];
             if (firstHouseId) {
                 setSelectedHouse(firstHouseId);
@@ -166,11 +165,10 @@ export default function ControlSection({ setActiveTab }) {
                 variant: "destructive",
             });
         } finally {
-            setIsLoading(false); // Matikan loading setelah fetch selesai
+            setIsLoading(false); 
         }
     };
 
-    // Realtime data subscription
     useEffect(() => {
         const socket = initSocket();
 
@@ -195,10 +193,9 @@ export default function ControlSection({ setActiveTab }) {
             socket.off("error");
         };
     }, [selectedSensor]);
-
-    // Handle perubahan kandang
+    
     const handleHouseChange = (houseId) => {
-        setIsLoading(true); // Set loading saat mengganti kandang
+        setIsLoading(true); 
         unsubscribeFromSensor();
         setSelectedHouse(houseId);
 
@@ -224,12 +221,11 @@ export default function ControlSection({ setActiveTab }) {
             setMonthlyData({ Suhu: [], Kelembaban: [], labels: [] });
         }
 
-        setTimeout(() => setIsLoading(false), 300); // Simulasikan loading singkat
+        setTimeout(() => setIsLoading(false), 300); 
     };
 
-    // Handle perubahan lantai
     const handleFloorChange = (floor) => {
-        setIsLoading(true); // Set loading saat mengganti lantai
+        setIsLoading(true); 
         unsubscribeFromSensor();
         setSelectedFloor(floor);
 
@@ -244,14 +240,14 @@ export default function ControlSection({ setActiveTab }) {
             setMonthlyData({ Suhu: [], Kelembaban: [], labels: [] });
         }
 
-        setTimeout(() => setIsLoading(false), 300); // Simulasikan loading singkat
+        setTimeout(() => setIsLoading(false), 300); 
     };
 
     const handleModalClose = (newHouseAdded) => {
         setIsAddSwiftletModalOpen(false);
 
         if (newHouseAdded) {
-            fetchHouses(); // Fetch data kandang terbaru setelah modal ditutup
+            fetchHouses(); 
         }
     };
 
@@ -439,10 +435,10 @@ export default function ControlSection({ setActiveTab }) {
                                         fetchMonthlyData(sensor.installCode);
                                     }}
                                     variant={sensor.installCode === selectedSensor ? "default" : "outline"}
-                                    disabled={isLoading} // Disable tombol saat loading
+                                    disabled={isLoading} 
                                 >
                                     {sensor.installCode === selectedSensor && isLoading
-                                        ? "Loading..." // Tampilkan loading jika sedang diubah
+                                        ? "Loading..." 
                                         : `Sensor ${index + 1}`}
                                 </Button>
                             ))}

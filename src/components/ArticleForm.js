@@ -24,10 +24,10 @@ export default function ArticleForm() {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [cover, setCover] = useState(null);
-    const [tags, setTags] = useState([]); // List of tags
-    const [selectedTag, setSelectedTag] = useState(""); // Selected tag ID
-    const [status, setStatus] = useState("0"); // Default status as draft
-    const [loading, setLoading] = useState(false); // Loading state
+    const [tags, setTags] = useState([]); 
+    const [selectedTag, setSelectedTag] = useState(""); 
+    const [status, setStatus] = useState("0"); 
+    const [loading, setLoading] = useState(false); 
     const router = useRouter();
     const { id } = router.query;
 

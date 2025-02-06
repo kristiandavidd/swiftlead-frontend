@@ -27,7 +27,6 @@ export default function HarvestSection() {
     const fetchWeeklyPrices = async () => {
         try {
             const response = await axios.get(`${apiUrl}/weekly-price/all`);
-            // Check if the data is an array; if not, assign an empty array            
             const data = Array.isArray(response.data.data) ? response.data.data : [];
             setWeeklyPrices(data);
             setStartDate(response.data.startDate);

@@ -42,10 +42,8 @@ export default function Register() {
             if (res.status === 201 || res.status === 200) {
                 const { token, user } = res.data;
 
-                // Menyimpan token di localStorage
                 localStorage.setItem('token', token);
 
-                // Menyimpan user di context dan localStorage
                 const userData = {
                     id: user.id,
                     email: user.email,
@@ -57,7 +55,6 @@ export default function Register() {
                 };
                 setUser(userData);
 
-                // Redirect ke dashboard
                 router.push('/dashboard');
             } else {
                 setMessage('Registrasi gagal: ' + res.data.message);

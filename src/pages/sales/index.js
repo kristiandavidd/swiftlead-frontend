@@ -96,7 +96,7 @@ export default function SalesMonitoringPage() {
             setSales(res.data);
 
             setTotalRevenue(res.data
-                .filter(sale => sale.status === 3) // Filter status 3
+                .filter(sale => sale.status === 3) 
                 .reduce((total, sale) => total + parseFloat(sale.price), 0))
             setCountRevenue(res.data.filter(sale => sale.status === 3).length)
         } catch (error) {
@@ -125,7 +125,6 @@ export default function SalesMonitoringPage() {
                 variant: "success",
             });
 
-            // Update the sales data
             fetchSales();
         } catch (error) {
             console.error("Error cancelling sale:", error);
@@ -144,9 +143,8 @@ export default function SalesMonitoringPage() {
 
         try {
             setLoading(true);
-            const response = await axios.get(`${apiUrl}/weekly-price/average`); // URL sesuai dengan backend endpoint
+            const response = await axios.get(`${apiUrl}/weekly-price/average`); 
 
-            // Set average price from backend to the state
             setAveragePrice(response.data.averagePrice);
         } catch (err) {
             console.error("Error fetching weekly average price:", err);

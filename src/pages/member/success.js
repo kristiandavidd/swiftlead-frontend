@@ -10,12 +10,10 @@ export default function SuccessPage() {
     useEffect(() => {
         console.log("Payment Success");
 
-        // Redirect ke /membership setelah 3 detik
         const timeout = setTimeout(() => {
             router.push('/member');
         }, 2000);
 
-        // Membersihkan timeout ketika komponen di-unmount
         return () => clearTimeout(timeout);
     }, [router]);
 

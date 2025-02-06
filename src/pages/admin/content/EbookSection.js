@@ -12,6 +12,7 @@ const EbookSection = () => {
     const [ebooks, setEbooks] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const [deletingEbookId, setDeletingEbookId] = useState(null);
     const [editingEbook, setEditingEbook] = useState(null);
     const { toast } = useToast();
     const apiUrl = process.env.NODE_ENV === 'production'
@@ -101,7 +102,10 @@ const EbookSection = () => {
                             >
                                 <IconPencil />
                             </Button>
-                            <Button className="w-1/4" onClick={() => setIsAlertOpen(true)} variant="destructive">
+                            <Button className="w-1/4" onClick={() => {
+                                setDeletingEbookId(ebook.id);
+                                setIsAlertOpen(true);
+                            }} variant="destructive">
                                 <IconTrash />
                             </Button>
                         </div>
@@ -128,8 +132,14 @@ const EbookSection = () => {
                         <AlertDialogDescription>Aksi ini tidak bisa dikembalikan.</AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <Button onClick={() => setIsAlertOpen(false)} variant="outline">Batal</Button>
-                        <Button onClick={() => handleDelete(editingEbook?.id)} variant="destructive">Hapus</Button>
+                        <Button onClick={() => {
+                            setIsAlertOpen(false)
+                            setDeletingEbookId(null)
+                        }} variant="outline">Batal</Button>
+                        <Button onClick={() => {
+                            handleDelete(deletingEbookId)
+                            setDeletingEbookId(null)
+                        }} variant="destructive">Hapus</Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

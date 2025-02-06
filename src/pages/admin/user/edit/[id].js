@@ -27,13 +27,13 @@ export default function EditUser() {
         status: 0,
     });
     const [loading, setLoading] = useState(false);
-    const [isClient, setIsClient] = useState(false); // Cek apakah komponen berjalan di client
+    const [isClient, setIsClient] = useState(false); 
     const { toast } = useToast();
     const router = useRouter();
     const params = useParams();
 
     useEffect(() => {
-        setIsClient(true); // Menandai bahwa komponen berjalan di sisi client
+        setIsClient(true);
     }, []);
 
     useEffect(() => {

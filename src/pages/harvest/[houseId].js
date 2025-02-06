@@ -10,10 +10,10 @@ import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function HarvestPage() {
-    const [floorCount, setFloorCount] = useState(1); // Jumlah lantai awal = 1
-    const [isPostHarvest, setIsPostHarvest] = useState(false); // Apakah sudah submit ke post-harvest
-    const [floorData, setFloorData] = useState([0]); // Set default 10 sarang per lantai
-    const [postHarvestData, setPostHarvestData] = useState([]); // Data untuk post-harvest
+    const [floorCount, setFloorCount] = useState(1); 
+    const [isPostHarvest, setIsPostHarvest] = useState(false);
+    const [floorData, setFloorData] = useState([0]); 
+    const [postHarvestData, setPostHarvestData] = useState([]);
     const { user } = useUser();
     const router = useRouter();
     const { houseId } = router.query;
@@ -42,7 +42,6 @@ export default function HarvestPage() {
     }, [houseId]);
 
     useEffect(() => {
-        // Update formData when postHarvestData or floorData changes
         setFormData((prev) => ({
             ...prev,
             floorData: floorData,
@@ -67,14 +66,14 @@ export default function HarvestPage() {
     const handleClickerChange = (floorIndex, value) => {
         setFloorData((prevData) => {
             const newData = [...prevData];
-            newData[floorIndex] = Math.max(0, newData[floorIndex] + value); // Menambahkan sarang atau mengurangi
+            newData[floorIndex] = Math.max(0, newData[floorIndex] + value);
             return newData;
         });
     };
 
     const handleAddFloor = () => {
         setFloorCount(floorCount + 1);
-        setFloorData([...floorData, 0]); // Menambah lantai baru dengan 10 sarang default
+        setFloorData([...floorData, 0]);
     };
 
     const handleSubmit = () => {
@@ -91,8 +90,7 @@ export default function HarvestPage() {
     const handlePostHarvestChange = (floorIndex, shape, field, value) => {
         setPostHarvestData((prevData) => {
             const newData = [...prevData];
-
-            // Jika lantai belum ada di array, buat objek baru dengan default struktur
+        
             if (!newData[floorIndex]) {
                 newData[floorIndex] = {
                     bowl: { weight: "", pieces: "" },
@@ -102,12 +100,10 @@ export default function HarvestPage() {
                 };
             }
 
-            // Pastikan objek bentuk sudah ada sebelum mengaksesnya
             if (!newData[floorIndex][shape]) {
                 newData[floorIndex][shape] = { weight: "", pieces: "" };
             }
 
-            // Set nilai yang dimasukkan oleh pengguna
             newData[floorIndex][shape][field] = value;
 
             return newData;

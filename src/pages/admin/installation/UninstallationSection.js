@@ -29,7 +29,7 @@ const statusOptions = [
 
 export default function UninstallationSection({ setActiveTab }) {
     const [uninstallations, setUninstallations] = useState([]);
-    const [selectedUninstallationId, setSelectedUninstallationId] = useState(null); // To manage modal state
+    const [selectedUninstallationId, setSelectedUninstallationId] = useState(null);
     const [selectedInstallation, setSelectedInstallation] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalProcessOpen, setIsModalProcessOpen] = useState(false);
