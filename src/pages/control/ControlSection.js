@@ -42,15 +42,20 @@ export default function ControlSection({ setActiveTab }) {
     const statusSuhu = sensorData.Suhu > 29 ? 'Too warm' : sensorData.Suhu < 27 ? 'Too cold' : 'Good';
     const statusKelembaban = sensorData.Kelembaban > 70 ? 'Too humid' : sensorData.Kelembaban < 65 ? 'Too dry' : 'Good';
 
-    const fetchDailyData = async () => {
+    const fetchDailyData = async (installCode) => {
+        if (!installCode) return;
+
         const apiUrl = process.env.NODE_ENV === "production"
             ? process.env.NEXT_PUBLIC_API_PROD_URL
             : process.env.NEXT_PUBLIC_API_URL;
+
         try {
-            const res = await axios.get(`${apiUrl}/control/daily`);
-            const labels = res.data.map((d) => `${String(d.hour).padStart(2, '0')}:00`);
+            const res = await axios.post(`${apiUrl}/control/daily`, { install_code: installCode });
+
+            const labels = res.data.map((d) => new Date(d.time_label).toLocaleTimeString());
             const Suhu = res.data.map((d) => Number(d.avgSuhu));
             const Kelembaban = res.data.map((d) => Number(d.avgKelembaban));
+
             setDailyData({ Suhu, Kelembaban, labels });
         } catch (error) {
             console.error('Error fetching daily data:', error);
@@ -62,12 +67,16 @@ export default function ControlSection({ setActiveTab }) {
         }
     };
 
-    const fetchMonthlyData = async () => {
+    const fetchMonthlyData = async (installCode) => {
+        if (!installCode) return;
+
         const apiUrl = process.env.NODE_ENV === "production"
             ? process.env.NEXT_PUBLIC_API_PROD_URL
             : process.env.NEXT_PUBLIC_API_URL;
+
         try {
-            const res = await axios.get(`${apiUrl}/control/monthly`);
+            const res = await axios.post(`${apiUrl}/control/monthly`, { install_code: installCode });
+
             const labels = res.data.map((d) => {
                 const date = new Date(d.date);
                 return date.toLocaleDateString('id-ID', {
@@ -78,6 +87,7 @@ export default function ControlSection({ setActiveTab }) {
             });
             const Suhu = res.data.map((d) => Number(d.avgSuhu));
             const Kelembaban = res.data.map((d) => Number(d.avgKelembaban));
+
             setMonthlyData({ Suhu, Kelembaban, labels });
         } catch (error) {
             console.error('Error fetching monthly data:', error);
@@ -89,18 +99,25 @@ export default function ControlSection({ setActiveTab }) {
         }
     };
 
+
     useEffect(() => {
         fetchDailyData();
         fetchMonthlyData();
 
         const intervalId = setInterval(() => {
-            fetchDailyData();
-            fetchMonthlyData();
-        }, 15 * 60 * 1000);
+            if (selectedSensor) {
+                fetchDailyData(selectedSensor);
+                fetchMonthlyData(selectedSensor);
+            }
+        }, 30000);
+
+        // per15menit 15 * 60 * 1000
+        // permenit 60 * 1000
+        // perdetik 1000
 
         return () => clearInterval(intervalId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [router]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [router, selectedSensor]);
 
     const chartData = timeRange === 'daily' ? dailyData : monthlyData;
 
@@ -136,6 +153,8 @@ export default function ControlSection({ setActiveTab }) {
                     const firstSensor = data[firstHouseId].floors[firstFloor][0]?.installCode;
                     if (firstSensor) {
                         setSelectedSensor(firstSensor);
+                        fetchDailyData(firstSensor);
+                        fetchMonthlyData(firstSensor);
                     }
                 }
             }
@@ -190,10 +209,19 @@ export default function ControlSection({ setActiveTab }) {
             const firstSensor = houses[houseId].floors[firstFloor][0]?.installCode;
             if (firstSensor) {
                 setSelectedSensor(firstSensor);
+                fetchDailyData(firstSensor);
+                fetchMonthlyData(firstSensor);
+            } else {
+                setSelectedSensor(null);
+                setDailyData({ Suhu: [], Kelembaban: [], labels: [] });
+                setMonthlyData({ Suhu: [], Kelembaban: [], labels: [] });
             }
+
         } else {
             setSelectedFloor(null);
             setSelectedSensor(null);
+            setDailyData({ Suhu: [], Kelembaban: [], labels: [] });
+            setMonthlyData({ Suhu: [], Kelembaban: [], labels: [] });
         }
 
         setTimeout(() => setIsLoading(false), 300); // Simulasikan loading singkat
@@ -208,8 +236,12 @@ export default function ControlSection({ setActiveTab }) {
         const firstSensor = houses[selectedHouse]?.floors[floor]?.[0]?.installCode;
         if (firstSensor) {
             setSelectedSensor(firstSensor);
+            fetchDailyData(firstSensor);
+            fetchMonthlyData(firstSensor);
         } else {
             setSelectedSensor(null);
+            setDailyData({ Suhu: [], Kelembaban: [], labels: [] });
+            setMonthlyData({ Suhu: [], Kelembaban: [], labels: [] });
         }
 
         setTimeout(() => setIsLoading(false), 300); // Simulasikan loading singkat
@@ -236,7 +268,7 @@ export default function ControlSection({ setActiveTab }) {
                 yAxisID: 'y',
             },
             {
-                label: 'Kelebaban (%)',
+                label: 'Kelembaban (%)',
                 data: chartData.Kelembaban,
                 borderColor: 'rgba(54, 162, 235, 1)',
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -401,7 +433,11 @@ export default function ControlSection({ setActiveTab }) {
                             {(houses[selectedHouse]?.floors[selectedFloor] || []).map((sensor, index) => (
                                 <Button
                                     key={sensor.installCode}
-                                    onClick={() => setSelectedSensor(sensor.installCode)}
+                                    onClick={() => {
+                                        setSelectedSensor(sensor.installCode);
+                                        fetchDailyData(sensor.installCode);
+                                        fetchMonthlyData(sensor.installCode);
+                                    }}
                                     variant={sensor.installCode === selectedSensor ? "default" : "outline"}
                                     disabled={isLoading} // Disable tombol saat loading
                                 >
@@ -415,6 +451,7 @@ export default function ControlSection({ setActiveTab }) {
                 )}
             </div>
 
+            {/* Grafik Suhu dan Kelembaban */}
             <div className="mb-6 print-content" ref={pdfRef}>
                 <Tabs defaultValue="daily" onValueChange={(value) => setTimeRange(value)} className='flex flex-col gap-4'>
                     <div className='flex items-center justify-between'>
@@ -451,6 +488,8 @@ export default function ControlSection({ setActiveTab }) {
                         <Line data={combinedData} options={options} />
                     </TabsContent>
                 </Tabs>
+
+                {/* Tabel Data */}
                 <div className="hidden ">
                     <table className="w-full border border-collapse border-gray-300 table-auto">
                         <thead>
@@ -481,6 +520,6 @@ export default function ControlSection({ setActiveTab }) {
                 isOpen={isInstallationModalOpen}
                 onClose={() => setIsInstallationModalOpen(false)}
             />
-        </div>
+        </div >
     );
 }
