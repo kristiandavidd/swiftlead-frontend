@@ -86,6 +86,7 @@ export default function AddWeeklyPricePage() {
                                         type="number"
                                         placeholder="Masukkan harga.."
                                         value={item.price}
+                                        min='0'
                                         onChange={(e) => handlePriceChange(index, e.target.value)}
                                     />
                                 </td>

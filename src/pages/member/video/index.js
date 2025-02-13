@@ -62,7 +62,7 @@ const Video = () => {
     }, []);
 
     return (
-        <MemberLayout>
+        <MemberLayout head={"Konten Video"}>
             <div className="container p-4 mx-auto">
                 <div className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3">
                     {Array.isArray(videos) && videos.length > 0 ? (

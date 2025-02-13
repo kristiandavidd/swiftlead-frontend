@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/table";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import AddDeviceModal from "@/components/AddDevicemodal";
 import Spinner from "@/components/ui/spinner";
 import MaintenanceDetailModal from "@/components/MaintenanceDetailModal";
 
@@ -33,15 +32,15 @@ export default function MaintenanceSection({ setActiveTab }) {
     const [isModalProcessOpen, setIsModalProcessOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     const { toast } = useToast();
+    const [statusFilter, setStatusFilter] = useState("all");
 
     useEffect(() => {
         fetchMaintenances();
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const openModal = (saleId) => {
-        setSelectedMaintenanceId(saleId);
+    const openModal = (maintenanceId) => {
+        setSelectedMaintenanceId(maintenanceId);
         setIsModalOpen(true);
     };
 
@@ -81,8 +80,55 @@ export default function MaintenanceSection({ setActiveTab }) {
         }
     };
 
+    const filteredMaintenances = maintenances.filter((maintenance) => {
+        switch (statusFilter) {
+            case "all":
+                return true;
+            case "selesai":
+                return maintenance.status === 3;
+            case "canceled":
+                return maintenance.status === 4 || maintenance.status === 5;
+            case "reschedule":
+                return maintenance.status === 6;
+            default:
+                return true;
+        }
+    });
+
     return (
         <div>
+            {/* Filter Buttons */}
+            <div className="flex gap-2 mx-2 my-6">
+                <Button
+                    size="sm"
+                    variant={statusFilter === "all" ? "default" : "outline"}
+                    onClick={() => setStatusFilter("all")}
+                >
+                    Semua
+                </Button>
+                <Button
+                    size="sm"
+                    variant={statusFilter === "selesai" ? "default" : "outline"}
+                    onClick={() => setStatusFilter("selesai")}
+                >
+                    Selesai
+                </Button>
+                <Button
+                    size="sm"
+                    variant={statusFilter === "canceled" ? "default" : "outline"}
+                    onClick={() => setStatusFilter("canceled")}
+                >
+                    Ditolak & Dibatalkan
+                </Button>
+                <Button
+                    size="sm"
+                    variant={statusFilter === "reschedule" ? "default" : "outline"}
+                    onClick={() => setStatusFilter("reschedule")}
+                >
+                    Dijadwalkan Ulang
+                </Button>
+            </div>
+
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -97,20 +143,16 @@ export default function MaintenanceSection({ setActiveTab }) {
                 <TableBody>
                     {loading ? (
                         <TableRow>
-                            <TableCell colSpan="5" className="text-center">
+                            <TableCell colSpan={6} className="text-center">
                                 <Spinner />
                             </TableCell>
                         </TableRow>
                     ) : (
-                        maintenances.map((maintenance) => (
+                        filteredMaintenances.map((maintenance) => (
                             <TableRow key={maintenance.id}>
-                                <TableCell>
-                                    {maintenance.user_name}
-                                </TableCell>
+                                <TableCell>{maintenance.user_name}</TableCell>
                                 <TableCell>{maintenance.location}</TableCell>
-                                <TableCell>
-                                    {maintenance.floors}
-                                </TableCell>
+                                <TableCell>{maintenance.floors}</TableCell>
                                 <TableCell>
                                     {new Date(maintenance.appointment_date).toLocaleDateString("id-ID", {
                                         day: "2-digit",
@@ -139,12 +181,14 @@ export default function MaintenanceSection({ setActiveTab }) {
                                     <Button
                                         size="sm"
                                         variant="outline"
-                                        onClick={() => openModal(maintenance.id)}
+                                        onClick={() => {
+                                            setSelectedMaintenanceId(maintenance.id);
+                                            setIsModalOpen(true);
+                                        }}
                                     >
                                         Detail
                                     </Button>
                                 </TableCell>
-
                             </TableRow>
                         ))
                     )}
@@ -152,10 +196,12 @@ export default function MaintenanceSection({ setActiveTab }) {
             </Table>
             <MaintenanceDetailModal
                 isOpen={isModalOpen}
-                onClose={closeModal}
+                onClose={() => {
+                    setIsModalOpen(false);
+                    setSelectedMaintenanceId(null);
+                }}
                 maintenanceId={selectedMaintenanceId}
             />
-
         </div>
-    )
+    );
 }

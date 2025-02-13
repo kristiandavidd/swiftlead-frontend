@@ -43,8 +43,8 @@ import MemberLayout from "@/layout/MemberLayout";
 
 export default function Article() {
     const [articles, setArticles] = useState([]);
-    const [filteredArticles, setFilteredArticles] = useState([]); 
-    const [searchQuery, setSearchQuery] = useState(""); 
+    const [filteredArticles, setFilteredArticles] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
     const [selectedArticleId, setSelectedArticleId] = useState(null);
     const { toast } = useToast();
     const apiUrl = process.env.NODE_ENV === 'production'
@@ -58,12 +58,12 @@ export default function Article() {
     }, []);
 
     const stripHtmlTags = (html) => {
-        return html.replace(/<[^>]*>/g, ''); 
+        return html.replace(/<[^>]*>/g, '');
     };
 
     const truncateText = (text, maxLength) => {
         if (!text || text.length === 0) {
-            return ''; 
+            return '';
         }
 
         if (text.length > maxLength) {
@@ -92,7 +92,7 @@ export default function Article() {
         setSearchQuery(query);
 
         if (query.trim() === "") {
-            setFilteredArticles(articles); 
+            setFilteredArticles(articles);
         } else {
             const filtered = articles.filter((article) => {
                 return (
@@ -105,7 +105,7 @@ export default function Article() {
     };
 
     return (
-        <MemberLayout>
+        <MemberLayout head={"Konten Artikel"}>
             <div className="mx-auto">
                 <div className="flex justify-between mb-4">
                     <div className="flex items-center gap-4">

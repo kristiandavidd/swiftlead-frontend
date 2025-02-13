@@ -85,22 +85,28 @@ export default function AddDeviceModal({ isOpen, onClose, requestData, onSuccess
                 <DialogHeader>
                     <DialogTitle>Tambah Perangkat</DialogTitle>
                 </DialogHeader>
-                <div className="space-y-4">
-                    <div>
-                        <strong>Nama Kandang:</strong> {requestData?.house_name || "N/A"}
+                <div className="w-full space-y-4">
+                    <div className="table-row">
+                        <div className="table-cell w-3/5 py-1">Nama Kandang</div>
+                        <div className="table-cell text-muted-foreground">{requestData?.house_name}</div>
                     </div>
-                    <div>
-                        <strong>Alamat:</strong> {requestData?.location || "N/A"}
+                    <div className="table-row">
+                        <div className="table-cell w-3/5 py-1">Alamat</div>
+                        <div className="table-cell text-muted-foreground">{requestData?.location}</div>
                     </div>
-                    <div>
-                        <strong>Kode Instalasi:</strong> {installCode}
+                    <div className="table-row">
+                        <div className="table-cell w-3/5 py-1">Kode Instalasi</div>
+                        <div className="table-cell "><strong>{installCode}</strong></div>
                     </div>
-                    <Input
-                        type="number"
-                        placeholder="Lantai penempatan perangkat.."
-                        value={floor}
-                        onChange={(e) => setFloor(e.target.value)}
-                    />
+                    <div className="space-y-2">
+                        <label>Lantai</label>
+                        <Input
+                            type="number"
+                            placeholder="Lantai penempatan perangkat.."
+                            value={floor}
+                            onChange={(e) => setFloor(e.target.value)}
+                        />
+                    </div>
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>

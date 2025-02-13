@@ -95,9 +95,10 @@ export default function SalesMonitoringPage() {
             const res = await axios.get(`${apiUrl}/sales/user/${user.id}`);
             setSales(res.data);
 
-            setTotalRevenue(res.data
-                .filter(sale => sale.status === 3) 
-                .reduce((total, sale) => total + parseFloat(sale.price), 0))
+            const revenue = res.data
+                .filter(sale => sale.status === 3)
+                .reduce((total, sale) => total + (parseFloat(sale.price) * (sale.bowl_weight + sale.oval_weight + sale.corner_weight + sale.broken_weight)), 0);
+            setTotalRevenue(revenue);
             setCountRevenue(res.data.filter(sale => sale.status === 3).length)
         } catch (error) {
             console.error("Error fetching sales:", error);
@@ -143,7 +144,7 @@ export default function SalesMonitoringPage() {
 
         try {
             setLoading(true);
-            const response = await axios.get(`${apiUrl}/weekly-price/average`); 
+            const response = await axios.get(`${apiUrl}/weekly-price/average`);
 
             setAveragePrice(response.data.averagePrice);
         } catch (err) {
@@ -157,6 +158,22 @@ export default function SalesMonitoringPage() {
             setLoading(false);
         }
     };
+
+    if (!user?.no_telp || !user?.location) {
+        return (
+            <UserLayout head="Lengkapi Profil">
+                <div className="flex flex-col items-center justify-center h-[80vh] text-center bg-white rounded-lg">
+                    <h1 className="text-2xl font-bold">Lengkapi Profil Anda</h1>
+                    <p className="mt-2 text-gray-600">
+                        Untuk melanjutkan, silakan lengkapi informasi profil Anda terlebih dahulu.
+                    </p>
+                    <Link href="/profile">
+                        <Button className="mt-4">Lengkapi Profil</Button>
+                    </Link>
+                </div>
+            </UserLayout>
+        );
+    }
 
     return (
         <UserLayout head={"Penjualan"}>
@@ -276,7 +293,7 @@ export default function SalesMonitoringPage() {
                                                 variant="outline"
                                                 size="sm"
                                                 className="w-1/4 mt-2 border-destructive text-destructive"
-                                                disabled={sale.status === 3 || sale.status === 4 || sale.status === 5}
+                                                disabled={sale.status === 3 || sale.status === 4 || sale.status === 5 || sale.status === 2}
                                             >
                                                 Batal
                                             </Button>

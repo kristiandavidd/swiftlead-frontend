@@ -89,7 +89,8 @@ export default function Installation() {
             : process.env.NEXT_PUBLIC_API_URL;
 
         try {
-            await axios.delete(`${apiUrl}/device/delete/${selectedDevice}`);
+            await axios.delete(`${apiUrl}/device/delete/${selectedDeviceId}`);
+            setSelectedDevice(null)
             toast({ title: "Sukses!", description: "Perangkat berhasil dihapus.", variant: "success" });
             fetchDevice();
         } catch (error) {

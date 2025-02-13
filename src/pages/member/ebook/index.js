@@ -29,32 +29,38 @@ const Ebook = () => {
                 title: "Galat!",
                 description: "Gagal mengambil data E-Book.",
                 variant: "destructive"
-            })
+            });
         }
     };
+
     const downloadEbook = (ebookUrl, ebookName) => {
-
-        fetch(ebookUrl).then((response) => {
-            response.blob().then((blob) => {
-
-                const fileURL =
-                    window.URL.createObjectURL(blob);
-
-                let alink = document.createElement("a");
+        fetch(ebookUrl)
+            .then((response) => response.blob())
+            .then((blob) => {
+                const fileURL = window.URL.createObjectURL(blob);
+                const alink = document.createElement("a");
                 alink.href = fileURL;
                 alink.download = ebookName;
                 alink.click();
+                window.URL.revokeObjectURL(fileURL); 
+            })
+            .catch((error) => {
+                console.error('Error downloading ebook:', error);
+                toast({
+                    title: "Galat!",
+                    description: "Gagal mengunduh E-Book.",
+                    variant: "destructive"
+                });
             });
-        });
     };
 
     useEffect(() => {
         fetchEbooks();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
-        <MemberLayout>
+        <MemberLayout head={"Konten E-Book"}>
             <div className="container p-4 mx-auto">
                 <div className="grid grid-cols-3 gap-4 mt-4">
                     {(ebooks.length === 0) && (
@@ -72,17 +78,18 @@ const Ebook = () => {
                             />
                             <h2 className="mb-6 text-lg font-bold">{ebook.title}</h2>
                             <div className='flex items-center justify-between w-full gap-2'>
-
                                 <Button className="w-3/4 bg-white" variant="outline">
                                     <Link href={`${apiUrl}${ebook.file_path}`} target="_blank" className='inline-flex items-center gap-2 '>
                                         <IconArrowUpRight /> Baca E-Book
                                     </Link>
                                 </Button>
-                                <Button className="w-1/4" onClick={downloadEbook(`${apiUrl}${ebook.file_path}`, ebook.title)} >
+                                <Button
+                                    className="w-1/4"
+                                    onClick={() => downloadEbook(`${apiUrl}${ebook.file_path}`, ebook.title)}
+                                >
                                     <IconDownload />
                                 </Button>
                             </div>
-
                         </div>
                     ))}
                 </div>

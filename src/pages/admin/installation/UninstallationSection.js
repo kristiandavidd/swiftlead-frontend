@@ -11,9 +11,6 @@ import {
 } from "@/components/ui/table";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import InstallationDetailModal from "@/components/InstallationDetailModal";
-import AddDeviceModal from "@/components/AddDevicemodal";
-import { set } from "react-hook-form";
 import UninstallationDetailModal from "@/components/UninstallationDetailModal";
 import Spinner from "@/components/ui/spinner";
 
@@ -30,42 +27,16 @@ const statusOptions = [
 export default function UninstallationSection({ setActiveTab }) {
     const [uninstallations, setUninstallations] = useState([]);
     const [selectedUninstallationId, setSelectedUninstallationId] = useState(null);
-    const [selectedInstallation, setSelectedInstallation] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isModalProcessOpen, setIsModalProcessOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     const { toast } = useToast();
 
+    const [statusFilter, setStatusFilter] = useState("all");
+
     useEffect(() => {
         fetchUninstallations();
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const openModal = (saleId) => {
-        setSelectedUninstallationId(saleId);
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setSelectedUninstallationId(null);
-    };
-
-    const handleStatusChange = async (id, newStatus) => {
-        const apiUrl = process.env.NODE_ENV === "production"
-            ? process.env.NEXT_PUBLIC_API_PROD_URL
-            : process.env.NEXT_PUBLIC_API_URL;
-
-        try {
-            await axios.put(`${apiUrl}/request/uninstallation/${id}/status`, { status: newStatus });
-            toast({ title: "Sukses!", description: "Berhasil memperbarui status uninstalasi.", variant: "success" });
-            fetchUninstallations();
-        } catch (error) {
-            console.error("Error updating installation status:", error);
-            toast({ title: "Galat!", description: "Gagal memperbarui status uninstalasi.", variant: "destructive" });
-        }
-    };
 
     const fetchUninstallations = async () => {
         const apiUrl = process.env.NODE_ENV === "production"
@@ -83,8 +54,70 @@ export default function UninstallationSection({ setActiveTab }) {
         }
     };
 
+    const handleStatusChange = async (id, newStatus) => {
+        const apiUrl = process.env.NODE_ENV === "production"
+            ? process.env.NEXT_PUBLIC_API_PROD_URL
+            : process.env.NEXT_PUBLIC_API_URL;
+
+        try {
+            await axios.put(`${apiUrl}/request/uninstallation/${id}/status`, { status: newStatus });
+            toast({ title: "Sukses!", description: "Berhasil memperbarui status uninstalasi.", variant: "success" });
+            fetchUninstallations();
+        } catch (error) {
+            console.error("Error updating uninstallation status:", error);
+            toast({ title: "Galat!", description: "Gagal memperbarui status uninstalasi.", variant: "destructive" });
+        }
+    };
+
+    const filteredUninstallations = uninstallations.filter((uninstallation) => {
+        switch (statusFilter) {
+            case "all":
+                return true;
+            case "selesai":
+                return uninstallation.status === 3;
+            case "canceled":
+                return uninstallation.status === 4 || uninstallation.status === 5;
+            case "reschedule":
+                return uninstallation.status === 6;
+            default:
+                return true;
+        }
+    });
+
     return (
         <div>
+            {/* Filter Buttons */}
+            <div className="flex gap-2 mx-2 my-6">
+                <Button
+                    size="sm"
+                    variant={statusFilter === "all" ? "default" : "outline"}
+                    onClick={() => setStatusFilter("all")}
+                >
+                    Semua
+                </Button>
+                <Button
+                    size="sm"
+                    variant={statusFilter === "selesai" ? "default" : "outline"}
+                    onClick={() => setStatusFilter("selesai")}
+                >
+                    Selesai
+                </Button>
+                <Button
+                    size="sm"
+                    variant={statusFilter === "canceled" ? "default" : "outline"}
+                    onClick={() => setStatusFilter("canceled")}
+                >
+                    Ditolak & Dibatalkan
+                </Button>
+                <Button
+                    size="sm"
+                    variant={statusFilter === "reschedule" ? "default" : "outline"}
+                    onClick={() => setStatusFilter("reschedule")}
+                >
+                    Dijadwalkan Ulang
+                </Button>
+            </div>
+
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -99,12 +132,12 @@ export default function UninstallationSection({ setActiveTab }) {
                 <TableBody>
                     {loading ? (
                         <TableRow>
-                            <TableCell colSpan="7" className="text-center">
+                            <TableCell colSpan={6} className="text-center">
                                 <Spinner />
                             </TableCell>
                         </TableRow>
                     ) : (
-                        uninstallations.map((uninstallation) => (
+                        filteredUninstallations.map((uninstallation) => (
                             <TableRow key={uninstallation.id}>
                                 <TableCell>
                                     {uninstallation.user_name}
@@ -141,22 +174,28 @@ export default function UninstallationSection({ setActiveTab }) {
                                     <Button
                                         size="sm"
                                         variant="outline"
-                                        onClick={() => openModal(uninstallation.id)}
+                                        onClick={() => {
+                                            setSelectedUninstallationId(uninstallation.id);
+                                            setIsModalOpen(true);
+                                        }}
                                     >
                                         Detail
                                     </Button>
                                 </TableCell>
-
                             </TableRow>
                         ))
                     )}
                 </TableBody>
             </Table>
+
             <UninstallationDetailModal
                 isOpen={isModalOpen}
-                onClose={closeModal}
+                onClose={() => {
+                    setIsModalOpen(false);
+                    setSelectedUninstallationId(null);
+                }}
                 uninstallationId={selectedUninstallationId}
             />
-        </div >
-    )
+        </div>
+    );
 }

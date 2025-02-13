@@ -33,11 +33,11 @@ export default function InstallationSection({ setActiveTab }) {
     const [isModalProcessOpen, setIsModalProcessOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     const { toast } = useToast();
+    const [statusFilter, setStatusFilter] = useState("all");
 
     useEffect(() => {
         fetchInstallations();
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const openModal = (saleId) => {
@@ -53,17 +53,18 @@ export default function InstallationSection({ setActiveTab }) {
     const openModalProcess = (installation) => {
         setSelectedInstallation(installation);
         setIsModalProcessOpen(true);
-    }
+    };
 
     const closeModalProcess = () => {
         setIsModalProcessOpen(false);
         setSelectedInstallation(null);
-    }
+    };
 
     const handleStatusChange = async (id, newStatus) => {
-        const apiUrl = process.env.NODE_ENV === "production"
-            ? process.env.NEXT_PUBLIC_API_PROD_URL
-            : process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl =
+            process.env.NODE_ENV === "production"
+                ? process.env.NEXT_PUBLIC_API_PROD_URL
+                : process.env.NEXT_PUBLIC_API_URL;
 
         try {
             await axios.put(`${apiUrl}/request/installation/${id}/status`, { status: newStatus });
@@ -76,9 +77,10 @@ export default function InstallationSection({ setActiveTab }) {
     };
 
     const fetchInstallations = async () => {
-        const apiUrl = process.env.NODE_ENV === "production"
-            ? process.env.NEXT_PUBLIC_API_PROD_URL
-            : process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl =
+            process.env.NODE_ENV === "production"
+                ? process.env.NEXT_PUBLIC_API_PROD_URL
+                : process.env.NEXT_PUBLIC_API_URL;
 
         try {
             const res = await axios.get(`${apiUrl}/request/installation`);
@@ -91,8 +93,29 @@ export default function InstallationSection({ setActiveTab }) {
         }
     };
 
+    const filteredInstallations = installations.filter((inst) => {
+        if (statusFilter === "all") return true;
+        if (statusFilter === "selesai") {
+            return inst.status === 3;
+        }
+        if (statusFilter === "canceled") {
+            return inst.status === 4 || inst.status === 5;
+        }
+        if (statusFilter === "reschedule") {
+            return inst.status === 6;
+        }
+        return true; 
+    });
+
     return (
         <div>
+            <div className="flex gap-2 mx-2 my-6">
+                <Button size="sm" variant={statusFilter === "all" ? "default" : "outline"} onClick={() => setStatusFilter("all")}>Semua</Button>
+                <Button size="sm" variant={statusFilter === "selesai" ? "default" : "outline"} onClick={() => setStatusFilter("selesai")}>Selesai</Button>
+                <Button size="sm" variant={statusFilter === "canceled" ? "default" : "outline"} onClick={() => setStatusFilter("canceled")}>Ditolak & Dibatalkan</Button>
+                <Button size="sm" variant={statusFilter === "reschedule" ? "default" : "outline"} onClick={() => setStatusFilter("reschedule")}>Dijadwalkan Ulang</Button>
+            </div>
+
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -113,7 +136,7 @@ export default function InstallationSection({ setActiveTab }) {
                             </TableCell>
                         </TableRow>
                     ) : (
-                        installations.map((installation) => (
+                        filteredInstallations.map((installation) => (
                             <TableRow key={installation.id}>
                                 <TableCell>
                                     {installation.user_name}
@@ -138,7 +161,7 @@ export default function InstallationSection({ setActiveTab }) {
                                         onValueChange={(value) => handleStatusChange(installation.id, parseInt(value))}
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select Status" />
+                                            <SelectValue placeholder="Pilih Status" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {statusOptions.map((option) => (
@@ -185,5 +208,5 @@ export default function InstallationSection({ setActiveTab }) {
             />
 
         </div>
-    )
+    );
 }

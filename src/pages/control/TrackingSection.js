@@ -197,7 +197,7 @@ export default function TrackingSection() {
                                             variant="outline"
                                             size="sm"
                                             className="w-1/4 mt-2 border-destructive text-destructive"
-                                            disabled={item.status === 3 || item.status === 4 || item.status === 5}
+                                            disabled={item.status === 3 || item.status === 4 || item.status === 5 || item.status === 2}
                                         >
                                             Batalkan
                                         </Button>
